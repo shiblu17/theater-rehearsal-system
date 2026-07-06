@@ -10,6 +10,7 @@ export interface Member {
   role: string;
   character_name?: string; // ক্যারেক্টার ম্যাপিং (যেমন: নন্দিনী, রাজা)
   avatar_url?: string;
+  password?: string; // কুশীলব ড্যাশবোর্ড সেশন অথ
 }
 
 export interface Ticket {
@@ -66,29 +67,29 @@ const MOCK_DB_FILE = path.join(process.cwd(), 'mock-db.json');
 
 // Default Seed Data
 const DEFAULT_MEMBERS: Member[] = [
-  { id: 'm1', roll: '1041', name: 'সীমান্ত সূত্রধর সুমন', role: 'অভিনেতা', character_name: 'ফাগুলাল', avatar_url: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&auto=format&fit=crop&q=80' },
-  { id: 'm2', roll: '1042', name: 'হৃদয় রায়', role: 'অভিনেতা', character_name: 'অধ্যাপক', avatar_url: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop&q=80' },
-  { id: 'm3', roll: '1043', name: 'নাহিয়ান কাব্য', role: 'অভিনেতা', character_name: 'রঞ্জন', avatar_url: 'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=150&auto=format&fit=crop&q=80' },
-  { id: 'm4', roll: '1045', name: 'সাহিদুল ইসলাম', role: 'অভিনেতা', character_name: 'গোকুল', avatar_url: 'https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?w=150&auto=format&fit=crop&q=80' },
-  { id: 'm5', roll: '1046', name: 'নাসিম পারভেজ প্রভাত', role: 'অভিনেতা', character_name: 'মোড়ল', avatar_url: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=150&auto=format&fit=crop&q=80' },
-  { id: 'm6', roll: '1047', name: 'আতিকুজ্জামান শিবলু', role: 'অভিনেতা', character_name: 'রাজা', avatar_url: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&auto=format&fit=crop&q=80' },
-  { id: 'm7', roll: '1048', name: 'শেখ ফারদিন ইসলাম জিম', role: 'অভিনেতা', character_name: 'অধিকারী', avatar_url: 'https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?w=150&auto=format&fit=crop&q=80' },
-  { id: 'm8', roll: '1049', name: 'মোঃ নাফিজ-উল-আলম', role: 'অভিনেতা', character_name: 'বিশু পাগল', avatar_url: 'https://images.unsplash.com/photo-1500048993953-d23a436266cf?w=150&auto=format&fit=crop&q=80' },
-  { id: 'm9', roll: '1050', name: 'অপূর্ব বিশ্বাস', role: 'অভিনেতা', character_name: 'কিশোর', avatar_url: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop&q=80' },
-  { id: 'm10', roll: '1051', name: 'তৌহিদ মোস্তাক নীল', role: 'অভিনেতা', character_name: 'পড়ুয়া', avatar_url: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&auto=format&fit=crop&q=80' },
-  { id: 'm11', roll: '1052', name: 'নীল কমল লাল খাঁ', role: 'অভিনেতা', character_name: 'খনি সর্দার', avatar_url: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=150&auto=format&fit=crop&q=80' },
-  { id: 'm12', roll: '1053', name: 'বিশ্বাসের মাধুর্য রিফাত', role: 'অভিনেতা', character_name: 'দ্বারপাল', avatar_url: 'https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?w=150&auto=format&fit=crop&q=80' },
-  { id: 'm13', roll: '1054', name: 'মোঃ শাফায়েত জামিল লিজান', role: 'অভিনেতা', character_name: 'রাজপ্রহরী', avatar_url: 'https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?w=150&auto=format&fit=crop&q=80' },
-  { id: 'm14', roll: '1055', name: 'সজীব হোসেন দোলন', role: 'অভিনেতা', character_name: 'খোদাইকর', avatar_url: 'https://images.unsplash.com/photo-1500048993953-d23a436266cf?w=150&auto=format&fit=crop&q=80' },
-  { id: 'm15', roll: '1057', name: 'উম্মে মারিয়াম', role: 'অভিনেত্রী', character_name: 'চন্দ্রা', avatar_url: 'https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=150&auto=format&fit=crop&q=80' },
-  { id: 'm16', roll: '1058', name: 'স্নেহা বান্টা', role: 'অভিনেত্রী', character_name: 'নন্দিনী', avatar_url: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&auto=format&fit=crop&q=80' },
-  { id: 'm17', roll: '1060', name: 'মুশফিকা নওশিন ঐতিহ্য', role: 'অভিনেত্রী', character_name: 'রূপমঞ্জরী', avatar_url: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150&auto=format&fit=crop&q=80' },
-  { id: 'm18', roll: '1061', name: 'মিথিলা তাসфিয়া সাজ্জাদ', role: 'অভিনেত্রী', character_name: 'সংগীতি', avatar_url: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80' },
-  { id: 'm19', roll: '1062', name: 'সাজিদা সামিহা', role: 'অভিনেত্রী', character_name: 'নৃত্যশিল্পী', avatar_url: 'https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=150&auto=format&fit=crop&q=80' },
-  { id: 'm20', roll: '1063', name: 'প্রিয়ন্তী চক্রবর্তী', role: 'অভিনেত্রী', character_name: 'নেপথ্য গায়িকা', avatar_url: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&auto=format&fit=crop&q=80' },
-  { id: 'm21', roll: '1064', name: 'দেবব্রতা সরকার অহনা', role: 'অভিনেত্রী', character_name: 'অদিতি', avatar_url: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150&auto=format&fit=crop&q=80' },
-  { id: 'm22', roll: '1065', name: 'জেসমিন রীমা', role: 'অভিনেত্রী', character_name: 'নর্তকী', avatar_url: 'https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=150&auto=format&fit=crop&q=80' },
-  { id: 'm23', roll: '1069', name: 'মারিয়া আক্তার রায়শা', role: 'অভিনেত্রী', character_name: 'প্রহরিণী', avatar_url: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&auto=format&fit=crop&q=80' }
+  { id: 'm1', roll: '1041', name: 'সীমান্ত সূত্রধর সুমন', role: 'অভিনেতা', character_name: 'ফাগুলাল', avatar_url: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&auto=format&fit=crop&q=80', password: 'roktokorobi52' },
+  { id: 'm2', roll: '1042', name: 'হৃদয় রায়', role: 'অভিনেতা', character_name: 'অধ্যাপক', avatar_url: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop&q=80', password: 'roktokorobi52' },
+  { id: 'm3', roll: '1043', name: 'নাহিয়ান কাব্য', role: 'অভিনেতা', character_name: 'রঞ্জন', avatar_url: 'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=150&auto=format&fit=crop&q=80', password: 'roktokorobi52' },
+  { id: 'm4', roll: '1045', name: 'সাহিদুল ইসলাম', role: 'অভিনেতা', character_name: 'গোকুল', avatar_url: 'https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?w=150&auto=format&fit=crop&q=80', password: 'roktokorobi52' },
+  { id: 'm5', roll: '1046', name: 'নাসিম পারভেজ প্রভাত', role: 'অভিনেতা', character_name: 'মোড়ল', avatar_url: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=150&auto=format&fit=crop&q=80', password: 'roktokorobi52' },
+  { id: 'm6', roll: '1047', name: 'আতিকুজ্জামান শিবলু', role: 'অভিনেতা', character_name: 'রাজা', avatar_url: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&auto=format&fit=crop&q=80', password: 'roktokorobi52' },
+  { id: 'm7', roll: '1048', name: 'শেখ ফারদিন ইসলাম জিম', role: 'অভিনেতা', character_name: 'অধিকারী', avatar_url: 'https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?w=150&auto=format&fit=crop&q=80', password: 'roktokorobi52' },
+  { id: 'm8', roll: '1049', name: 'মোঃ নাফিজ-উল-আলম', role: 'অভিনেতা', character_name: 'বিশু পাগল', avatar_url: 'https://images.unsplash.com/photo-1500048993953-d23a436266cf?w=150&auto=format&fit=crop&q=80', password: 'roktokorobi52' },
+  { id: 'm9', roll: '1050', name: 'অপূর্ব বিশ্বাস', role: 'অভিনেতা', character_name: 'কিশোর', avatar_url: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop&q=80', password: 'roktokorobi52' },
+  { id: 'm10', roll: '1051', name: 'তৌহিদ মোস্তাক নীল', role: 'অভিনেতা', character_name: 'পড়ুয়া', avatar_url: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&auto=format&fit=crop&q=80', password: 'roktokorobi52' },
+  { id: 'm11', roll: '1052', name: 'নীল কমল লাল খাঁ', role: 'অভিনেতা', character_name: 'খনি সর্দার', avatar_url: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=150&auto=format&fit=crop&q=80', password: 'roktokorobi52' },
+  { id: 'm12', roll: '1053', name: 'বিশ্বাসের মাধুর্য রিফাত', role: 'অভিনেতা', character_name: 'দ্বারপাল', avatar_url: 'https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?w=150&auto=format&fit=crop&q=80', password: 'roktokorobi52' },
+  { id: 'm13', roll: '1054', name: 'মোঃ শাফায়েত জামিল লিজান', role: 'অভিনেতা', character_name: 'রাজপ্রহরী', avatar_url: 'https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?w=150&auto=format&fit=crop&q=80', password: 'roktokorobi52' },
+  { id: 'm14', roll: '1055', name: 'সজীব হোসেন দোলন', role: 'অভিনেতা', character_name: 'খোদাইকর', avatar_url: 'https://images.unsplash.com/photo-1500048993953-d23a436266cf?w=150&auto=format&fit=crop&q=80', password: 'roktokorobi52' },
+  { id: 'm15', roll: '1057', name: 'উম্মে মারিয়াম', role: 'অভিনেত্রী', character_name: 'চন্দ্রা', avatar_url: 'https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=150&auto=format&fit=crop&q=80', password: 'roktokorobi52' },
+  { id: 'm16', roll: '1059', name: 'স্নেহা বান্টা', role: 'অভিনেত্রী', character_name: 'নন্দিনী', avatar_url: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&auto=format&fit=crop&q=80', password: 'roktokorobi52' },
+  { id: 'm17', roll: '1061', name: 'মুশফিকা নওশিন ঐতিহ্য', role: 'অভিনেত্রী', character_name: 'রূপমঞ্জরী', avatar_url: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150&auto=format&fit=crop&q=80', password: 'roktokorobi52' },
+  { id: 'm18', roll: '1062', name: 'মিথিলা তাসফিয়া সাজ্জাদ', role: 'অভিনেত্রী', character_name: 'সংগীতি', avatar_url: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80', password: 'roktokorobi52' },
+  { id: 'm19', roll: '1063', name: 'সাজিদা সামিহা', role: 'অভিনেত্রী', character_name: 'নৃত্যশিল্পী', avatar_url: 'https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=150&auto=format&fit=crop&q=80', password: 'roktokorobi52' },
+  { id: 'm20', roll: '1064', name: 'প্রিয়ন্তী চক্রবর্তী', role: 'অভিনেত্রী', character_name: 'নেপথ্য গায়িকা', avatar_url: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&auto=format&fit=crop&q=80', password: 'roktokorobi52' },
+  { id: 'm21', roll: '1065', name: 'দেবব্রতা সরকার অহনা', role: 'অভিনেত্রী', character_name: 'অদিতি', avatar_url: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150&auto=format&fit=crop&q=80', password: 'roktokorobi52' },
+  { id: 'm22', roll: '1066', name: 'জেসমিন রীমা', role: 'অভিনেত্রী', character_name: 'নর্তকী', avatar_url: 'https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=150&auto=format&fit=crop&q=80', password: 'roktokorobi52' },
+  { id: 'm23', roll: '1070', name: 'মারিয়া আক্তার রায়শা', role: 'অভিনেত্রী', character_name: 'প্রহরিণী', avatar_url: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&auto=format&fit=crop&q=80', password: 'roktokorobi52' }
 ];
 
 interface MockDB {
@@ -811,4 +812,23 @@ export async function deleteRehearsalNote(id: string): Promise<void> {
   db.notes = db.notes.filter(n => n.id !== id);
   writeMockDB(db);
 }
+
+export async function updateMemberPassword(roll: string, newPassword: string): Promise<boolean> {
+  if (isSupabaseConfigured && supabase) {
+    try {
+      const { data, error } = await supabase.from('members').update({ password: newPassword }).eq('roll', roll).select();
+      if (error) throw error;
+      return (data && data.length > 0) ? true : false;
+    } catch (err) {
+      console.warn('⚠️ Supabase member password update failed. Falling back to mock-db.');
+    }
+  }
+  const db = readMockDB();
+  const mIdx = db.members.findIndex(m => m.roll === roll);
+  if (mIdx === -1) return false;
+  db.members[mIdx].password = newPassword;
+  writeMockDB(db);
+  return true;
+}
+
 

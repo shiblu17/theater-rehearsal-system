@@ -38,6 +38,7 @@ CREATE TABLE IF NOT EXISTS members (
     role TEXT NOT NULL, -- 'অভিনেতা', 'নির্দেশক', 'কলাকুশলী'
     character_name TEXT, -- ক্যারেক্টার ম্যাপিং (যেমন: নন্দিনী, বিশু পাগল)
     avatar_url TEXT,
+    password TEXT DEFAULT 'roktokorobi52' NOT NULL,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
 );
 
@@ -113,12 +114,15 @@ CREATE TABLE IF NOT EXISTS rehearsals (
     created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
 );
 
+-- Enable RLS for rehearsals
 ALTER TABLE rehearsals ENABLE ROW LEVEL SECURITY;
 
+-- Allow anyone to read rehearsals
 DROP POLICY IF EXISTS "Allow anyone to read rehearsals" ON rehearsals;
 CREATE POLICY "Allow anyone to read rehearsals" ON rehearsals
     FOR SELECT USING (true);
 
+-- Allow anyone to manage rehearsals
 DROP POLICY IF EXISTS "Allow anyone to manage rehearsals" ON rehearsals;
 CREATE POLICY "Allow anyone to manage rehearsals" ON rehearsals
     FOR ALL USING (true) WITH CHECK (true);
@@ -132,40 +136,43 @@ CREATE TABLE IF NOT EXISTS rehearsal_notes (
     created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
 );
 
+-- Enable RLS for rehearsal_notes
 ALTER TABLE rehearsal_notes ENABLE ROW LEVEL SECURITY;
 
+-- Allow anyone to read rehearsal_notes
 DROP POLICY IF EXISTS "Allow anyone to read rehearsal_notes" ON rehearsal_notes;
 CREATE POLICY "Allow anyone to read rehearsal_notes" ON rehearsal_notes
     FOR SELECT USING (true);
 
+-- Allow anyone to manage rehearsal_notes
 DROP POLICY IF EXISTS "Allow anyone to manage rehearsal_notes" ON rehearsal_notes;
 CREATE POLICY "Allow anyone to manage rehearsal_notes" ON rehearsal_notes
     FOR ALL USING (true) WITH CHECK (true);
 
 
 -- Seed default members from the class roster (Jahangirnagar University Drama & Dramatics 52nd batch)
-INSERT INTO members (roll, name, role, character_name, avatar_url) VALUES
-('1041', 'সীমান্ত সূত্রধর সুমন', 'অভিনেতা', 'ফাগুলাল', 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&auto=format&fit=crop&q=80'),
-('1042', 'হৃদয় রায়', 'অভিনেতা', 'অধ্যাপক', 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop&q=80'),
-('1043', 'নাহিয়ান কাব্য', 'অভিনেতা', 'রঞ্জন', 'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=150&auto=format&fit=crop&q=80'),
-('1045', 'সাহিদুল ইসলাম', 'অভিনেতা', 'গোকুল', 'https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?w=150&auto=format&fit=crop&q=80'),
-('1046', 'নাসিম পারভেজ প্রভাত', 'অভিনেতা', 'মোড়ল', 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=150&auto=format&fit=crop&q=80'),
-('1047', 'আতিকুজ্জামান শিবলু', 'অভিনেতা', 'রাজা', 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&auto=format&fit=crop&q=80'),
-('1048', 'শেখ ফারদিন ইসলাম জিম', 'অভিনেতা', 'অধিকারী', 'https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?w=150&auto=format&fit=crop&q=80'),
-('1049', 'মোঃ নাফিজ-উল-আলম', 'অভিনেতা', 'বিশু পাগল', 'https://images.unsplash.com/photo-1500048993953-d23a436266cf?w=150&auto=format&fit=crop&q=80'),
-('1050', 'অপূর্ব বিশ্বাস', 'অভিনেতা', 'কিশোর', 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop&q=80'),
-('1051', 'তৌহিদ মোস্তাক নীল', 'অভিনেতা', 'পড়ুয়া', 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&auto=format&fit=crop&q=80'),
-('1052', 'নীল কমল লাল খাঁ', 'অভিনেতা', 'খনি সর্দার', 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=150&auto=format&fit=crop&q=80'),
-('1053', 'বিশ্বাসের মাধুর্য রিফাত', 'অভিনেতা', 'দ্বারপাল', 'https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?w=150&auto=format&fit=crop&q=80'),
-('1054', 'মোঃ শাফায়েত জামিল লিজান', 'অভিনেতা', 'রাজপ্রহরী', 'https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?w=150&auto=format&fit=crop&q=80'),
-('1055', 'সজীব হোসেন দোলন', 'অভিনেতা', 'খোদাইকর', 'https://images.unsplash.com/photo-1500048993953-d23a436266cf?w=150&auto=format&fit=crop&q=80'),
-('1057', 'উম্মে মারিয়াম', 'অভিনেত্রী', 'চন্দ্রা', 'https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=150&auto=format&fit=crop&q=80'),
-('1058', 'স্নেহা বান্টা', 'অভিনেত্রী', 'নন্দিনী', 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&auto=format&fit=crop&q=80'),
-('1060', 'মুশফিকা নওশিন ঐতিহ্য', 'অভিনেত্রী', 'রূপমঞ্জরী', 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150&auto=format&fit=crop&q=80'),
-('1061', 'মিথিলা তাসফিয়া সাজ্জাদ', 'অভিনেত্রী', 'সংগীতি', 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80'),
-('1062', 'সাজিদা সামিহা', 'অভিনেত্রী', 'নৃত্যশিল্পী', 'https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=150&auto=format&fit=crop&q=80'),
-('1063', 'প্রিয়ন্তী চক্রবর্তী', 'অভিনেত্রী', 'নেপথ্য গায়িকা', 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&auto=format&fit=crop&q=80'),
-('1064', 'দেবব্রতা সরকার অহনা', 'অভিনেত্রী', 'অদিতি', 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150&auto=format&fit=crop&q=80'),
-('1065', 'জেসমিন রীমা', 'অভিনেত্রী', 'নর্তকী', 'https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=150&auto=format&fit=crop&q=80'),
-('1069', 'মারিয়া আক্তার রায়শা', 'অভিনেত্রী', 'প্রহরিণী', 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&auto=format&fit=crop&q=80')
+INSERT INTO members (roll, name, role, character_name, avatar_url, password) VALUES
+('1041', 'সীমান্ত সূত্রধর সুমন', 'অভিনেতা', 'ফাগুলাল', 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&auto=format&fit=crop&q=80', 'roktokorobi52'),
+('1042', 'হৃদয় রায়', 'অভিনেতা', 'অধ্যাপক', 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop&q=80', 'roktokorobi52'),
+('1043', 'নাহিয়ান কাব্য', 'অভিনেতা', 'রঞ্জন', 'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=150&auto=format&fit=crop&q=80', 'roktokorobi52'),
+('1045', 'সাহিদুল ইসলাম', 'অভিনেতা', 'গোকুল', 'https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?w=150&auto=format&fit=crop&q=80', 'roktokorobi52'),
+('1046', 'নাসিম পারভেজ প্রভাত', 'অভিনেতা', 'মোড়ল', 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=150&auto=format&fit=crop&q=80', 'roktokorobi52'),
+('1047', 'আতিকুজ্জামান শিবলু', 'অভিনেতা', 'রাজা', 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&auto=format&fit=crop&q=80', 'roktokorobi52'),
+('1048', 'শেখ ফারদিন ইসলাম জিম', 'অভিনেতা', 'অধিকারী', 'https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?w=150&auto=format&fit=crop&q=80', 'roktokorobi52'),
+('1049', 'মোঃ নাফিজ-উল-আলম', 'অভিনেতা', 'বিশু পাগল', 'https://images.unsplash.com/photo-1500048993953-d23a436266cf?w=150&auto=format&fit=crop&q=80', 'roktokorobi52'),
+('1050', 'অপূর্ব বিশ্বাস', 'অভিনেতা', 'কিশোর', 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop&q=80', 'roktokorobi52'),
+('1051', 'তৌহিদ মোস্তাক নীল', 'অভিনেতা', 'পড়ুয়া', 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&auto=format&fit=crop&q=80', 'roktokorobi52'),
+('1052', 'নীল কমল লাল খাঁ', 'অভিনেতা', 'খনি সর্দার', 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=150&auto=format&fit=crop&q=80', 'roktokorobi52'),
+('1053', 'বিশ্বাসের মাধুর্য রিফাত', 'অভিনেতা', 'দ্বারপাল', 'https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?w=150&auto=format&fit=crop&q=80', 'roktokorobi52'),
+('1054', 'মোঃ শাফায়েত জামিল লিজান', 'অভিনেতা', 'রাজপ্রহরী', 'https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?w=150&auto=format&fit=crop&q=80', 'roktokorobi52'),
+('1055', 'সজীব হোসেন দোলন', 'অভিনেতা', 'খোদাইকর', 'https://images.unsplash.com/photo-1500048993953-d23a436266cf?w=150&auto=format&fit=crop&q=80', 'roktokorobi52'),
+('1057', 'উম্মে মারিয়াম', 'অভিনেত্রী', 'চন্দ্রা', 'https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=150&auto=format&fit=crop&q=80', 'roktokorobi52'),
+('1059', 'স্নেহা বান্টা', 'অভিনেত্রী', 'নন্দিনী', 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&auto=format&fit=crop&q=80', 'roktokorobi52'),
+('1061', 'মুশফিকা নওশিন ঐতিহ্য', 'অভিনেত্রী', 'রূপমঞ্জরী', 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150&auto=format&fit=crop&q=80', 'roktokorobi52'),
+('1062', 'মিথিলা তাসফিয়া সাজ্জাদ', 'অভিনেত্রী', 'সংগীতি', 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80', 'roktokorobi52'),
+('1063', 'সাজিদা সামিহা', 'অভিনেত্রী', 'নৃত্যশিল্পী', 'https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=150&auto=format&fit=crop&q=80', 'roktokorobi52'),
+('1064', 'প্রিয়ন্তী চক্রবর্তী', 'অভিনেত্রী', 'নেপথ্য গায়িকা', 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&auto=format&fit=crop&q=80', 'roktokorobi52'),
+('1065', 'দেবব্রতা সরকার অহনা', 'অভিনেত্রী', 'অদিতি', 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150&auto=format&fit=crop&q=80', 'roktokorobi52'),
+('1066', 'জেসমিন রীমা', 'অভিনেত্রী', 'নর্তকী', 'https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=150&auto=format&fit=crop&q=80', 'roktokorobi52'),
+('1070', 'মারিয়া আক্তার রায়শা', 'অভিনেত্রী', 'প্রহরিণী', 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&auto=format&fit=crop&q=80', 'roktokorobi52')
 ON CONFLICT (roll) DO NOTHING;
