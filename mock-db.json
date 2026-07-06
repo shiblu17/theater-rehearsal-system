@@ -1,0 +1,334 @@
+{
+  "members": [
+    {
+      "id": "m1",
+      "roll": "1041",
+      "name": "সীমান্ত সূত্রধর সুমন",
+      "role": "অভিনেতা",
+      "character_name": "ফাগুলাল",
+      "avatar_url": "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&auto=format&fit=crop&q=80"
+    },
+    {
+      "id": "m2",
+      "roll": "1042",
+      "name": "হৃদয় রায়",
+      "role": "অভিনেতা",
+      "character_name": "অধ্যাপক",
+      "avatar_url": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop&q=80"
+    },
+    {
+      "id": "m3",
+      "roll": "1043",
+      "name": "নাহিয়ান কাব্য",
+      "role": "অভিনেতা",
+      "character_name": "রঞ্জন",
+      "avatar_url": "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=150&auto=format&fit=crop&q=80"
+    },
+    {
+      "id": "m4",
+      "roll": "1045",
+      "name": "সাহিদুল ইসলাম",
+      "role": "অভিনেতা",
+      "character_name": "গোকুল",
+      "avatar_url": "https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?w=150&auto=format&fit=crop&q=80"
+    },
+    {
+      "id": "m5",
+      "roll": "1046",
+      "name": "নাসিম পারভেজ প্রভাত",
+      "role": "অভিনেতা",
+      "character_name": "মোড়ল",
+      "avatar_url": "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=150&auto=format&fit=crop&q=80"
+    },
+    {
+      "id": "m6",
+      "roll": "1047",
+      "name": "আতিকুজ্জামান শিবলু",
+      "role": "অভিনেতা",
+      "character_name": "রাজা",
+      "avatar_url": "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&auto=format&fit=crop&q=80"
+    },
+    {
+      "id": "m7",
+      "roll": "1048",
+      "name": "শেখ ফারদিন ইসলাম জিম",
+      "role": "অভিনেতা",
+      "character_name": "অধিকারী",
+      "avatar_url": "https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?w=150&auto=format&fit=crop&q=80"
+    },
+    {
+      "id": "m8",
+      "roll": "1049",
+      "name": "মোঃ নাফিজ-উল-আলম",
+      "role": "অভিনেতা",
+      "character_name": "বিশু পাগল",
+      "avatar_url": "https://images.unsplash.com/photo-1500048993953-d23a436266cf?w=150&auto=format&fit=crop&q=80"
+    },
+    {
+      "id": "m9",
+      "roll": "1050",
+      "name": "অপূর্ব বিশ্বাস",
+      "role": "অভিনেতা",
+      "character_name": "কিশোর",
+      "avatar_url": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop&q=80"
+    },
+    {
+      "id": "m10",
+      "roll": "1051",
+      "name": "তৌহিদ মোস্তাক নীল",
+      "role": "অভিনেতা",
+      "character_name": "পড়ুয়া",
+      "avatar_url": "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&auto=format&fit=crop&q=80"
+    },
+    {
+      "id": "m11",
+      "roll": "1052",
+      "name": "নীল কমল লাল খাঁ",
+      "role": "অভিনেতা",
+      "character_name": "খনি সর্দার",
+      "avatar_url": "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=150&auto=format&fit=crop&q=80"
+    },
+    {
+      "id": "m12",
+      "roll": "1053",
+      "name": "বিশ্বাসের মাধুর্য রিফাত",
+      "role": "অভিনেতা",
+      "character_name": "দ্বারপাল",
+      "avatar_url": "https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?w=150&auto=format&fit=crop&q=80"
+    },
+    {
+      "id": "m13",
+      "roll": "1054",
+      "name": "মোঃ শাফায়েত জামিল লিজান",
+      "role": "অভিনেতা",
+      "character_name": "রাজপ্রহরী",
+      "avatar_url": "https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?w=150&auto=format&fit=crop&q=80"
+    },
+    {
+      "id": "m14",
+      "roll": "1055",
+      "name": "সজীব হোসেন দোলন",
+      "role": "অভিনেতা",
+      "character_name": "খোদাইকর",
+      "avatar_url": "https://images.unsplash.com/photo-1500048993953-d23a436266cf?w=150&auto=format&fit=crop&q=80"
+    },
+    {
+      "id": "m15",
+      "roll": "1057",
+      "name": "উম্মে মারিয়াম",
+      "role": "অভিনেত্রী",
+      "character_name": "চন্দ্রা",
+      "avatar_url": "https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=150&auto=format&fit=crop&q=80"
+    },
+    {
+      "id": "m16",
+      "roll": "1058",
+      "name": "স্নেহা বান্টা",
+      "role": "অভিনেত্রী",
+      "character_name": "নন্দিনী",
+      "avatar_url": "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&auto=format&fit=crop&q=80"
+    },
+    {
+      "id": "m17",
+      "roll": "1060",
+      "name": "মুশফিকা নওশিন ঐতিহ্য",
+      "role": "অভিনেত্রী",
+      "character_name": "রূপমঞ্জরী",
+      "avatar_url": "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150&auto=format&fit=crop&q=80"
+    },
+    {
+      "id": "m18",
+      "roll": "1061",
+      "name": "মিথিলা তাসфিয়া সাজ্জাদ",
+      "role": "অভিনেত্রী",
+      "character_name": "সংগীতি",
+      "avatar_url": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80"
+    },
+    {
+      "id": "m19",
+      "roll": "1062",
+      "name": "সাজিদা সামিহা",
+      "role": "অভিনেত্রী",
+      "character_name": "নৃত্যশিল্পী",
+      "avatar_url": "https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=150&auto=format&fit=crop&q=80"
+    },
+    {
+      "id": "m20",
+      "roll": "1063",
+      "name": "প্রিয়ন্তী চক্রবর্তী",
+      "role": "অভিনেত্রী",
+      "character_name": "নেপথ্য গায়িকা",
+      "avatar_url": "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&auto=format&fit=crop&q=80"
+    },
+    {
+      "id": "m21",
+      "roll": "1064",
+      "name": "দেবব্রতা সরকার অহনা",
+      "role": "অভিনেত্রী",
+      "character_name": "অদিতি",
+      "avatar_url": "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150&auto=format&fit=crop&q=80"
+    },
+    {
+      "id": "m22",
+      "roll": "1065",
+      "name": "জেসমিন রীমা",
+      "role": "অভিনেত্রী",
+      "character_name": "নর্তকী",
+      "avatar_url": "https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=150&auto=format&fit=crop&q=80"
+    },
+    {
+      "id": "m23",
+      "roll": "1069",
+      "name": "মারিয়া আক্তার রায়শা",
+      "role": "অভিনেত্রী",
+      "character_name": "প্রহরিণী",
+      "avatar_url": "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&auto=format&fit=crop&q=80"
+    }
+  ],
+  "tickets": [
+    {
+      "name": "আহসান হাবিব",
+      "email": "ahsan@example.com",
+      "phone": "01712345678",
+      "seats": 2,
+      "is_verified": false,
+      "id": "t_demo1",
+      "created_at": "2026-07-06T08:41:43.580Z"
+    },
+    {
+      "name": "তাসনিয়া রহমান",
+      "email": "tasnia@example.com",
+      "phone": "01812345678",
+      "seats": 3,
+      "is_verified": true,
+      "id": "t_demo2",
+      "created_at": "2026-07-06T07:41:43.581Z"
+    },
+    {
+      "name": "ড. মোস্তাফিজুর রহমান",
+      "email": "mustafiz@juniv.edu",
+      "phone": "01512345678",
+      "seats": 1,
+      "is_verified": false,
+      "id": "t_demo3",
+      "created_at": "2026-07-06T06:41:43.581Z"
+    },
+    {
+      "name": "ফারজানা ববি",
+      "email": "farjana@example.com",
+      "phone": "01912345678",
+      "seats": 4,
+      "is_verified": false,
+      "id": "t_demo4",
+      "created_at": "2026-07-06T05:41:43.581Z"
+    },
+    {
+      "name": "তাহমিদ চৌধুরী",
+      "email": "tahmid@example.com",
+      "phone": "01312345678",
+      "seats": 2,
+      "is_verified": false,
+      "id": "t_demo5",
+      "created_at": "2026-07-06T04:41:43.581Z"
+    }
+  ],
+  "attendance": [
+    {
+      "id": "a_demo1",
+      "member_id": "m1",
+      "check_in_time": "2026-07-06T08:41:43.581Z",
+      "is_late": true,
+      "status": "late"
+    },
+    {
+      "id": "a_demo2",
+      "member_id": "m2",
+      "check_in_time": "2026-07-05T07:41:43.581Z",
+      "is_late": false,
+      "status": "present"
+    },
+    {
+      "id": "a_demo3",
+      "member_id": "m3",
+      "check_in_time": "2026-07-04T08:41:43.581Z",
+      "is_late": false,
+      "status": "present"
+    },
+    {
+      "id": "a_demo4",
+      "member_id": "m4",
+      "check_in_time": "2026-07-03T07:41:43.581Z",
+      "is_late": true,
+      "status": "late"
+    },
+    {
+      "id": "a_demo5",
+      "member_id": "m5",
+      "check_in_time": "2026-07-02T08:41:43.581Z",
+      "is_late": false,
+      "status": "present"
+    },
+    {
+      "id": "a_demo6",
+      "member_id": "m9",
+      "check_in_time": "2026-07-01T07:41:43.581Z",
+      "is_late": false,
+      "status": "present"
+    },
+    {
+      "id": "a_demo7",
+      "member_id": "m10",
+      "check_in_time": "2026-06-30T08:41:43.581Z",
+      "is_late": true,
+      "status": "late"
+    },
+    {
+      "id": "a_demo8",
+      "member_id": "m16",
+      "check_in_time": "2026-06-29T07:41:43.581Z",
+      "is_late": false,
+      "status": "present"
+    }
+  ],
+  "subscriptions": [],
+  "rehearsals": [
+    {
+      "id": "r_demo1",
+      "title": "দৃশ্য ১ ও ২ ব্লকিং",
+      "date": "2026-07-07",
+      "time": "১১:৩০",
+      "required_cast": "নন্দিনী, রাজা, বিশু পাগল"
+    },
+    {
+      "id": "r_demo2",
+      "title": "বিশু পাগলের গান ও সংগীত অনুশীলন",
+      "date": "2026-07-08",
+      "time": "০৩:০০",
+      "required_cast": "বিশু পাগল, সংগীতি, নৃত্যশিল্পী"
+    },
+    {
+      "id": "r_demo3",
+      "title": "দৃশ্য ৪ ও ৫ শেষ রিহার্সাল",
+      "date": "2026-07-09",
+      "time": "১১:৩০",
+      "required_cast": "নন্দিনী, রাজা, কিশোর, চন্দ্রা"
+    }
+  ],
+  "notes": [
+    {
+      "id": "n_1783328464673",
+      "date": "৬ জুলাই, ২০২৬",
+      "content": "সীমান্তর মাথা ফাঠাও\n"
+    },
+    {
+      "id": "n_demo1",
+      "date": "৬ জুলাই ২০২৬",
+      "content": "বিশু পাগলের প্রবেশ দৃশ্যে আলোর ফোকাস আরেকটু উজ্জ্বল করতে হবে। চন্দ্রা এবং ফাগুলালের ডায়ালগ থ্রোয়িং বেশ জুতসই হয়েছে।"
+    },
+    {
+      "id": "n_demo2",
+      "date": "৫ জুলাই ২০২৬",
+      "content": "মঞ্চ সজ্জার কলাকুশলীরা আজকের মধ্যে ল্যাবের পেছনের কালো পর্দা ফিট করে দেবেন। নন্দিনীর রক্তকরবী ফুলগুলো সজীব দেখানোর জন্য ডামিগুলো লাল রং করুন।"
+    }
+  ]
+}
