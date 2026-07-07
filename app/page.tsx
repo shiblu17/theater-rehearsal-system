@@ -93,26 +93,25 @@ export default function HomePage() {
         let timeStr = '';
         if (hours > 0) timeStr += `${hours} ঘণ্টা `;
         timeStr += `${minutes} মিনিট ${seconds} সেকেন্ড`;
-        setCountdownText(`মহড়া শুরু হতে বাকি: ${timeStr}`);
+        setCountdownText(`মহড়া শুরু হতে ${timeStr} বাকি।`);
       }
     };
 
     tick();
-    timerRef.current = setInterval(tick, 1000);
-
-    return () => {
-      if (timerRef.current) clearInterval(timerRef.current);
-    };
+    const interval = setInterval(tick, 1000);
+    timerRef.current = interval;
+    return () => clearInterval(interval);
   }, [nextRehearsal]);
 
-  const getCastingActor = (character: string) => {
-    return leaderboard.find(m => m.character_name === character);
+  const getCastingActor = (charName: string) => {
+    return leaderboard.find(m => m.character_name === charName);
   };
 
   const majorCharacters = [
-    { title: 'নন্দিনী (Nandini)', desc: 'অকৃত্রিম প্রকৃতি, প্রেম ও স্বাধীনতার প্রতীক।' },
-    { title: 'রাজา (Raja)', desc: 'পুঁজিবাদ, শোষণ, ও নিঃসঙ্গতার জালে বন্দি শাসন।' },
-    { title: 'বিশু পাগল (Bishu Pagol)', desc: 'নন্দিনীর গানের সাথি ও খনির তাত্ত্বিক বিদ্রোহী।' },
+    { title: 'নন্দিনী (Nandini)', desc: 'যক্ষপুরীর বন্দী খনি শ্রমিকদের মাঝে সৌন্দর্যের প্রতীক ও মুক্তির প্রতীক।' },
+    { title: 'রাজা (Raja)', desc: 'যক্ষপুরীর খনির অদৃশ্য মহাশক্তিশালী ও অত্যন্ত জটিল শাসনকর্তা।' },
+    { title: 'বিশু পাগল (Bishu Pagol)', desc: 'নন্দিনীর গানের সাথি ও যক্ষপুরীর নিপীড়িত খনি শ্রমিকদের কণ্ঠস্বর।' },
+    { title: 'রাজপ্রহরী (Rajprohori)', desc: 'যক্ষপুরীর ক্ষমতা ও শোষণ টিকিয়ে রাখতে নিয়োজিত প্রহরী।' },
     { title: 'রঞ্জন (Ranjan)', desc: 'মুক্তি ও যৌবনের জাগরণের অদৃশ্য নায়ক।' },
     { title: 'চন্দ্রা (Chandra)', desc: 'ফাগুলালের স্ত্রী ও যক্ষপুরীর খেটে খাওয়া নারী শক্তি।' },
     { title: 'ফাগুলাল (Phagulal)', desc: 'খনির শ্রমিকদের অসন্তোষ ও প্রতিবাদের প্রথম কণ্ঠ।' },
