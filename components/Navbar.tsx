@@ -27,7 +27,7 @@ export default function Navbar() {
         </div>
       </div>
 
-      <div className="flex items-center gap-2 md:gap-6">
+      <div className="hidden md:flex items-center gap-6">
         {navItems.map((item) => {
           const Icon = item.icon;
           const isActive = pathname === item.href || (item.href !== '/' && pathname.startsWith(item.href));
@@ -36,14 +36,14 @@ export default function Navbar() {
             <Link
               key={item.href}
               href={item.href}
-              className={`flex items-center gap-2 px-3 py-2 rounded-xl text-sm font-medium transition-all ${
+              className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold transition-all ${
                 isActive
                   ? 'bg-gradient-to-r from-[#e056fd] to-[#be2edd] text-white shadow-md shadow-[#e056fd]/15'
                   : 'text-gray-400 hover:text-white hover:bg-white/5'
               }`}
             >
               <Icon size={16} />
-              <span className="hidden sm:inline">{item.name}</span>
+              <span>{item.name}</span>
             </Link>
           );
         })}

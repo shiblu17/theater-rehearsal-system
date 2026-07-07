@@ -4,6 +4,7 @@ import './globals.css';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import PWARegistration from '@/components/PWARegistration';
+import BottomNavigation from '@/components/BottomNavigation';
 
 const outfit = Outfit({
   variable: '--font-outfit',
@@ -38,7 +39,8 @@ export default function RootLayout({
       <body className="min-h-screen flex flex-col antialiased">
         <PWARegistration />
         <Navbar />
-        <main className="flex-1 w-full flex flex-col">{children}</main>
+        <main className="flex-1 w-full flex flex-col pb-20 md:pb-0">{children}</main>
+        <BottomNavigation />
         <Footer />
       </body>
     </html>
