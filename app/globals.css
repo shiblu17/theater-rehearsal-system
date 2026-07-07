@@ -8,22 +8,24 @@
   --font-display: 'Outfit', 'Inter', system-ui, -apple-system, sans-serif;
   --font-body: 'Inter', system-ui, -apple-system, sans-serif;
   
-  --bg-main: #06060c;
-  --bg-gradient: radial-gradient(circle at 50% 0%, #170b22 0%, #06060c 70%);
-  --bg-card: rgba(18, 18, 28, 0.7);
-  --bg-card-hover: rgba(28, 28, 44, 0.9);
+  --bg-main: #0c141a; /* Color 1 (Deep Dark Slate-Navy) */
+  --bg-gradient: radial-gradient(circle at 50% 0%, #15252e 0%, #0c141a 70%);
+  --bg-card: rgba(21, 37, 46, 0.7);
+  --bg-card-hover: rgba(28, 49, 61, 0.9);
   
-  --color-primary: #e056fd; /* Neon Violet */
-  --color-primary-glow: rgba(224, 86, 253, 0.25);
-  --color-secondary: #ff7979; /* Soft Crimson/Red (matching Roktokorobi flower) */
-  --color-secondary-glow: rgba(255, 121, 121, 0.25);
-  --color-accent: #22a6b3; /* Teal */
+  --color-primary: #851b2e; /* Maroon/Deep Red - Color 6 */
+  --color-primary-glow: rgba(133, 27, 46, 0.25);
+  --color-secondary: #c85122; /* Rust Orange - Color 5 */
+  --color-secondary-glow: rgba(200, 81, 34, 0.25);
+  --color-accent: #e59f5b; /* Soft Apricot/Gold - Color 4 */
+  --color-forest: #2f594d; /* Forest Green - Color 2 */
+  --color-sage: #6f886f; /* Sage/Olive Green - Color 3 */
   
   --text-main: #f5f6fa;
-  --text-muted: #a4b0be;
+  --text-muted: #95afc0;
   
   --border-glass: rgba(255, 255, 255, 0.08);
-  --border-glass-active: rgba(224, 86, 253, 0.35);
+  --border-glass-active: rgba(200, 81, 34, 0.35); /* Rust Orange */
   
   --spacing-xs: 0.5rem;
   --spacing-sm: 1rem;
@@ -31,6 +33,69 @@
   --spacing-lg: 2.5rem;
   --spacing-xl: 4rem;
   --spacing-xxl: 6rem;
+}
+
+/* Color Palette Override Rules for hardcoded classes */
+.bg-\[\#e056fd\]\/10, .bg-\[\#e056fd\]\/5, .bg-\[\#e056fd\]\/15 {
+  background-color: rgba(229, 159, 91, 0.12) !important;
+}
+.text-\[\#e056fd\] {
+  color: #e59f5b !important;
+}
+.border-\[\#e056fd\]\/15, .border-\[\#e056fd\]\/25 {
+  border-color: rgba(229, 159, 91, 0.25) !important;
+}
+.hover\:border-\[\#e056fd\]\/30:hover {
+  border-color: rgba(229, 159, 91, 0.3) !important;
+}
+
+.bg-\[\#ff7979\]\/10, .bg-\[\#ff7979\]\/5, .bg-\[\#ff7979\]\/15 {
+  background-color: rgba(200, 81, 34, 0.12) !important;
+}
+.text-\[\#ff7979\] {
+  color: #c85122 !important;
+}
+.border-\[\#ff7979\]\/10, .border-\[\#ff7979\]\/20, .border-\[\#ff7979\]\/30 {
+  border-color: rgba(200, 81, 34, 0.25) !important;
+}
+.hover\:border-\[\#ff7979\]\/20:hover {
+  border-color: rgba(200, 81, 34, 0.25) !important;
+}
+
+.text-\[\#22a6b3\] {
+  color: #6f886f !important;
+}
+.bg-\[\#22a6b3\]\/10 {
+  background-color: rgba(111, 136, 111, 0.12) !important;
+}
+
+/* Gradient mappings to match color palette */
+.bg-gradient-to-tr.from-\[\#ff7979\].to-\[\#e056fd\] {
+  background-image: linear-gradient(135deg, #c85122 0%, #e59f5b 100%) !important;
+}
+.bg-gradient-to-r.from-\[\#ff7979\].to-\[\#e056fd\] {
+  background-image: linear-gradient(90deg, #c85122 0%, #e59f5b 100%) !important;
+}
+.from-\[\#ff7979\]\/5 {
+  --tw-gradient-from: rgba(200, 81, 34, 0.05) !important;
+}
+.bg-gradient-to-br.from-\[\#ff7979\].to-\[\#eb4d4b\] {
+  background-image: linear-gradient(135deg, #851b2e 0%, #c85122 100%) !important;
+}
+.bg-gradient-to-br.from-\[\#22a6b3\].to-\[\#00d2d3\] {
+  background-image: linear-gradient(135deg, #2f594d 0%, #6f886f 100%) !important;
+}
+.bg-gradient-to-br.from-\[\#e056fd\].to-\[\#be2edd\] {
+  background-image: linear-gradient(135deg, #851b2e 0%, #e59f5b 100%) !important;
+}
+.bg-gradient-to-tr.from-\[\#ff7979\]\/20.to-\[\#e056fd\]\/20 {
+  background-image: linear-gradient(135deg, rgba(200, 81, 34, 0.2) 0%, rgba(229, 159, 91, 0.2) 100%) !important;
+}
+.from-\[\#e056fd\]\/10 {
+  --tw-gradient-from: rgba(229, 159, 91, 0.1) !important;
+}
+.from-\[\#ff7979\]\/10 {
+  --tw-gradient-from: rgba(200, 81, 34, 0.1) !important;
 }
 
 /* -------------------------------------------------------------
