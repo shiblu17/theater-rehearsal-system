@@ -10,7 +10,7 @@ export default function BottomNavigation() {
   const navItems = [
     { name: 'হোম', href: '/', icon: Sparkles },
     { name: 'টিকিট বুকিং', href: '/tickets', icon: Ticket },
-    { name: 'পোর্টাল', href: '/dashboard', icon: LayoutDashboard },
+    { name: 'নির্দেশক পোর্টাল', href: '/dashboard', icon: LayoutDashboard },
   ];
 
   return (

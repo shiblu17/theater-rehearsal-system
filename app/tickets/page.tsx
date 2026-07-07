@@ -62,7 +62,7 @@ export default function TicketsPage() {
 
             <div className="space-y-2">
               <h2 className="text-2xl font-black text-white">টিকিট বুকিং সফল হয়েছে!</h2>
-              <p className="text-xs text-gray-400">আপনার ডিজিটাল এন্ট্রি পাসটি নিচে তৈরি করা হয়েছে।</p>
+              <p className="text-xs text-gray-400">আপনার ডিজিটাল এন্ট্রি পাসটি নিচে তৈরি করা হয়েছে। একই সাথে আপনার ইমেইল ও মোবাইল নম্বরে (SMS) কিউআর কোডসহ টিকিট পাঠানো হয়েছে।</p>
             </div>
 
             {/* Ticket Card visual representation */}
@@ -287,7 +287,7 @@ export default function TicketsPage() {
                         </button>
                       </div>
                       <span className="text-xs text-gray-400">
-                        * সর্বোচ্চ ৫টি আসন একসাথে বুক করা যাবে।
+                        * সর্বোচ্চ ৫টি আসন একসাথে বুক করা যাবে। (বুকিং নিশ্চিত হওয়ার পর আপনার ইমেইল ও মোবাইলে (SMS) কিউআর কোড পাঠানো হবে)
                       </span>
                     </div>
                   </div>

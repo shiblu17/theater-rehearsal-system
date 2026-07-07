@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useRef } from 'react';
 import Link from 'next/link';
-import { Calendar, MapPin, Clock, Users, ArrowRight, Shield, Download, FileText, Music, AlertCircle, Timer } from 'lucide-react';
+import { Calendar, MapPin, Clock, Users, ArrowRight, Shield, Download, FileText, Music, AlertCircle, Timer, ChevronDown, BookOpen } from 'lucide-react';
 import { Member, Rehearsal, RehearsalNote } from '@/lib/db';
 
 export default function HomePage() {
@@ -15,6 +15,9 @@ export default function HomePage() {
   const [nextRehearsal, setNextRehearsal] = useState<Rehearsal | null>(null);
   const [countdownText, setCountdownText] = useState<string>('');
   const [isRehearsalPassed, setIsRehearsalPassed] = useState<boolean>(false);
+  const [isSynopsisOpen, setIsSynopsisOpen] = useState(false);
+  const [isAnalysisOpen, setIsAnalysisOpen] = useState(false);
+  const [isScheduleOpen, setIsScheduleOpen] = useState(false);
 
   const timerRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -119,6 +122,13 @@ export default function HomePage() {
     { title: 'কিশোর (Kishore)', desc: 'নন্দিনীর প্রতি নিঃস্বার্থ ভক্ত ও আত্মত্যাগী বালক।' }
   ];
 
+  const isAllCastingTbd = majorCharacters.every(char => {
+    const charNameOnly = char.title.split(' ')[0];
+    const actor = getCastingActor(charNameOnly);
+    return !actor;
+  });
+
+
   return (
     <div className="flex-1 space-y-4">
       
@@ -168,12 +178,8 @@ export default function HomePage() {
 
             <div className="flex flex-wrap gap-4 pt-6">
               <Link href="/tickets" className="btn-secondary">
-                <span>টিকিট বুকিং করুন</span>
+                <span>টিকিট বুক করুন</span>
                 <ArrowRight size={16} />
-              </Link>
-              <Link href="/dashboard" className="btn-glass">
-                <span>কনট্রোল ড্যাশবোর্ড</span>
-                <Shield size={16} />
               </Link>
             </div>
           </div>
@@ -255,85 +261,149 @@ export default function HomePage() {
       )}
 
       {/* -------------------------------------------------------------
-         About the Play Section (Synopsis)
+         Accordion Section (কাহিনী সংক্ষেপ, রূপক তত্ত্ব, মহড়া সময়সূচী)
          ------------------------------------------------------------- */}
-      <section className="section-wrapper bg-black/30">
-        <div className="content-container">
-          <div className="section-header">
-            <h2>নাটক পরিচিতি ও রূপক তত্ত্ব</h2>
-            <p>রক্তকরবী নাটকের মূল ভাবধারা এবং মঞ্চায়ন তত্ত্ব</p>
-            <div className="divider"></div>
-          </div>
-
-          <div className="grid-2-col">
-            <div className="glass-panel stack-layout-sm">
-              <span className="text-xs font-bold text-[#ff7979] tracking-wider uppercase">কাহিনী সংক্ষেপ (Synopsis)</span>
-              <h3 className="text-xl font-bold text-white">যক্ষপুরের জটিল খনি ও নন্দিনীর আগমন</h3>
-              <p className="text-sm text-gray-300 leading-relaxed">
-                রক্তকরবী নাটকের মূলে রয়েছে যক্ষপুরী নামক একটি যান্ত্রিক খনি শহর। এখানে মানুষ সোনার লোভে অন্ধ হয়ে খনির গর্ভে মাটির নিচে প্রাণহীন পাথর খুঁড়ছে। রাজা স্বয়ং নিজেকে এক জটিল জালের আড়ালে বন্দি করে রেখেছেন এবং মানুষকে শুধু উৎপাদনের যন্ত্রে পরিণত করেছেন। এই শ্বাসরুদ্ধকর পরিবেশের মাঝে রক্তকরবী ফুলের মতো রাঙা রূপ আর অফুরন্ত প্রাণশক্তি নিয়ে হাজির হয় নন্দিনী। তার উপস্থিতি খনির শ্রমিকদের অসাড় চেতনায় মুক্তির কম্পন জাগায় এবং শেষ পর্যন্ত অত্যাচারী ও জটিল শাসন ব্যবস্থার ভিত কাঁপিয়ে দেয়।
-              </p>
-            </div>
-
-            <div className="glass-panel stack-layout-sm">
-              <span className="text-xs font-bold text-[#e056fd] tracking-wider uppercase">নাটকের ঘরানা ও প্রয়োগশৈলী (Genre)</span>
-              <h3 className="text-xl font-bold text-white">প্রতীকীবাদ ও রিয়ালিস্টিক নাটকীয়তার মেলবন্ধন</h3>
-              <p className="text-sm text-gray-300 leading-relaxed">
-                রক্তকরবী রবীন্দ্রনাথের অন্যতম শ্রেষ্ঠ রূপক ও প্রতীকী নাটক (Symbolic Drama)। এখানে প্রতিটি চরিত্র ও অনুষঙ্গ এক একটি দর্শনের প্রতিনিধিত্ব করে। যেমন- 'নন্দিনী' হলো অকৃত্রিম প্রকৃতি ও সৌন্দর্যের প্রতীক; 'রাজা' হলো অন্ধ পুঁজিবাদ, শোষণ ও একাকিত্বের প্রতীক; 'রক্তকরবী ফুল' হলো ওজস্বী যৌবনের জাগরণ এবং আত্মদানের প্রতীক। ৫২তম আবর্তনের এই মঞ্চায়নে আধুনিক আলোকসম্পাত, শক্তিশালী আবহসংগীত এবং গ্লাসমরফিক কোরিওগ্রাফির মাধ্যমে চিরায়ত রূপক নাটকের সাথে রিয়ালিজমের এক চমৎকার যুগলবন্দী ফুটিয়ে তোলা হয়েছে।
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* -------------------------------------------------------------
-         Rehearsal Upcoming Scheduler List
-         ------------------------------------------------------------- */}
-      <section className="section-wrapper bg-black/10">
-        <div className="content-container">
-          <div className="section-header">
-            <h2>মহড়া ক্যালেন্ডার ও শিডিউল (Calendar)</h2>
-            <p>পরবর্তী আসন্ন মহড়ার সময়সূচী ও কাস্ট কন্ডিশনস</p>
-            <div className="divider"></div>
-          </div>
-
-          {rehearsals.length === 0 ? (
-            <div className="glass-panel p-10 text-center text-sm text-gray-500 max-w-xl mx-auto border-white/5">
-              আপাতত কোনো আসন্ন মহড়ার শিডিউল দেওয়া নেই। নির্দেশক শীঘ্রই মহড়া ঘোষণা করবেন।
-            </div>
-          ) : (
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {rehearsals.map(r => (
-                <div key={r.id} className="glass-panel p-5 bg-gradient-to-br from-white/5 to-transparent flex flex-col justify-between text-left hover:border-[#e056fd]/30 transition-all">
-                  <div className="space-y-3">
-                    <div className="flex justify-between items-center text-[9px] text-[#e056fd] font-bold tracking-widest uppercase">
-                      <span>রিহার্সাল অ্যালার্ট</span>
-                      <span className="bg-[#e056fd]/10 py-0.5 px-2 rounded-full border border-[#e056fd]/25">UPCOMING</span>
-                    </div>
-                    <h3 className="text-base font-bold text-white">{r.title}</h3>
-                    {r.description && <p className="text-xs text-gray-400 leading-relaxed">{r.description}</p>}
-                  </div>
-                  
-                  <div className="border-t border-white/5 mt-5 pt-4 space-y-2 text-xs">
-                    <div className="flex items-center gap-2 text-gray-300">
-                      <Calendar size={12} className="text-[#ff7979]" />
-                      <span>তারিখ: {r.date}</span>
-                    </div>
-                    <div className="flex items-center gap-2 text-gray-300">
-                      <Clock size={12} className="text-[#e056fd]" />
-                      <span>সময়: {r.time}</span>
-                    </div>
-                    <div className="flex items-center gap-2 text-gray-300">
-                      <Users size={12} className="text-[#22a6b3]" />
-                      <span>চরিত্র: <span className="font-semibold text-white">{r.required_cast}</span></span>
-                    </div>
-                  </div>
+      <section className="section-wrapper bg-black/10 py-10 border-t border-white/5">
+        <div className="content-container max-w-4xl space-y-4">
+          
+          {/* Accordion 1: কাহিনী সংক্ষেপ */}
+          <div className="border border-white/5 rounded-2xl bg-[#12121c]/50 overflow-hidden transition-all duration-300">
+            <button 
+              type="button"
+              onClick={() => setIsSynopsisOpen(!isSynopsisOpen)}
+              className="w-full flex items-center justify-between p-5 text-left transition-colors hover:bg-white/5 focus:outline-none"
+            >
+              <div className="flex items-center gap-4">
+                <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center text-[#ff7979]">
+                  <BookOpen size={20} />
                 </div>
-              ))}
+                <div>
+                  <h3 className="font-bold text-white text-base">কাহিনী সংক্ষেপ</h3>
+                  <p className="text-xs text-gray-400">যক্ষপুরের জটিল খনি ও নন্দিনীর আগমনের মূল গল্প</p>
+                </div>
+              </div>
+              <span className={`transform transition-transform duration-300 text-gray-400 ${isSynopsisOpen ? 'rotate-180' : ''}`}>
+                <ChevronDown size={20} />
+              </span>
+            </button>
+            <div 
+              className="transition-all duration-300 ease-in-out overflow-hidden"
+              style={{ 
+                maxHeight: isSynopsisOpen ? '1000px' : '0px', 
+                opacity: isSynopsisOpen ? 1 : 0,
+                visibility: isSynopsisOpen ? 'visible' : 'hidden'
+              }}
+            >
+              <div className="p-6 border-t border-white/5 bg-black/20 text-sm text-gray-300 leading-relaxed">
+                রক্তকরবী নাটকের মূলে রয়েছে যক্ষপুরী নামক একটি যান্ত্রিক খনি শহর। এখানে মানুষ সোনার লোভে অন্ধ হয়ে খনির গর্ভে মাটির নিচে প্রাণহীন পাথর খুঁড়ছে। রাজা স্বয়ং নিজেকে এক জটিল জালের আড়ালে বন্দি করে রেখেছেন এবং মানুষকে শুধু উৎপাদনের যন্ত্রে পরিণত করেছেন। এই শ্বাসরুদ্ধকর পরিবেশের মাঝে রক্তকরবী ফুলের মতো রাঙা রূপ আর অফুরন্ত প্রাণশক্তি নিয়ে হাজির হয় নন্দিনী। তার উপস্থিতি খনির শ্রমিকদের অসাড় চেতনায় মুক্তির কম্পন জাগায় এবং শেষ পর্যন্ত অত্যাচারী ও জটিল শাসন ব্যবস্থার ভিত কাঁপিয়ে দেয়।
+              </div>
             </div>
-          )}
+          </div>
+
+          {/* Accordion 2: রূপক তত্ত্ব ও বিশ্লেষণ */}
+          <div className="border border-white/5 rounded-2xl bg-[#12121c]/50 overflow-hidden transition-all duration-300">
+            <button 
+              type="button"
+              onClick={() => setIsAnalysisOpen(!isAnalysisOpen)}
+              className="w-full flex items-center justify-between p-5 text-left transition-colors hover:bg-white/5 focus:outline-none"
+            >
+              <div className="flex items-center gap-4">
+                <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center text-[#e056fd]">
+                  <SparklesIcon className="w-5 h-5" />
+                </div>
+                <div>
+                  <h3 className="font-bold text-white text-base">রূপক তত্ত্ব ও বিশ্লেষণ</h3>
+                  <p className="text-xs text-gray-400">প্রতীকীবাদ, রক্তকরবী ফুল ও রূপকের গূঢ় অর্থ</p>
+                </div>
+              </div>
+              <span className={`transform transition-transform duration-300 text-gray-400 ${isAnalysisOpen ? 'rotate-180' : ''}`}>
+                <ChevronDown size={20} />
+              </span>
+            </button>
+            <div 
+              className="transition-all duration-300 ease-in-out overflow-hidden"
+              style={{ 
+                maxHeight: isAnalysisOpen ? '1000px' : '0px', 
+                opacity: isAnalysisOpen ? 1 : 0,
+                visibility: isAnalysisOpen ? 'visible' : 'hidden'
+              }}
+            >
+              <div className="p-6 border-t border-white/5 bg-black/20 text-sm text-gray-300 leading-relaxed">
+                রক্তকরবী রবীন্দ্রনাথের অন্যতম শ্রেষ্ঠ রূপক ও প্রতীকী নাটক (Symbolic Drama)। এখানে প্রতিটি চরিত্র ও অনুষঙ্গ এক একটি দর্শনের প্রতিনিধিত্ব করে। যেমন- 'নন্দিনী' হলো অকৃত্রিম প্রকৃতি ও সৌন্দর্যের প্রতীক; 'রাজা' হলো অন্ধ পুঁজিবাদ, শোষণ ও একাকিত্বের প্রতীক; 'রক্তকরবী ফুল' হলো ওজস্বী যৌবনের জাগরণ এবং আত্মদানের প্রতীক। ৫২তম আবর্তনের এই মঞ্চায়নে আধুনিক আলোকসম্পাত, শক্তিশালী আবহসংগীত এবং গ্লাসমরফিক কোরিওগ্রাফির মাধ্যমে চিরায়ত রূপক নাটকের সাথে রিয়ালিজমের এক চমৎকার যুগলবন্দী ফুটিয়ে তোলা হয়েছে।
+              </div>
+            </div>
+          </div>
+
+          {/* Accordion 3: মহড়ার সময়সূচী */}
+          <div className="border border-white/5 rounded-2xl bg-[#12121c]/50 overflow-hidden transition-all duration-300">
+            <button 
+              type="button"
+              onClick={() => setIsScheduleOpen(!isScheduleOpen)}
+              className="w-full flex items-center justify-between p-5 text-left transition-colors hover:bg-white/5 focus:outline-none"
+            >
+              <div className="flex items-center gap-4">
+                <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center text-[#22a6b3]">
+                  <Calendar size={20} />
+                </div>
+                <div>
+                  <h3 className="font-bold text-white text-base">মহড়ার সময়সূচী</h3>
+                  <p className="text-xs text-gray-400">আসন্ন মহড়া ক্যালেন্ডার ও প্রয়োজনীয় কাস্টের বিবরণ</p>
+                </div>
+              </div>
+              <span className={`transform transition-transform duration-300 text-gray-400 ${isScheduleOpen ? 'rotate-180' : ''}`}>
+                <ChevronDown size={20} />
+              </span>
+            </button>
+            <div 
+              className="transition-all duration-300 ease-in-out overflow-hidden"
+              style={{ 
+                maxHeight: isScheduleOpen ? '1500px' : '0px', 
+                opacity: isScheduleOpen ? 1 : 0,
+                visibility: isScheduleOpen ? 'visible' : 'hidden'
+              }}
+            >
+              <div className="p-6 border-t border-white/5 bg-black/20">
+                {rehearsals.length === 0 ? (
+                  <div className="p-8 text-center text-sm text-gray-500 max-w-xl mx-auto">
+                    সময়সূচী এখনও প্রকাশিত হয়নি
+                  </div>
+                ) : (
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    {rehearsals.map(r => (
+                      <div key={r.id} className="border border-white/5 p-5 bg-black/30 rounded-xl flex flex-col justify-between text-left hover:border-[#e056fd]/30 transition-all">
+                        <div className="space-y-3">
+                          <div className="flex justify-between items-center text-[9px] text-[#e056fd] font-bold tracking-widest uppercase">
+                            <span>রিহার্সাল অ্যালার্ট</span>
+                            <span className="bg-[#e056fd]/10 py-0.5 px-2 rounded-full border border-[#e056fd]/25">UPCOMING</span>
+                          </div>
+                          <h3 className="text-base font-bold text-white">{r.title}</h3>
+                          {r.description && <p className="text-xs text-gray-400 leading-relaxed">{r.description}</p>}
+                        </div>
+                        
+                        <div className="border-t border-white/5 mt-5 pt-4 space-y-2 text-xs">
+                          <div className="flex items-center gap-2 text-gray-300">
+                            <Calendar size={12} className="text-[#ff7979]" />
+                            <span>তারিখ: {r.date}</span>
+                          </div>
+                          <div className="flex items-center gap-2 text-gray-300">
+                            <Clock size={12} className="text-[#e056fd]" />
+                            <span>সময়: {r.time}</span>
+                          </div>
+                          <div className="flex items-center gap-2 text-gray-300">
+                            <Users size={12} className="text-[#22a6b3]" />
+                            <span>চরিত্র: <span className="font-semibold text-white">{r.required_cast}</span></span>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+
         </div>
       </section>
-
       {/* -------------------------------------------------------------
          Casting Board Section (চরিত্র বণ্টন)
          ------------------------------------------------------------- */}
@@ -341,51 +411,57 @@ export default function HomePage() {
         <div className="content-container">
           <div className="section-header">
             <h2>চরিত্র বণ্টন বোর্ড (Casting Grid)</h2>
-            <p>নাটকের চরিত্র পরিচিতি ও কুশীলব ম্যাপিং</p>
+            <p>{isAllCastingTbd ? "কাস্টিং চলছে" : "নাটকের চরিত্র পরিচিতি ও কুশীলব ম্যাপিং"}</p>
             <div className="divider"></div>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {majorCharacters.map((char) => {
-              const charNameOnly = char.title.split(' ')[0]; // e.g. "নন্দিনী"
-              const actor = getCastingActor(charNameOnly);
-              
-              return (
-                <div key={char.title} className="glass-panel p-5 text-left flex flex-col justify-between hover:border-[#ff7979]/20 transition-all group relative overflow-hidden">
-                  
-                  {/* Dynamic Achievement Badge at the top right of the card */}
-                  {actor?.badge && (
-                    <div className="absolute top-4 right-4 flex items-center gap-1">
-                      <span className={`px-2 py-0.5 rounded-full border text-[8px] font-black uppercase tracking-wider flex items-center gap-1 ${actor.badge.className}`}>
-                        <span>{actor.badge.icon}</span>
-                        <span>{actor.badge.text}</span>
-                      </span>
-                    </div>
-                  )}
+          {isAllCastingTbd ? (
+            <div className="glass-panel p-10 text-center text-sm text-gray-500 max-w-xl mx-auto border-white/5">
+              চরিত্র বণ্টন প্রক্রিয়া চলমান রয়েছে। খুব শীঘ্রই কুশীলবদের তালিকা এখানে প্রকাশ করা হবে।
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+              {majorCharacters.map((char) => {
+                const charNameOnly = char.title.split(' ')[0]; // e.g. "নন্দিনী"
+                const actor = getCastingActor(charNameOnly);
+                
+                return (
+                  <div key={char.title} className="glass-panel p-5 text-left flex flex-col justify-between hover:border-[#ff7979]/20 transition-all group relative overflow-hidden">
+                    
+                    {/* Dynamic Achievement Badge at the top right of the card */}
+                    {actor?.badge && (
+                      <div className="absolute top-4 right-4 flex items-center gap-1">
+                        <span className={`px-2 py-0.5 rounded-full border text-[8px] font-black uppercase tracking-wider flex items-center gap-1 ${actor.badge.className}`}>
+                          <span>{actor.badge.icon}</span>
+                          <span>{actor.badge.text}</span>
+                        </span>
+                      </div>
+                    )}
 
-                  <div className="space-y-2">
-                    <h3 className="font-black text-white text-base group-hover:text-[#ff7979] transition-colors pr-16">{char.title}</h3>
-                    <p className="text-[10px] text-gray-400 leading-normal">{char.desc}</p>
-                  </div>
+                    <div className="space-y-2">
+                      <h3 className="font-black text-white text-base group-hover:text-[#ff7979] transition-colors pr-16">{char.title}</h3>
+                      <p className="text-[10px] text-gray-400 leading-normal">{char.desc}</p>
+                    </div>
 
-                  <div className="border-t border-white/5 mt-4 pt-4 flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-full overflow-hidden border border-white/10 shrink-0 bg-white/5">
-                      {actor?.avatar_url ? (
-                        <img src={actor.avatar_url} alt={actor.name} className="w-full h-full object-cover" />
-                      ) : (
-                        <div className="w-full h-full flex items-center justify-center text-[10px] font-bold text-gray-500">TBD</div>
-                      )}
-                    </div>
-                    <div className="min-w-0">
-                      <p className="text-[9px] text-gray-500 uppercase tracking-widest font-semibold">অভিনয়ে</p>
-                      <h4 className="text-xs font-bold text-white truncate max-w-full">{actor?.name || 'আসন্ন নির্বাচন'}</h4>
-                      {actor && <p className="text-[9px] text-gray-400">রোল: {actor.roll} • উপস্থিত: {actor.totalPresent} দিন</p>}
+                    <div className="border-t border-white/5 mt-4 pt-4 flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-full overflow-hidden border border-white/10 shrink-0 bg-white/5">
+                        {actor?.avatar_url ? (
+                          <img src={actor.avatar_url} alt={actor.name} className="w-full h-full object-cover" />
+                        ) : (
+                          <div className="w-full h-full flex items-center justify-center text-[10px] font-bold text-gray-500">TBD</div>
+                        )}
+                      </div>
+                      <div className="min-w-0">
+                        <p className="text-[9px] text-gray-500 uppercase tracking-widest font-semibold">অভিনয়ে</p>
+                        <h4 className="text-xs font-bold text-white truncate max-w-full">{actor?.name || 'আসন্ন নির্বাচন'}</h4>
+                        {actor && <p className="text-[9px] text-gray-400">রোল: {actor.roll} • উপস্থিত: {actor.totalPresent} দিন</p>}
+                      </div>
                     </div>
                   </div>
-                </div>
-              );
-            })}
-          </div>
+                );
+              })}
+            </div>
+          )}
 
           {/* Script & Audio Assets Cards */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8 text-left">
