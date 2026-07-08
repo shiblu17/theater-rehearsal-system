@@ -29,6 +29,7 @@ export interface Attendance {
   check_in_time: string;
   is_late: boolean;
   status: string; // 'present' | 'late' | 'absent'
+  session?: string; // 'morning' | 'afternoon'
   member?: Member;
 }
 
@@ -220,38 +221,94 @@ export async function checkIn(rollNumber: string): Promise<{ attendance: Attenda
   }
 
   const now = new Date();
-  const cutoffHour = 11;
-  const cutoffMinute = 30;
   const currentHour = now.getHours();
   const currentMinute = now.getMinutes();
 
+  // Determine session: morning (< 13:30), afternoon (>= 13:30)
+  const session = currentHour < 13 || (currentHour === 13 && currentMinute < 30) ? 'morning' : 'afternoon';
+
+  // Determine cutoff for lateness
   let isLate = false;
-  if (currentHour > cutoffHour || (currentHour === cutoffHour && currentMinute > cutoffMinute)) {
-    isLate = true;
+  if (session === 'morning') {
+    // Morning cutoff: 11:30 AM
+    isLate = currentHour > 11 || (currentHour === 11 && currentMinute > 30);
+  } else {
+    // Afternoon cutoff: 3:00 PM (15:00)
+    isLate = currentHour > 15 || (currentHour === 15 && currentMinute > 0);
   }
 
   const status = isLate ? 'late' : 'present';
 
+  // Check duplicate check-in today for the same session
+  const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate()).toISOString();
+  const todayEnd = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 23, 59, 59).toISOString();
+  const todayStr = now.toDateString();
+
   if (isSupabaseConfigured && supabase) {
     try {
+      // Query existing check-ins for this member today
+      const { data: existingLogs, error: fetchError } = await supabase
+        .from('attendance')
+        .select('*')
+        .eq('member_id', member.id)
+        .gte('check_in_time', todayStart)
+        .lte('check_in_time', todayEnd);
+
+      if (!fetchError && existingLogs && existingLogs.length > 0) {
+        const duplicate = existingLogs.find(log => (log.session || 'morning') === session);
+        if (duplicate) {
+          throw new Error(`আপনি ইতিমধ্যে ${session === 'afternoon' ? 'লাঞ্চ পরবর্তী' : 'সকালের প্রথম'} সেশনের হাজিরা দিয়েছেন!`);
+        }
+      }
+
+      // Insert check-in with session column
       const { data, error } = await supabase
         .from('attendance')
-        .insert([{ member_id: member.id, is_late: isLate, status }])
+        .insert([{ member_id: member.id, is_late: isLate, status, session }])
         .select()
         .single();
-      if (error) throw error;
+
+      if (error) {
+        // Retrying without session column if it doesn't exist yet on database
+        if (error.code === '42703') {
+          console.warn('⚠️ Supabase "session" column is missing. Retrying check-in without it.');
+          const { data: retryData, error: retryError } = await supabase
+            .from('attendance')
+            .insert([{ member_id: member.id, is_late: isLate, status }])
+            .select()
+            .single();
+          if (retryError) throw retryError;
+          return { attendance: { ...retryData, session: 'morning' }, member };
+        }
+        throw error;
+      }
       return { attendance: data, member };
-    } catch (err) {
-      console.warn('⚠️ Supabase check-in failed. Falling back to mock-db.');
+    } catch (err: any) {
+      if (err.message && err.message.includes('আপনি ইতিমধ্যে')) {
+        throw err;
+      }
+      console.warn('⚠️ Supabase check-in failed or threw error. Falling back to mock-db.', err);
     }
   }
+
+  // Mock-DB Fallback
   const db = readMockDB();
+  const existingMockLogs = db.attendance.filter(a => {
+    return a.member_id === member.id && new Date(a.check_in_time).toDateString() === todayStr;
+  });
+
+  const duplicateMock = existingMockLogs.find(log => (log.session || 'morning') === session);
+  if (duplicateMock) {
+    throw new Error(`আপনি ইতিমধ্যে ${session === 'afternoon' ? 'লাঞ্চ পরবর্তী' : 'সকালের প্রথম'} সেশনের হাজিরা দিয়েছেন!`);
+  }
+
   const newAttendance: Attendance = {
     id: 'a_' + Math.random().toString(36).substr(2, 9),
     member_id: member.id,
-    check_in_time: new Date().toISOString(),
+    check_in_time: now.toISOString(),
     is_late: isLate,
-    status
+    status,
+    session
   };
   db.attendance.push(newAttendance);
   writeMockDB(db);
@@ -373,9 +430,10 @@ export async function getLeaderboard(): Promise<any[]> {
       
       if (!hasRehearsal && !hasLogsOnDay) return 'none';
 
-      const log = memberLogDates.find(l => l.date === dateStr);
-      if (log) {
-        return log.isLate ? 'late' : 'present';
+      const dayLogs = memberLogDates.filter(l => l.date === dateStr);
+      if (dayLogs.length > 0) {
+        const hasLate = dayLogs.some(l => l.isLate);
+        return hasLate ? 'late' : 'present';
       } else {
         // If rehearsal was scheduled but actor didn't check in, marked absent
         return 'absent';

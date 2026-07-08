@@ -591,7 +591,7 @@ export default function DirectorDashboard() {
                         </div>
                         <div className="text-right">
                           <span className={`badge ${log.status === 'late' ? 'badge-late' : 'badge-present'} text-[9px] mb-1`}>
-                            {log.status === 'late' ? 'লেট চেক-ইন' : 'সময়মতো উপস্থিত'}
+                            {log.status === 'late' ? 'লেট চেক-ইন' : 'সময়মতো উপস্থিত'} • {log.session === 'afternoon' ? 'লাঞ্চ পরবর্তী' : 'সকালের প্রথম'}
                           </span>
                           <p className="text-[9px] text-gray-400">
                             {new Date(log.check_in_time).toLocaleTimeString('bn-BD', { hour: '2-digit', minute: '2-digit', second: '2-digit' })}

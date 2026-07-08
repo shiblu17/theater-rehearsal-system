@@ -132,6 +132,13 @@ export default function CheckInPage({ params }: PageProps) {
               </div>
 
               <div className="flex justify-between items-center text-[11px]">
+                <span className="text-gray-400">হাজিরা সেশন</span>
+                <span className="font-bold text-white">
+                  {successData.attendance.session === 'afternoon' ? 'লাঞ্চ পরবর্তী সেশন' : 'সকালের প্রথম সেশন'}
+                </span>
+              </div>
+
+              <div className="flex justify-between items-center text-[11px]">
                 <span className="text-gray-400">হাজিরা স্ট্যাটাস</span>
                 <span className={`badge ${successData.attendance.is_late ? 'badge-late' : 'badge-present'} text-[8px]`}>
                   {successData.attendance.is_late ? 'বিলম্বিত (Late)' : 'সময়নিষ্ঠ (On Time)'}
