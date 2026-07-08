@@ -15,11 +15,20 @@ export async function POST(request: Request) {
     const body = await request.json();
     const { title, date, time, description, required_cast } = body;
 
-    if (!title || !date || !time || !required_cast) {
-      return NextResponse.json({ error: 'প্রয়োজনীয় ফিল্ডগুলো পূরণ করুন।' }, { status: 400 });
+    if (!date || !time) {
+      return NextResponse.json({ error: 'তারিখ এবং সময় অবশ্যই প্রদান করুন।' }, { status: 400 });
     }
 
-    const rehearsal = await addRehearsal({ title, date, time, description, required_cast });
+    const finalTitle = title && title.trim() ? title.trim() : 'মহড়া';
+    const finalRequiredCast = required_cast && required_cast.trim() ? required_cast.trim() : 'সকল কুশীলব';
+
+    const rehearsal = await addRehearsal({ 
+      title: finalTitle, 
+      date, 
+      time, 
+      description, 
+      required_cast: finalRequiredCast 
+    });
     return NextResponse.json(rehearsal);
   } catch (error) {
     return NextResponse.json({ error: 'মহড়া শিডিউল তৈরি করতে সমস্যা হয়েছে।' }, { status: 500 });

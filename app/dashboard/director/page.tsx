@@ -212,20 +212,27 @@ export default function DirectorDashboard() {
     }
   };
 
-  // Add rehearsal
   const handleAddRehearsal = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!newRehearsal.title || !newRehearsal.date || !newRehearsal.time || !newRehearsal.required_cast) {
-      alert('সবগুলো প্রয়োজনীয় তথ্য পূরণ করুন।');
+    if (!newRehearsal.date || !newRehearsal.time) {
+      alert('মহড়ার তারিখ এবং সময় অবশ্যই প্রদান করুন।');
       return;
     }
 
     setIsSubmitting(true);
     try {
+      const payload = {
+        title: newRehearsal.title.trim() || 'মহড়া',
+        date: newRehearsal.date,
+        time: newRehearsal.time,
+        description: newRehearsal.description,
+        required_cast: newRehearsal.required_cast.trim() || 'সকল কুশীলব'
+      };
+
       const res = await fetch('/api/rehearsals', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(newRehearsal)
+        body: JSON.stringify(payload)
       });
       if (res.ok) {
         setNewRehearsal({ title: '', date: '', time: '', description: '', required_cast: '' });
@@ -612,14 +619,13 @@ export default function DirectorDashboard() {
                   <form onSubmit={handleAddRehearsal} className="space-y-4">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-left">
                       <div className="form-group mb-0">
-                        <label className="form-label">মহড়ার শিরোনাম</label>
+                        <label className="form-label">মহড়ার শিরোনাম (ঐচ্ছিক)</label>
                         <input 
                           type="text" 
                           placeholder="উদা: দৃশ্য ২ এবং ৩ ড্রাফটিং" 
                           value={newRehearsal.title}
                           onChange={e => setNewRehearsal({ ...newRehearsal, title: e.target.value })}
                           className="form-input py-2.5"
-                          required
                         />
                       </div>
                       <div className="form-group mb-0">
@@ -646,14 +652,13 @@ export default function DirectorDashboard() {
                         />
                       </div>
                       <div className="form-group mb-0">
-                        <label className="form-label">কাদের উপস্থিত থাকতে হবে</label>
+                        <label className="form-label">কাদের উপস্থিত থাকতে হবে (ঐচ্ছিক)</label>
                         <input 
                           type="text" 
                           placeholder="উদা: নন্দিনী, রাজা, বিশু পাগল (বা অল কাস্ট)" 
                           value={newRehearsal.required_cast}
                           onChange={e => setNewRehearsal({ ...newRehearsal, required_cast: e.target.value })}
                           className="form-input py-2.5"
-                          required
                         />
                       </div>
                     </div>
