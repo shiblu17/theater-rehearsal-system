@@ -18,6 +18,7 @@ export default function HomePage() {
   const [isSynopsisOpen, setIsSynopsisOpen] = useState(false);
   const [isAnalysisOpen, setIsAnalysisOpen] = useState(false);
   const [isScheduleOpen, setIsScheduleOpen] = useState(false);
+  const [isResourcesOpen, setIsResourcesOpen] = useState(false);
 
   const timerRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -394,111 +395,82 @@ export default function HomePage() {
             </div>
           </div>
 
-        </div>
-      </section>
-      {/* -------------------------------------------------------------
-         Casting Board Section (চরিত্র বণ্টন)
-         ------------------------------------------------------------- */}
-      <section className="section-wrapper">
-        <div className="content-container">
-          <div className="section-header">
-            <h2>চরিত্র বণ্টন বোর্ড (Casting Grid)</h2>
-            <p>{isAllCastingTbd ? "কাস্টিং চলছে" : "নাটকের চরিত্র পরিচিতি ও কুশীলব ম্যাপিং"}</p>
-            <TraditionalDivider />
-          </div>
-
-          {isAllCastingTbd ? (
-            <div className="glass-panel p-10 text-center text-sm text-gray-500 max-w-xl mx-auto border-white/5">
-              চরিত্র বণ্টন প্রক্রিয়া চলমান রয়েছে। খুব শীঘ্রই কুশীলবদের তালিকা এখানে প্রকাশ করা হবে।
-            </div>
-          ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-              {majorCharacters.map((char) => {
-                const charNameOnly = char.title.split(' ')[0]; // e.g. "নন্দিনী"
-                const actor = getCastingActor(charNameOnly);
-                
-                return (
-                  <div key={char.title} className="glass-panel p-5 text-left flex flex-col justify-between hover:border-[#ff7979]/20 transition-all group relative overflow-hidden">
-                    
-                    {/* Dynamic Achievement Badge at the top right of the card */}
-                    {actor?.badge && (
-                      <div className="absolute top-4 right-4 flex items-center gap-1">
-                        <span className={`px-2 py-0.5 rounded-full border text-[8px] font-black uppercase tracking-wider flex items-center gap-1 ${actor.badge.className}`}>
-                          <span>{actor.badge.icon}</span>
-                          <span>{actor.badge.text}</span>
-                        </span>
+          {/* Accordion 4: গুরুত্বপূর্ণ ডাউনলোড ও রিসোর্স */}
+          <div className="border border-white/5 rounded-2xl bg-[#12121c]/50 overflow-hidden transition-all duration-300">
+            <button 
+              type="button"
+              onClick={() => setIsResourcesOpen(!isResourcesOpen)}
+              className="w-full flex items-center justify-between p-5 text-left transition-colors hover:bg-white/5 focus:outline-none"
+            >
+              <div className="flex items-center gap-4">
+                <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center text-[#ff7979]">
+                  <FileText size={20} />
+                </div>
+                <div>
+                  <h3 className="font-bold text-white text-base">লিব্রেটো স্ক্রিপ্ট ও রিহার্সাল ট্র্যাকস</h3>
+                  <p className="text-xs text-gray-400">রক্তকরবী স্ক্রিপ্ট (PDF) ডাউনলোড এবং মহড়ার প্রয়োজনীয় অডিও প্লেলিস্ট</p>
+                </div>
+              </div>
+              <span className={`transform transition-transform duration-300 text-gray-400 ${isResourcesOpen ? 'rotate-180' : ''}`}>
+                <ChevronDown size={20} />
+              </span>
+            </button>
+            <div 
+              className="transition-all duration-300 ease-in-out overflow-hidden"
+              style={{ 
+                maxHeight: isResourcesOpen ? '500px' : '0px', 
+                opacity: isResourcesOpen ? 1 : 0,
+                visibility: isResourcesOpen ? 'visible' : 'hidden'
+              }}
+            >
+              <div className="p-6 border-t border-white/5 bg-black/20">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-left">
+                  <div className="glass-panel p-5 bg-gradient-to-r from-red-500/5 to-transparent flex items-center justify-between gap-4">
+                    <div className="flex items-center gap-4">
+                      <div className="w-12 h-12 rounded-xl bg-[#ff7979]/15 flex items-center justify-center text-[#ff7979]">
+                        <FileText size={24} />
                       </div>
-                    )}
-
-                    <div className="space-y-2">
-                      <h3 className="font-black text-white text-base group-hover:text-[#ff7979] transition-colors pr-16">{char.title}</h3>
-                      <p className="text-[10px] text-gray-400 leading-normal">{char.desc}</p>
-                    </div>
-
-                    <div className="border-t border-white/5 mt-4 pt-4 flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-full overflow-hidden border border-white/10 shrink-0 bg-white/5">
-                        {actor?.avatar_url ? (
-                          <img src={actor.avatar_url} alt={actor.name} className="w-full h-full object-cover" />
-                        ) : (
-                          <div className="w-full h-full flex items-center justify-center text-[10px] font-bold text-gray-500">TBD</div>
-                        )}
-                      </div>
-                      <div className="min-w-0">
-                        <p className="text-[9px] text-gray-500 uppercase tracking-widest font-semibold">অভিনয়ে</p>
-                        <h4 className="text-xs font-bold text-white truncate max-w-full">{actor?.name || 'আসন্ন নির্বাচন'}</h4>
-                        {actor && <p className="text-[9px] text-gray-400">রোল: {actor.roll} • উপস্থিত: {actor.totalPresent} দিন</p>}
+                      <div>
+                        <h4 className="font-bold text-white text-sm">রক্তকরবী লিব্রেটো (PDF Script)</h4>
+                        <p className="text-[10px] text-gray-400">বার্ষিক উৎসবের মূল স্ক্রিপ্ট ও লিব্রেটো ডাউনলোড করুন।</p>
                       </div>
                     </div>
+                    <a 
+                      href="https://sanskritbooks.org/rabindranath-tagore-books-pdf/Rakta-Karabi-Rabindranath-Tagore.pdf" 
+                      target="_blank" 
+                      rel="noopener noreferrer" 
+                      className="btn-glass py-2 px-4 text-xs shrink-0 flex items-center gap-1"
+                    >
+                      <Download size={12} />
+                      <span>ডাউনলোড</span>
+                    </a>
                   </div>
-                );
-              })}
-            </div>
-          )}
 
-          {/* Script & Audio Assets Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8 text-left">
-            <div className="glass-panel p-5 bg-gradient-to-r from-red-500/5 to-transparent flex items-center justify-between gap-4">
-              <div className="flex items-center gap-4">
-                <div className="w-12 h-12 rounded-xl bg-[#ff7979]/15 flex items-center justify-center text-[#ff7979]">
-                  <FileText size={24} />
-                </div>
-                <div>
-                  <h4 className="font-bold text-white text-sm">রক্তকরবী লিব্রেটো (PDF Script)</h4>
-                  <p className="text-[10px] text-gray-400">বার্ষিক উৎসবের মূল স্ক্রিপ্ট ও ব্লক-বুক লিব্রেটো ডাউনলোড করুন।</p>
+                  <div className="glass-panel p-5 bg-gradient-to-r from-[#e056fd]/5 to-transparent flex items-center justify-between gap-4">
+                    <div className="flex items-center gap-4">
+                      <div className="w-12 h-12 rounded-xl bg-[#e056fd]/15 flex items-center justify-center text-[#e056fd]">
+                        <Music size={24} />
+                      </div>
+                      <div>
+                        <h4 className="font-bold text-white text-sm">বিশু পাগলের গান (Rehearsal Tracks)</h4>
+                        <p className="text-[10px] text-gray-400">মহড়ায় ব্যবহৃত ব্যাকগ্রাউন্ড আবহসংগীত ও গান অনুশীলনের ফাইলসমূহ।</p>
+                      </div>
+                    </div>
+                    <a 
+                      href="https://www.youtube.com/results?search_query=raktakarabi+rabindrasangeet" 
+                      target="_blank" 
+                      rel="noopener noreferrer" 
+                      className="btn-glass py-2 px-4 text-xs shrink-0 flex items-center gap-1"
+                    >
+                      <Music size={12} />
+                      <span>প্লেলিস্ট</span>
+                    </a>
+                  </div>
                 </div>
               </div>
-              <a 
-                href="https://sanskritbooks.org/rabindranath-tagore-books-pdf/Rakta-Karabi-Rabindranath-Tagore.pdf" 
-                target="_blank" 
-                rel="noopener noreferrer" 
-                className="btn-glass py-2 px-4 text-xs shrink-0 flex items-center gap-1"
-              >
-                <Download size={12} />
-                <span>ডাউনলোড</span>
-              </a>
-            </div>
-
-            <div className="glass-panel p-5 bg-gradient-to-r from-indigo-500/5 to-transparent flex items-center justify-between gap-4">
-              <div className="flex items-center gap-4">
-                <div className="w-12 h-12 rounded-xl bg-[#e056fd]/15 flex items-center justify-center text-[#e056fd]">
-                  <Music size={24} />
-                </div>
-                <div>
-                  <h4 className="font-bold text-white text-sm">বিশু পাগলের গান (Rehearsal Tracks)</h4>
-                  <p className="text-[10px] text-gray-400">মহড়ায় ব্যবহৃত ব্যাকগ্রাউন্ড আবহসংগীত ও গান অনুশীলনের ফাইলসমূহ।</p>
-                </div>
-              </div>
-              <a 
-                href="https://www.youtube.com/results?search_query=raktakarabi+rabindrasangeet" 
-                target="_blank" 
-                rel="noopener noreferrer" 
-                className="btn-glass py-2 px-4 text-xs shrink-0 flex items-center gap-1"
-              >
-                <Music size={12} />
-                <span>প্লেলিস্ট</span>
-              </a>
             </div>
           </div>
+
         </div>
       </section>
 
