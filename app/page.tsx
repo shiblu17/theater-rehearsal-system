@@ -212,26 +212,10 @@ export default function HomePage() {
          ------------------------------------------------------------- */}
       {nextRehearsal && (
         <section className="content-container px-4 py-2">
-          <div className="glass-panel border-l-4 border-l-[#c85122] p-6 text-left space-y-4 hover:transform-none">
-            <div className="flex items-center justify-between gap-4 flex-wrap">
-              <div className="space-y-1.5">
-                <div className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-[#e59f5b]">
-                  <Timer size={13} className="animate-spin [animation-duration:3s] text-[#e59f5b]" />
-                  <span>মহড়া লাইভ টাইমার (COUNTDOWN)</span>
-                </div>
-                <h3 className="text-xl font-black text-white leading-tight">{nextRehearsal.title}</h3>
-                <p className="text-xs text-[#95afc0]">দৃশ্যভিত্তিক কাস্ট: <span className="text-white font-semibold">{nextRehearsal.required_cast}</span></p>
-              </div>
-            </div>
-            
-            <div className="p-4 rounded-xl bg-black/40 border border-white/5 flex items-center justify-between gap-4 flex-wrap">
-              <div className="flex items-center gap-2">
-                <span className="w-2 h-2 rounded-full bg-[#c85122] animate-pulse"></span>
-                <span className="text-xs text-gray-400 font-semibold uppercase tracking-wider">মহড়া শুরুর সময়</span>
-              </div>
-              <div className="font-mono text-sm md:text-base font-extrabold text-white tracking-wide">
-                {countdownText || 'হিসাব করা হচ্ছে...'}
-              </div>
+          <div className="glass-panel border-l-4 border-l-[#c85122] p-4 text-center hover:transform-none">
+            <div className="font-mono text-sm md:text-base font-extrabold text-white tracking-wide flex items-center justify-center gap-3">
+              <span className="w-2 h-2 rounded-full bg-[#c85122] animate-pulse shrink-0"></span>
+              <span>{countdownText || 'হিসাব করা হচ্ছে...'}</span>
             </div>
           </div>
         </section>
