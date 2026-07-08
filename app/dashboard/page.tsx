@@ -24,120 +24,72 @@ export default function DashboardPortalPage() {
         </div>
 
         {/* Roles Grid Layout */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-left">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center max-w-4xl mx-auto">
           
           {/* Card 1: Director Portal */}
-          <div className="glass-panel group flex flex-col justify-between h-full hover:border-[#ff7979]/30 transition-all duration-300">
-            <div className="space-y-6">
-              <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#ff7979] to-[#eb4d4b] flex items-center justify-center text-white shadow-lg group-hover:scale-105 transition-transform duration-300">
-                <Shield size={28} />
+          <div className="glass-panel group flex flex-col justify-between items-center p-8 h-full hover:border-[#ff7979]/30 transition-all duration-300">
+            <div className="flex flex-col items-center space-y-6">
+              <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-[#ff7979] to-[#eb4d4b] flex items-center justify-center text-white shadow-lg group-hover:scale-105 transition-transform duration-300">
+                <Shield size={32} />
               </div>
               
-              <div className="space-y-2">
-                <h3 className="text-2xl font-bold text-white group-hover:text-[#ff7979] transition-colors">
-                  নির্দেশক পোর্টাল
+              <div className="space-y-1">
+                <h3 className="text-xl font-bold text-white group-hover:text-[#ff7979] transition-colors">
+                  Director Panel
                 </h3>
-                <p className="text-xs text-[#ff7979] font-semibold tracking-wider uppercase">Director Panel</p>
-                <p className="text-sm text-gray-300 leading-relaxed pt-2">
-                  আতিকুজ্জামান শিবলু ভাইয়ের নির্দেশনা প্যানেল। এখানে আপনি কুশীলবদের হাজিরা দেখতে পারবেন, নতুন মহড়ার দৃশ্য ও সময় নির্ধারণ করতে পারবেন, লিব্রেটো ফিডব্যাক দিতে পারবেন এবং কিউআর কোড স্ক্যান করে দর্শকদের টিকিট ভেরিফাই করবেন।
-                </p>
-              </div>
-
-              {/* Feature Tags */}
-              <div className="flex flex-wrap gap-2 pt-2">
-                <span className="px-2.5 py-1 rounded-md bg-white/5 border border-white/10 text-[10px] text-gray-300 flex items-center gap-1">
-                  <Users size={10} /> কুশীলব হাজিরা
-                </span>
-                <span className="px-2.5 py-1 rounded-md bg-white/5 border border-white/10 text-[10px] text-gray-300 flex items-center gap-1">
-                  <Activity size={10} /> মহড়া শিডিউলার
-                </span>
-                <span className="px-2.5 py-1 rounded-md bg-white/5 border border-white/10 text-[10px] text-gray-300 flex items-center gap-1">
-                  <Terminal size={10} /> গেট পাস স্ক্যানার
-                </span>
+                <p className="text-xs text-gray-500">নির্দেশক পোর্টাল</p>
               </div>
             </div>
 
-            <div className="pt-8">
+            <div className="w-full pt-8">
               <Link href="/dashboard/director" className="btn-secondary w-full justify-center">
-                <span>নির্দেশক পোর্টালে প্রবেশ করুন</span>
+                <span>প্রবেশ করুন</span>
                 <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
               </Link>
             </div>
           </div>
 
           {/* Card 2: Actor Portal */}
-          <div className="glass-panel group flex flex-col justify-between h-full hover:border-[#22a6b3]/30 transition-all duration-300">
-            <div className="space-y-6">
-              <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#22a6b3] to-[#00d2d3] flex items-center justify-center text-white shadow-lg group-hover:scale-105 transition-transform duration-300">
-                <Users size={28} />
+          <div className="glass-panel group flex flex-col justify-between items-center p-8 h-full hover:border-[#22a6b3]/30 transition-all duration-300">
+            <div className="flex flex-col items-center space-y-6">
+              <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-[#22a6b3] to-[#00d2d3] flex items-center justify-center text-white shadow-lg group-hover:scale-105 transition-transform duration-300">
+                <Users size={32} />
               </div>
               
-              <div className="space-y-2">
-                <h3 className="text-2xl font-bold text-white group-hover:text-[#22a6b3] transition-colors">
-                  কুশীলব পোর্টাল
+              <div className="space-y-1">
+                <h3 className="text-xl font-bold text-white group-hover:text-[#22a6b3] transition-colors">
+                  Actor Dashboard
                 </h3>
-                <p className="text-xs text-[#22a6b3] font-semibold tracking-wider uppercase">Actor Dashboard</p>
-                <p className="text-sm text-gray-300 leading-relaxed pt-2">
-                  অভিনেতা ও অভিনেত্রীদের ব্যক্তিগত ড্যাশবোর্ড। এখানে আপনার সুনির্দিষ্ট চরিত্র মেনশন করা নোটিশ দেখতে পাবেন, আপনার চরিত্রভিত্তিক মহড়া ক্যালেন্ডার ফিল্টার করতে পারবেন, নিজের হাজিরার পার্সেন্টেজ এবং অর্জিত রবীন্দ্র ব্যাজ দেখতে পাবেন।
-                </p>
-              </div>
-
-              {/* Feature Tags */}
-              <div className="flex flex-wrap gap-2 pt-2">
-                <span className="px-2.5 py-1 rounded-md bg-white/5 border border-white/10 text-[10px] text-gray-300 flex items-center gap-1">
-                  <FileText size={10} /> চরিত্র-নির্দিষ্ট নোটিশ
-                </span>
-                <span className="px-2.5 py-1 rounded-md bg-white/5 border border-white/10 text-[10px] text-gray-300 flex items-center gap-1">
-                  <Calendar size={10} /> মহড়া ক্যালেন্ডার
-                </span>
-                <span className="px-2.5 py-1 rounded-md bg-white/5 border border-white/10 text-[10px] text-gray-300 flex items-center gap-1">
-                  <Award size={10} /> উপস্থিতি ও ব্যাজ
-                </span>
+                <p className="text-xs text-gray-500">কুশীলব পোর্টাল</p>
               </div>
             </div>
 
-            <div className="pt-8">
+            <div className="w-full pt-8">
               <Link href="/login" className="btn-glass w-full justify-center border-[#22a6b3]/20 hover:border-[#22a6b3]/40 text-[#22a6b3] hover:bg-[#22a6b3]/5">
-                <span>কুশীলব অ্যাকাউন্টে প্রবেশ করুন</span>
+                <span>প্রবেশ করুন</span>
                 <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
               </Link>
             </div>
           </div>
 
           {/* Card 3: Developer Portal */}
-          <div className="glass-panel group flex flex-col justify-between h-full hover:border-[#e056fd]/30 transition-all duration-300">
-            <div className="space-y-6">
-              <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#e056fd] to-[#be2edd] flex items-center justify-center text-white shadow-lg group-hover:scale-105 transition-transform duration-300">
-                <Settings size={28} />
+          <div className="glass-panel group flex flex-col justify-between items-center p-8 h-full hover:border-[#e056fd]/30 transition-all duration-300">
+            <div className="flex flex-col items-center space-y-6">
+              <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-[#e056fd] to-[#be2edd] flex items-center justify-center text-white shadow-lg group-hover:scale-105 transition-transform duration-300">
+                <Settings size={32} />
               </div>
               
-              <div className="space-y-2">
-                <h3 className="text-2xl font-bold text-white group-hover:text-[#e056fd] transition-colors">
-                  ডেভেলপার প্যানেল
+              <div className="space-y-1">
+                <h3 className="text-xl font-bold text-white group-hover:text-[#e056fd] transition-colors">
+                  Developer Lab
                 </h3>
-                <p className="text-xs text-[#e056fd] font-semibold tracking-wider uppercase">Developer Lab</p>
-                <p className="text-sm text-gray-300 leading-relaxed pt-2">
-                  সিস্টেমের ডেটা সংযোগ ও নোটিফিকেশন ল্যাব। এখানে আপনি সুপাবেস ক্লাউড কানেকশন চেক করতে পারবেন, ১-ক্লিকে মক ডেটাবেজ পরিষ্কার বা লোড টেস্টিংয়ের ডেমো ডেটা সিড করতে পারবেন এবং পুশ নোটিফিকেশন সিস্টেম টেস্ট করতে পারবেন।
-                </p>
-              </div>
-
-              {/* Feature Tags */}
-              <div className="flex flex-wrap gap-2 pt-2">
-                <span className="px-2.5 py-1 rounded-md bg-white/5 border border-white/10 text-[10px] text-gray-300 flex items-center gap-1">
-                  <Terminal size={10} /> সুপাবেস হেলথ চেক
-                </span>
-                <span className="px-2.5 py-1 rounded-md bg-white/5 border border-white/10 text-[10px] text-gray-300 flex items-center gap-1">
-                  <Activity size={10} /> ডেমো ডেটা সিডার
-                </span>
-                <span className="px-2.5 py-1 rounded-md bg-white/5 border border-white/10 text-[10px] text-gray-300 flex items-center gap-1">
-                  <Shield size={10} /> পুশ নোটিফিকেশন টেস্ট
-                </span>
+                <p className="text-xs text-gray-500">ডেভেলপার প্যানেল</p>
               </div>
             </div>
 
-            <div className="pt-8">
+            <div className="w-full pt-8">
               <Link href="/dashboard/developer" className="btn-primary w-full justify-center">
-                <span>ডেভেলপার ল্যাবে প্রবেশ করুন</span>
+                <span>প্রবেশ করুন</span>
                 <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
               </Link>
             </div>
