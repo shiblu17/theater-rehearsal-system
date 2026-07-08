@@ -404,7 +404,7 @@ export default function HomePage() {
           <div className="section-header">
             <h2>চরিত্র বণ্টন বোর্ড (Casting Grid)</h2>
             <p>{isAllCastingTbd ? "কাস্টিং চলছে" : "নাটকের চরিত্র পরিচিতি ও কুশীলব ম্যাপিং"}</p>
-            <div className="divider"></div>
+            <TraditionalDivider />
           </div>
 
           {isAllCastingTbd ? (
@@ -510,7 +510,7 @@ export default function HomePage() {
           <div className="section-header">
             <h2>সম্পূর্ণ কলাকুশলী দল (Class Roster)</h2>
             <p>জাহাঙ্গীরনগর বিশ্ববিদ্যালয় নাটক ও নাট্যতত্ত্ব বিভাগ ৫২তম আবর্তন</p>
-            <div className="divider"></div>
+            <TraditionalDivider />
           </div>
 
           {loading ? (
@@ -575,6 +575,30 @@ function SparklesIcon(props: React.SVGProps<SVGSVGElement>) {
       <path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z" />
       <path d="m5 3 1 2.5L8.5 6 6 7 5 9.5 4 7 1.5 6 4 5.5z" />
       <path d="M19 17l1 2.5 2.5.5-2.5 1-1 2.5-1-2.5-2.5-1 2.5-1z" />
+    </svg>
+  );
+}
+
+function TraditionalDivider() {
+  return (
+    <svg viewBox="0 0 100 10" className="w-full max-w-sm mx-auto my-5 opacity-90 select-none pointer-events-none" fill="none">
+      {/* Center lotus/flame element (gold & rust orange) */}
+      <path d="M 50 2 C 48 2, 47 4, 50 6 C 53 4, 52 2, 50 2 Z" strokeWidth="0.5" stroke="#e59f5b" fill="#e59f5b" fillOpacity="0.15"/>
+      <path d="M 47 4.2 C 45 4.2, 44 6, 47 7 C 50 6, 49 4.2, 47 4.2 Z" strokeWidth="0.4" stroke="#c85122" fill="#c85122" fillOpacity="0.15"/>
+      <path d="M 53 4.2 C 55 4.2, 56 6, 53 7 C 50 6, 51 4.2, 53 4.2 Z" strokeWidth="0.4" stroke="#c85122" fill="#c85122" fillOpacity="0.15"/>
+      
+      {/* Symmetrical traditional wave lines (slate blue) */}
+      {/* Left side wave arches */}
+      <path d="M 41 5 Q 43 7, 45 5 T 49 5" strokeWidth="0.4" stroke="#22a6b3" strokeLinecap="round"/>
+      <path d="M 32 5 Q 34 7, 36 5 T 40 5 T 44 5" strokeWidth="0.4" stroke="#22a6b3" strokeLinecap="round" opacity="0.65"/>
+      <path d="M 23 5 Q 25 7, 27 5 T 31 5 T 35 5" strokeWidth="0.4" stroke="#22a6b3" strokeLinecap="round" opacity="0.35"/>
+      <path d="M 10 5 L 21 5" strokeWidth="0.2" stroke="#22a6b3" strokeLinecap="round" opacity="0.15"/>
+      
+      {/* Right side wave arches */}
+      <path d="M 59 5 Q 57 7, 55 5 T 51 5" strokeWidth="0.4" stroke="#22a6b3" strokeLinecap="round"/>
+      <path d="M 68 5 Q 66 7, 64 5 T 60 5 T 56 5" strokeWidth="0.4" stroke="#22a6b3" strokeLinecap="round" opacity="0.65"/>
+      <path d="M 77 5 Q 75 7, 73 5 T 69 5 T 65 5" strokeWidth="0.4" stroke="#22a6b3" strokeLinecap="round" opacity="0.35"/>
+      <path d="M 90 5 L 79 5" strokeWidth="0.2" stroke="#22a6b3" strokeLinecap="round" opacity="0.15"/>
     </svg>
   );
 }
