@@ -17,8 +17,9 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'এই রোল নম্বরটি তালিকায় পাওয়া যায়নি।' }, { status: 404 });
     }
     
-    // Check password
-    if (member.password !== password) {
+    // Check password (fallback to default 'roktokorobi52' if empty or missing in DB)
+    const expectedPassword = member.password || 'roktokorobi52';
+    if (expectedPassword !== password) {
       return NextResponse.json({ error: 'ভুল পাসওয়ার্ড। দয়া করে আবার চেষ্টা করুন।' }, { status: 401 });
     }
     
