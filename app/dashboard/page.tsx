@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { Shield, Settings, Users, ArrowRight, Activity, Terminal, FileText, Calendar, Award } from 'lucide-react';
+import { Shield, Settings, Users, ArrowRight, Activity, Terminal, FileText, Calendar, Award, ClipboardList } from 'lucide-react';
 
 export default function DashboardPortalPage() {
   return (
@@ -24,7 +24,7 @@ export default function DashboardPortalPage() {
         </div>
 
         {/* Roles Grid Layout */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center max-w-4xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 text-center max-w-6xl mx-auto">
           
           {/* Card 1: Director Portal */}
           <div className="glass-panel group flex flex-col justify-between items-center p-8 h-full hover:border-[#ff7979]/30 transition-all duration-300">
@@ -72,7 +72,30 @@ export default function DashboardPortalPage() {
             </div>
           </div>
 
-          {/* Card 3: Developer Portal */}
+          {/* Card 3: Floor Manager Portal */}
+          <div className="glass-panel group flex flex-col justify-between items-center p-8 h-full hover:border-[#2ecc71]/30 transition-all duration-300">
+            <div className="flex flex-col items-center space-y-6">
+              <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-[#2ecc71] to-[#3498db] flex items-center justify-center text-white shadow-lg group-hover:scale-105 transition-transform duration-300">
+                <ClipboardList size={32} />
+              </div>
+              
+              <div className="space-y-1">
+                <h3 className="text-xl font-bold text-white group-hover:text-[#2ecc71] transition-colors">
+                  Floor Manager
+                </h3>
+                <p className="text-xs text-gray-500">ফ্লোর ম্যানেজার</p>
+              </div>
+            </div>
+
+            <div className="w-full pt-8">
+              <Link href="/dashboard/floor-manager" className="btn-primary w-full justify-center bg-gradient-to-r from-[#2ecc71] to-[#3498db] hover:opacity-90 border-0">
+                <span>প্রবেশ করুন</span>
+                <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
+              </Link>
+            </div>
+          </div>
+
+          {/* Card 4: Developer Portal */}
           <div className="glass-panel group flex flex-col justify-between items-center p-8 h-full hover:border-[#e056fd]/30 transition-all duration-300">
             <div className="flex flex-col items-center space-y-6">
               <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-[#e056fd] to-[#be2edd] flex items-center justify-center text-white shadow-lg group-hover:scale-105 transition-transform duration-300">
