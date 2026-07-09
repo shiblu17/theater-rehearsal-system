@@ -24,7 +24,10 @@ import {
   Volume2,
   Bell,
   MessageSquare,
-  Sparkle
+  Sparkle,
+  Flower,
+  Lightbulb,
+  Megaphone
 } from 'lucide-react';
 
 interface Member {
@@ -67,7 +70,7 @@ export default function ActorDashboard() {
   const [notes, setNotes] = useState<RehearsalNote[]>([]);
   const [attendance, setAttendance] = useState<AttendanceLog[]>([]);
   const [loading, setLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState<'notices' | 'schedule' | 'attendance' | 'finance' | 'settings'>('notices');
+  const [activeTab, setActiveTab] = useState<'home' | 'notices' | 'schedule' | 'attendance' | 'finance' | 'settings'>('home');
 
   // Change Password state
   const [newPassword, setNewPassword] = useState('');
@@ -254,104 +257,11 @@ export default function ActorDashboard() {
         </section>
 
         {/* -------------------------------------------------------------
-           METRICS BAR (Sleek Circle Progress Stats - Slate-800 Layout)
-           ------------------------------------------------------------- */}
-        <section className="grid grid-cols-4 gap-2 bg-[#1e293b] border border-[#475569] rounded-2xl p-5 shadow-xl shadow-black/30">
-          {/* Metric 1 */}
-          <div className="flex flex-col items-center justify-center space-y-2 text-center">
-            <div className="w-13 h-13 rounded-full border-2 border-emerald-500 flex items-center justify-center bg-emerald-500/5 shadow-md shadow-emerald-500/10">
-              <span className="text-[10px] font-black text-emerald-400">{attendanceRate}%</span>
-            </div>
-            <span className="text-[9px] text-gray-300 font-bold tracking-tight">উপস্থিতি</span>
-          </div>
-          {/* Metric 2 */}
-          <div className="flex flex-col items-center justify-center space-y-2 text-center">
-            <div className="w-13 h-13 rounded-full border-2 border-white/10 flex items-center justify-center bg-white/5 shadow-md">
-              <span className="text-[10px] font-black text-white">{totalRehearsalLogs} দিন</span>
-            </div>
-            <span className="text-[9px] text-gray-300 font-bold tracking-tight">Work Days</span>
-          </div>
-          {/* Metric 3 */}
-          <div className="flex flex-col items-center justify-center space-y-2 text-center">
-            <div className="w-13 h-13 rounded-full border-2 border-white/10 flex items-center justify-center bg-white/5 shadow-md">
-              <span className="text-[10px] font-black text-white">{presentCount}/{lateCount}</span>
-            </div>
-            <span className="text-[9px] text-gray-300 font-bold tracking-tight">Completed</span>
-          </div>
-          {/* Metric 4 */}
-          <div className="flex flex-col items-center justify-center space-y-2 text-center">
-            <div className="w-13 h-13 rounded-full border-2 border-white/10 flex items-center justify-center bg-white/5 shadow-md">
-              <span className="text-[10px] font-black text-white">{absentCount}</span>
-            </div>
-            <span className="text-[9px] text-gray-300 font-bold tracking-tight">Other Stats</span>
-          </div>
-        </section>
-
-        {/* -------------------------------------------------------------
-           URGENT TASKS (জরুরি কাজ - Slate-800 Spaced Cards)
-           ------------------------------------------------------------- */}
-        <section className="flex flex-col gap-3">
-          <h2 className="text-xs font-black text-amber-500 flex items-center gap-1.5 px-0.5 tracking-wider uppercase">
-            <Sparkle size={12} className="text-amber-500 animate-pulse" />
-            <span>জরুরি কাজ</span>
-          </h2>
-          
-          <div className="flex flex-col gap-3.5">
-            {/* Task 1 */}
-            <div className="p-4 bg-[#1e293b] border border-[#475569] rounded-2xl flex items-center gap-4 text-left shadow-xl shadow-black/20">
-              <span className="text-xs font-black text-amber-500 font-mono w-4">1</span>
-              <div className="w-9 h-9 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center shrink-0">
-                <Zap size={16} className="text-amber-500" />
-              </div>
-              <div className="space-y-1 min-w-0 flex-1">
-                <h4 className="text-xs sm:text-sm font-black text-white leading-tight">ল্যাব পর্দা ফিট</h4>
-                <p className="text-[10px] sm:text-xs text-gray-300 font-medium leading-relaxed">ল্যাব-এর পেছনের কালো পর্দা ফিট করে দেবেন।</p>
-              </div>
-            </div>
-
-            {/* Task 2 */}
-            <div className="p-4 bg-[#1e293b] border border-[#475569] rounded-2xl flex items-center gap-4 text-left shadow-xl shadow-black/20">
-              <span className="text-xs font-black text-amber-500 font-mono w-4">2</span>
-              <div className="w-9 h-9 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center shrink-0">
-                <Smile size={16} className="text-amber-500" />
-              </div>
-              <div className="space-y-1 min-w-0 flex-1">
-                <h4 className="text-xs sm:text-sm font-black text-white leading-tight">রক্তকরবী ফুল সজীব করা</h4>
-                <p className="text-[10px] sm:text-xs text-gray-300 font-medium leading-relaxed">নন্দিনীর রক্তকরবী ফুলগুলো সজীব দেখানোর জন্য কালার করা।</p>
-              </div>
-            </div>
-
-            {/* Task 3 */}
-            <div className="p-4 bg-[#1e293b] border border-[#475569] rounded-2xl flex items-center gap-4 text-left shadow-xl shadow-black/20">
-              <span className="text-xs font-black text-amber-500 font-mono w-4">3</span>
-              <div className="w-9 h-9 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center shrink-0">
-                <Volume2 size={16} className="text-amber-500" />
-              </div>
-              <div className="space-y-1 min-w-0 flex-1">
-                <h4 className="text-xs sm:text-sm font-black text-white leading-tight">বিশু পাগলের লাইটিং ফোকাস</h4>
-                <p className="text-[10px] sm:text-xs text-gray-300 font-medium leading-relaxed">বিশু পাগলের প্রবেশ দৃশ্যে আলোর ফোকাস উন্নত করা।</p>
-              </div>
-            </div>
-
-            {/* Task 4 */}
-            <div className="p-4 bg-[#1e293b] border border-[#475569] rounded-2xl flex items-center gap-4 text-left shadow-xl shadow-black/20">
-              <span className="text-xs font-black text-amber-500 font-mono w-4">4</span>
-              <div className="w-9 h-9 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center shrink-0">
-                <MessageSquare size={16} className="text-amber-500" />
-              </div>
-              <div className="space-y-1 min-w-0 flex-1">
-                <h4 className="text-xs sm:text-sm font-black text-white leading-tight">সংলাপ ভুল সংশোধন</h4>
-                <p className="text-[10px] sm:text-xs text-gray-300 font-medium leading-relaxed">চন্দ্রা এবং ফাগুলালের সংলাপ ভুল সংশোধন।</p>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* -------------------------------------------------------------
            TAB NAVIGATION (Minimal Segmented Control Group - Slate-800 layout)
            ------------------------------------------------------------- */}
-        <div className="flex bg-[#1e293b] p-1.5 rounded-2xl gap-1.5 w-full border border-[#475569] shadow-xl">
+        <div className="flex bg-[#1e293b] p-1 rounded-xl gap-0.5 w-full border border-[#475569] shadow-xl overflow-x-auto scrollbar-none shrink-0">
           {[
+            { id: 'home', name: 'হোম' },
             { id: 'notices', name: 'নোটিশ' },
             { id: 'schedule', name: 'শিডিউল' },
             { id: 'attendance', name: 'হাজিরা' },
@@ -363,7 +273,7 @@ export default function ActorDashboard() {
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id as any)}
-                className={`flex-1 text-center py-2.5 rounded-xl text-xs font-black transition-all cursor-pointer ${
+                className={`flex-1 text-center py-2 rounded-lg text-[10px] sm:text-xs font-black transition-all cursor-pointer whitespace-nowrap px-2.5 shrink-0 ${
                   isActive 
                     ? 'bg-amber-500 text-slate-950 border border-amber-500 shadow-md shadow-amber-500/25' 
                     : 'text-gray-400 hover:text-white border border-transparent'
@@ -380,53 +290,174 @@ export default function ActorDashboard() {
            ------------------------------------------------------------- */}
         <main className="min-h-[25vh] flex flex-col gap-4 pt-2">
           
-          {/* 1. NOTICES TAB */}
-          {activeTab === 'notices' && (
-            <div className="flex flex-col gap-4">
-              <h2 className="text-xs font-black text-amber-500 flex items-center gap-1.5 px-0.5 tracking-wider uppercase">
-                <Bell size={12} className="text-amber-500 animate-pulse" />
-                <span>নোটিশ বোর্ড</span>
-              </h2>
-              {notes.length === 0 ? (
-                <div className="p-10 text-center text-gray-500 text-xs border border-[#475569] rounded-2xl bg-[#1e293b]">
-                  আপাতত কোনো সাধারণ নোটিশ জারি করা হয়নি।
+          {/* 0. HOME TAB (Phone 2 Mockup Style) */}
+          {activeTab === 'home' && (
+            <div className="flex flex-col gap-6">
+              {/* METRICS BAR */}
+              <section className="grid grid-cols-4 gap-2 bg-[#1e293b] border border-[#475569] rounded-2xl p-5 shadow-xl shadow-black/30">
+                {/* Metric 1 */}
+                <div className="flex flex-col items-center justify-center space-y-2 text-center">
+                  <div className="w-13 h-13 rounded-full border-2 border-emerald-500 flex items-center justify-center bg-emerald-500/5 shadow-md shadow-emerald-500/10">
+                    <span className="text-[10px] font-black text-emerald-400">{attendanceRate}%</span>
+                  </div>
+                  <span className="text-[9px] text-gray-300 font-bold tracking-tight">উপস্থিতি</span>
                 </div>
-              ) : (
-                <div className="flex flex-col gap-4">
-                  {notes.slice(0, 2).map((note, idx) => {
-                    const isMentioned = note.content.includes(myCharacter) || note.content.includes(member.name);
-                    
-                    // Extract day and month name to generate header like "৫ জুলাই ডাক"
-                    const dayMatch = note.date.match(/\d+\s+[ক-য়]+/);
-                    const noticeTitle = isMentioned
-                      ? (dayMatch ? `${dayMatch[0]} ডাক` : "জরুরি ডাক")
-                      : "সাধারণ নোটিশ";
+                {/* Metric 2 */}
+                <div className="flex flex-col items-center justify-center space-y-2 text-center">
+                  <div className="w-13 h-13 rounded-full border-2 border-white/10 flex items-center justify-center bg-white/5 shadow-md">
+                    <span className="text-[10px] font-black text-white">{totalRehearsalLogs} দিন</span>
+                  </div>
+                  <span className="text-[9px] text-gray-300 font-bold tracking-tight">Work Days</span>
+                </div>
+                {/* Metric 3 */}
+                <div className="flex flex-col items-center justify-center space-y-2 text-center">
+                  <div className="w-13 h-13 rounded-full border-2 border-white/10 flex items-center justify-center bg-white/5 shadow-md">
+                    <span className="text-[10px] font-black text-white">{presentCount}/{lateCount}</span>
+                  </div>
+                  <span className="text-[9px] text-gray-300 font-bold tracking-tight">Completed</span>
+                </div>
+                {/* Metric 4 */}
+                <div className="flex flex-col items-center justify-center space-y-2 text-center">
+                  <div className="w-13 h-13 rounded-full border-2 border-white/10 flex items-center justify-center bg-white/5 shadow-md">
+                    <span className="text-[10px] font-black text-white">{absentCount}</span>
+                  </div>
+                  <span className="text-[9px] text-gray-300 font-bold tracking-tight">Other Stats</span>
+                </div>
+              </section>
 
-                    return (
-                      <div 
-                        key={note.id} 
-                        className="p-5 bg-[#1e293b] border border-[#475569] rounded-2xl flex gap-3.5 text-left items-start shadow-xl shadow-black/25"
-                      >
-                        <div className="w-8.5 h-8.5 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center shrink-0 mt-0.5">
-                          <Volume2 size={16} className="text-amber-500" />
-                        </div>
-                        <div className="space-y-1.5 min-w-0 flex-1">
-                          <div className="flex items-center justify-between gap-1 text-[11px] font-bold">
-                            <span className="text-white font-black">{noticeTitle}</span>
-                            {isMentioned && (
-                              <span className="text-[8px] font-bold px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 shrink-0">
-                                @ আপনাকে মেনশন করা হয়েছে
-                              </span>
-                            )}
-                          </div>
-                          <p className="text-xs text-gray-300 leading-relaxed font-semibold">{note.content}</p>
-                          <span className="text-[9px] text-gray-500 font-bold block">{note.date}</span>
-                        </div>
-                      </div>
-                    );
-                  })}
+              {/* URGENT TASKS */}
+              <section className="flex flex-col gap-3">
+                <h2 className="text-xs font-black text-amber-500 flex items-center gap-1.5 px-0.5 tracking-wider uppercase">
+                  <Sparkle size={12} className="text-amber-500 animate-pulse" />
+                  <span>জরুরি কাজ</span>
+                </h2>
+                
+                <div className="flex flex-col gap-3.5">
+                  {/* Task 1 */}
+                  <div className="p-4 bg-[#1e293b] border border-[#475569] rounded-2xl flex items-center gap-4 text-left shadow-xl shadow-black/20">
+                    <span className="text-xs font-black text-amber-500 font-mono w-4">1</span>
+                    <div className="w-9 h-9 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center shrink-0">
+                      <Zap size={16} className="text-amber-500" />
+                    </div>
+                    <div className="space-y-1 min-w-0 flex-1">
+                      <h4 className="text-xs sm:text-sm font-black text-white leading-tight">ল্যাব পর্দা ফিট</h4>
+                      <p className="text-[10px] sm:text-xs text-gray-300 font-medium leading-relaxed">ল্যাব-এর পেছনের কালো পর্দা ফিট করে দেবেন।</p>
+                    </div>
+                  </div>
+
+                  {/* Task 2 */}
+                  <div className="p-4 bg-[#1e293b] border border-[#475569] rounded-2xl flex items-center gap-4 text-left shadow-xl shadow-black/20">
+                    <span className="text-xs font-black text-amber-500 font-mono w-4">2</span>
+                    <div className="w-9 h-9 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center shrink-0">
+                      <Smile size={16} className="text-amber-500" />
+                    </div>
+                    <div className="space-y-1 min-w-0 flex-1">
+                      <h4 className="text-xs sm:text-sm font-black text-white leading-tight">রক্তকরবী ফুল সজীব করা</h4>
+                      <p className="text-[10px] sm:text-xs text-gray-300 font-medium leading-relaxed">নন্দিনীর রক্তকরবী ফুলগুলো সজীব দেখানোর জন্য কালার করা।</p>
+                    </div>
+                  </div>
+
+                  {/* Task 3 */}
+                  <div className="p-4 bg-[#1e293b] border border-[#475569] rounded-2xl flex items-center gap-4 text-left shadow-xl shadow-black/20">
+                    <span className="text-xs font-black text-amber-500 font-mono w-4">3</span>
+                    <div className="w-9 h-9 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center shrink-0">
+                      <Volume2 size={16} className="text-amber-500" />
+                    </div>
+                    <div className="space-y-1 min-w-0 flex-1">
+                      <h4 className="text-xs sm:text-sm font-black text-white leading-tight">বিশু পাগলের লাইটিং ফোকাস</h4>
+                      <p className="text-[10px] sm:text-xs text-gray-300 font-medium leading-relaxed">বিশু পাগলের প্রবেশ দৃশ্যে আলোর ফোকাস উন্নত করা।</p>
+                    </div>
+                  </div>
+
+                  {/* Task 4 */}
+                  <div className="p-4 bg-[#1e293b] border border-[#475569] rounded-2xl flex items-center gap-4 text-left shadow-xl shadow-black/20">
+                    <span className="text-xs font-black text-amber-500 font-mono w-4">4</span>
+                    <div className="w-9 h-9 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center shrink-0">
+                      <MessageSquare size={16} className="text-amber-500" />
+                    </div>
+                    <div className="space-y-1 min-w-0 flex-1">
+                      <h4 className="text-xs sm:text-sm font-black text-white leading-tight">সংলাপ ভুল সংশোধন</h4>
+                      <p className="text-[10px] sm:text-xs text-gray-300 font-medium leading-relaxed">চন্দ্রা এবং ফাগুলালের সংলাপ ভুল সংশোধন।</p>
+                    </div>
+                  </div>
                 </div>
-              )}
+              </section>
+            </div>
+          )}
+
+          {/* 1. NOTICES TAB (Phone 3 Mockup Style) */}
+          {activeTab === 'notices' && (
+            <div className="flex flex-col gap-6 w-full">
+              {/* Highlight cards */}
+              <div className="flex flex-col gap-3.5 w-full">
+                {/* Highlight 1: Flower */}
+                <div className="p-4.5 bg-[#1e293b] border border-[#475569] rounded-2xl flex items-center gap-4 text-left shadow-xl shadow-black/20">
+                  <div className="w-9 h-9 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center shrink-0">
+                    <Flower size={18} className="text-amber-500" />
+                  </div>
+                  <div className="space-y-1 min-w-0 flex-1">
+                    <h4 className="text-xs sm:text-sm font-black text-white leading-tight">রক্তকরবী ফুল সজীব করা</h4>
+                    <p className="text-[10px] sm:text-xs text-gray-300 font-medium leading-relaxed">নন্দিনীর রক্তকরবী ফুলগুলো সজীব দেখানোর জন্য কালার করা।</p>
+                  </div>
+                </div>
+
+                {/* Highlight 2: Lightbulb */}
+                <div className="p-4.5 bg-[#1e293b] border border-[#475569] rounded-2xl flex items-center gap-4 text-left shadow-xl shadow-black/20">
+                  <div className="w-9 h-9 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center shrink-0">
+                    <Lightbulb size={18} className="text-amber-500 animate-pulse" />
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <h4 className="text-xs sm:text-sm font-black text-white leading-snug">বিশু পাগলের প্রবেশ দৃশ্যে আলোর ফোকাস উন্নত করা।</h4>
+                  </div>
+                </div>
+              </div>
+
+              {/* Notices board */}
+              <div className="flex flex-col gap-4 w-full">
+                <h2 className="text-xs font-black text-amber-500 flex items-center gap-1.5 px-0.5 tracking-wider uppercase">
+                  <Bell size={12} className="text-amber-500" />
+                  <span>নোটিশ বোর্ড</span>
+                </h2>
+                {notes.length === 0 ? (
+                  <div className="p-10 text-center text-gray-500 text-xs border border-[#475569] rounded-2xl bg-[#1e293b]">
+                    আপাতত কোনো সাধারণ নোটিশ জারি করা হয়নি।
+                  </div>
+                ) : (
+                  <div className="flex flex-col gap-4">
+                    {notes.slice(0, 3).map((note, idx) => {
+                      const isMentioned = note.content.includes(myCharacter) || note.content.includes(member.name);
+                      const NoticeIcon = idx === 0 ? Megaphone : (idx === 1 ? Bell : MessageSquare);
+                      const dayMatch = note.date.match(/\d+\s+[ক-য়]+/);
+                      const noticeTitle = isMentioned
+                        ? (dayMatch ? `${dayMatch[0]} ডাক` : "জরুরি ডাক")
+                        : "সাধারণ নোটিশ";
+
+                      return (
+                        <div 
+                          key={note.id} 
+                          className="p-5 bg-[#1e293b] border border-[#475569] rounded-2xl flex gap-3.5 text-left items-start shadow-xl shadow-black/25"
+                        >
+                          <div className="w-9 h-9 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center shrink-0 mt-0.5">
+                            <NoticeIcon size={16} className="text-amber-500" />
+                          </div>
+                          <div className="space-y-1.5 min-w-0 flex-1">
+                            <div className="flex items-center justify-between gap-1 text-[11px] font-bold">
+                              <span className="text-white font-black">{noticeTitle}</span>
+                              {isMentioned && (
+                                <span className="text-[8px] font-bold px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 shrink-0">
+                                  @ আপনাকে মেনশন করা হয়েছে
+                                </span>
+                              )}
+                            </div>
+                            <p className="text-xs text-gray-300 leading-relaxed font-semibold">{note.content}</p>
+                            <span className="text-[9px] text-gray-500 font-bold block">7 hours ago ({note.date})</span>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
+              </div>
             </div>
           )}
 
