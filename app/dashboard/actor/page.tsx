@@ -17,7 +17,8 @@ import {
   User,
   Activity,
   ChevronRight,
-  Lock
+  Lock,
+  Coins
 } from 'lucide-react';
 
 interface Member {
@@ -27,6 +28,8 @@ interface Member {
   role: string;
   character_name: string;
   avatar_url?: string;
+  production_fee_paid?: number;
+  snacks_fee_paid?: number;
 }
 
 interface Rehearsal {
@@ -58,7 +61,7 @@ export default function ActorDashboard() {
   const [notes, setNotes] = useState<RehearsalNote[]>([]);
   const [attendance, setAttendance] = useState<AttendanceLog[]>([]);
   const [loading, setLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState<'notices' | 'schedule' | 'attendance' | 'settings'>('notices');
+  const [activeTab, setActiveTab] = useState<'notices' | 'schedule' | 'attendance' | 'finance' | 'settings'>('notices');
 
   // Change Password state
   const [newPassword, setNewPassword] = useState('');
@@ -325,6 +328,7 @@ export default function ActorDashboard() {
           { id: 'notices', name: 'নোটিশ বোর্ড', icon: FileText },
           { id: 'schedule', name: 'আমার মহড়া শিডিউল', icon: Calendar },
           { id: 'attendance', name: 'হাজিরা ইতিহাস ও অর্জন', icon: Award },
+          { id: 'finance', name: 'হিসাব ও ফিস 💰', icon: Coins },
           { id: 'settings', name: 'সেটিংস', icon: Lock }
         ].map((tab) => {
           const Icon = tab.icon;
@@ -539,6 +543,65 @@ export default function ActorDashboard() {
               </form>
 
             </div>
+          </div>
+        )}
+
+        {/* 5. FINANCE TAB */}
+        {activeTab === 'finance' && (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
+            
+            {/* Section 1: Production Fee */}
+            <div className="glass-panel p-6 bg-gradient-to-br from-[#ff7979]/5 to-transparent border-white/5 space-y-4 text-left relative overflow-hidden">
+              <div className="absolute top-0 right-0 w-32 h-32 bg-[#ff7979]/5 rounded-full filter blur-[30px] pointer-events-none"></div>
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl bg-[#ff7979]/10 border border-[#ff7979]/20 flex items-center justify-center text-[#ff7979]">
+                  <Coins size={20} />
+                </div>
+                <div>
+                  <h4 className="font-bold text-white text-base">প্রোডাকশন ফি (Production Fee)</h4>
+                  <p className="text-[10px] text-gray-400">নাটক প্রযোজনা ও আনুষঙ্গিক ফিস</p>
+                </div>
+              </div>
+              
+              <div className="p-5 rounded-2xl bg-black/40 border border-white/5 space-y-2">
+                <span className="text-[10px] text-gray-500 font-bold uppercase tracking-wider">পরিশোধিত পরিমাণ (Paid Amount)</span>
+                <div className="text-3xl font-black text-white flex items-baseline gap-1">
+                  <span className="text-xs text-gray-400 font-normal">৳</span>
+                  <span>{member.production_fee_paid || 0}</span>
+                </div>
+              </div>
+              
+              <p className="text-[10px] text-gray-400 leading-relaxed font-medium">
+                * প্রোডাকশন ফি এর যাবতীয় খরচ নাটক মঞ্চায়নের আনুষঙ্গিক সরঞ্জাম ও সেট নির্মাণে ব্যবহৃত হয়। কোনো গরমিল থাকলে নির্দেশকের সাথে যোগাযোগ করুন।
+              </p>
+            </div>
+
+            {/* Section 2: Snacks Money */}
+            <div className="glass-panel p-6 bg-gradient-to-br from-[#e056fd]/5 to-transparent border-white/5 space-y-4 text-left relative overflow-hidden">
+              <div className="absolute top-0 right-0 w-32 h-32 bg-[#e056fd]/5 rounded-full filter blur-[30px] pointer-events-none"></div>
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl bg-[#e056fd]/10 border border-[#e056fd]/20 flex items-center justify-center text-[#e056fd]">
+                  <Coins size={20} />
+                </div>
+                <div>
+                  <h4 className="font-bold text-white text-base">নাস্তার টাকা (Snacks Money)</h4>
+                  <p className="text-[10px] text-gray-400">মহড়াকালীন নাস্তা ও ক্যাটারিং ফিস</p>
+                </div>
+              </div>
+              
+              <div className="p-5 rounded-2xl bg-black/40 border border-white/5 space-y-2">
+                <span className="text-[10px] text-gray-500 font-bold uppercase tracking-wider">পরিশোধিত পরিমাণ (Paid Amount)</span>
+                <div className="text-3xl font-black text-white flex items-baseline gap-1">
+                  <span className="text-xs text-gray-400 font-normal">৳</span>
+                  <span>{member.snacks_fee_paid || 0}</span>
+                </div>
+              </div>
+              
+              <p className="text-[10px] text-gray-400 leading-relaxed font-medium">
+                * মহড়া সেশনের দৈনিক নাস্তা ও আপ্যায়ন খরচের জন্য এই ফিস সংগৃহীত হয়। কোনো গরমিল থাকলে নির্দেশকের সাথে যোগাযোগ করুন।
+              </p>
+            </div>
+
           </div>
         )}
 

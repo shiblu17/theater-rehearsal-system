@@ -11,6 +11,8 @@ export interface Member {
   character_name?: string; // ক্যারেক্টার ম্যাপিং (যেমন: নন্দিনী, রাজা)
   avatar_url?: string;
   password?: string; // কুশীলব ড্যাশবোর্ড সেশন অথ
+  production_fee_paid?: number; // প্রোডাকশন ফি
+  snacks_fee_paid?: number; // নাস্তার টাকা
 }
 
 export interface Ticket {
@@ -777,10 +779,19 @@ export async function createOrUpdateMember(member: Omit<Member, 'id'> & { id?: s
   if (isSupabaseConfigured && supabase) {
     try {
       const { data, error } = await supabase.from('members').upsert([updatedMember]).select().single();
-      if (error) throw error;
+      if (error) {
+        if (error.code === '42703') { // Column missing code
+          console.warn('⚠️ Supabase member column missing. Retrying upsert without fee columns.');
+          const { production_fee_paid, snacks_fee_paid, ...cleanMember } = updatedMember as any;
+          const { data: retryData, error: retryError } = await supabase.from('members').upsert([cleanMember]).select().single();
+          if (retryError) throw retryError;
+          return { ...retryData, production_fee_paid, snacks_fee_paid };
+        }
+        throw error;
+      }
       return data;
     } catch (err) {
-      console.warn('⚠️ Supabase member upsert failed. Falling back to mock-db.');
+      console.warn('⚠️ Supabase member upsert failed. Falling back to mock-db.', err);
     }
   }
 

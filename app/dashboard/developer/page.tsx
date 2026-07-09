@@ -46,7 +46,7 @@ export default function DeveloperDashboard() {
   const [editForm, setEditForm] = useState<any>({});
 
   // New Member Form state
-  const [newMember, setNewMember] = useState({ roll: '', name: '', role: 'অভিনেতা', character_name: '', avatar_url: '' });
+  const [newMember, setNewMember] = useState({ roll: '', name: '', role: 'অভিনেতা', character_name: '', avatar_url: '', production_fee_paid: 0, snacks_fee_paid: 0 });
 
   // Fetch status and all data lists
   const fetchData = async () => {
@@ -136,7 +136,7 @@ export default function DeveloperDashboard() {
         body: JSON.stringify(newMember)
       });
       if (res.ok) {
-        setNewMember({ roll: '', name: '', role: 'অভিনেতা', character_name: '', avatar_url: '' });
+        setNewMember({ roll: '', name: '', role: 'অভিনেতা', character_name: '', avatar_url: '', production_fee_paid: 0, snacks_fee_paid: 0 });
         setApiResponseMsg({ type: 'success', text: 'কুশীলব সফলভাবে যুক্ত করা হয়েছে।' });
         fetchData();
       } else {
@@ -475,6 +475,28 @@ export default function DeveloperDashboard() {
                     className="form-input text-xs py-2"
                   />
                 </div>
+                <div className="grid grid-cols-2 gap-3 mb-0">
+                  <div className="form-group mb-0">
+                    <label className="form-label text-[10px]">প্রোডাকশন ফি (৳)</label>
+                    <input 
+                      type="number" 
+                      placeholder="0" 
+                      value={newMember.production_fee_paid || ''}
+                      onChange={e => setNewMember({ ...newMember, production_fee_paid: Number(e.target.value) })}
+                      className="form-input text-xs py-2"
+                    />
+                  </div>
+                  <div className="form-group mb-0">
+                    <label className="form-label text-[10px]">নাস্তার টাকা (৳)</label>
+                    <input 
+                      type="number" 
+                      placeholder="0" 
+                      value={newMember.snacks_fee_paid || ''}
+                      onChange={e => setNewMember({ ...newMember, snacks_fee_paid: Number(e.target.value) })}
+                      className="form-input text-xs py-2"
+                    />
+                  </div>
+                </div>
                 <button type="submit" disabled={isSubmitting} className="btn-secondary w-full justify-center text-xs py-2.5">
                   <Plus size={14} />
                   <span>সংরক্ষণ করুন</span>
@@ -494,6 +516,8 @@ export default function DeveloperDashboard() {
                       <th className="pb-3 pr-2">নাম</th>
                       <th className="pb-3 pr-2">ভূমিকা</th>
                       <th className="pb-3 pr-2">চরিত্র</th>
+                      <th className="pb-3 pr-2">প্রোডাকশন ফি</th>
+                      <th className="pb-3 pr-2">নাস্তা ফি</th>
                       <th className="pb-3 text-right">অ্যাকশন</th>
                     </tr>
                   </thead>
@@ -538,6 +562,22 @@ export default function DeveloperDashboard() {
                                 className="form-input text-xs py-1 px-2 bg-zinc-950 w-28"
                               />
                             </td>
+                            <td className="py-2 pr-2">
+                              <input 
+                                type="number" 
+                                value={editForm.production_fee_paid || 0} 
+                                onChange={e => setEditForm({ ...editForm, production_fee_paid: Number(e.target.value) })}
+                                className="form-input text-xs py-1 px-2 bg-zinc-950 w-20 text-center"
+                              />
+                            </td>
+                            <td className="py-2 pr-2">
+                              <input 
+                                type="number" 
+                                value={editForm.snacks_fee_paid || 0} 
+                                onChange={e => setEditForm({ ...editForm, snacks_fee_paid: Number(e.target.value) })}
+                                className="form-input text-xs py-1 px-2 bg-zinc-950 w-20 text-center"
+                              />
+                            </td>
                             <td className="py-2 text-right flex gap-1.5 justify-end">
                               <button 
                                 onClick={() => handleSaveEdit('members')}
@@ -560,6 +600,8 @@ export default function DeveloperDashboard() {
                             <td className="py-3 font-semibold text-white">{m.name}</td>
                             <td className="py-3">{m.role}</td>
                             <td className="py-3 font-semibold text-[#e056fd]">{m.character_name || 'নেপথ্য'}</td>
+                            <td className="py-3 font-semibold text-emerald-400">৳ {m.production_fee_paid || 0}</td>
+                            <td className="py-3 font-semibold text-blue-400">৳ {m.snacks_fee_paid || 0}</td>
                             <td className="py-3 text-right flex gap-1.5 justify-end">
                               <button 
                                 onClick={() => startEditing(m.id, m)}
