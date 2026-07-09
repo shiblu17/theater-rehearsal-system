@@ -177,6 +177,9 @@ export default function FloorManagerDashboard() {
     return timeVal && new Date(timeVal).toDateString() === todayStr;
   });
 
+  const morningAttendance = todaysAttendance.filter(l => (l.session || 'morning') === 'morning');
+  const afternoonAttendance = todaysAttendance.filter(l => l.session === 'afternoon');
+
   return (
     <div className="section-wrapper min-h-screen py-10 relative overflow-hidden">
       {/* Background glow effects */}
@@ -354,83 +357,155 @@ export default function FloorManagerDashboard() {
 
         </div>
 
-        {/* BOTTOM SECTION: Today's Live Attendance Feed */}
-        <div className="glass-panel text-left">
-          <div className="flex items-center justify-between mb-6 border-b border-white/5 pb-4">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-[#2ecc71]/10 border border-[#2ecc71]/20 flex items-center justify-center text-[#2ecc71]">
-                <Users size={20} />
+        {/* BOTTOM SECTION: Split Morning & Afternoon Live Updates */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          
+          {/* Morning Session Table */}
+          <div className="glass-panel text-left">
+            <div className="flex items-center justify-between mb-6 border-b border-white/5 pb-4">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl bg-[#2ecc71]/10 border border-[#2ecc71]/20 flex items-center justify-center text-[#2ecc71]">
+                  <Users size={20} />
+                </div>
+                <div>
+                  <h3 className="font-bold text-base text-white">আজকের সকালের হাজিরা ({morningAttendance.length} জন)</h3>
+                  <p className="text-[10px] text-gray-400">আজকে সকালের সেশনের রিয়েল-টাইম তালিকা</p>
+                </div>
               </div>
-              <div>
-                <h3 className="font-bold text-base text-white">আজকের হাজিরার লাইভ আপডেট ({todaysAttendance.length} জন)</h3>
-                <p className="text-[10px] text-gray-400">আজকে মহড়াকক্ষে স্ক্যান করা কুশীলবদের রিয়েল-টাইম তালিকা</p>
-              </div>
+              
+              <button 
+                onClick={fetchData} 
+                className="btn-glass text-[10px] py-1.5 px-3 rounded-lg border-white/5 flex items-center gap-1"
+              >
+                রিফ্রেশ করুন
+              </button>
             </div>
-            
-            <button 
-              onClick={fetchData} 
-              className="btn-glass text-[10px] py-1.5 px-3 rounded-lg border-white/5 flex items-center gap-1"
-            >
-              রিফ্রেশ করুন
-            </button>
+
+            {loading ? (
+              <p className="text-center py-10 text-gray-500 text-xs">ডাটা লোড হচ্ছে...</p>
+            ) : morningAttendance.length === 0 ? (
+              <p className="text-center py-10 text-gray-500 text-xs">আজকে সকালের সেশনে এখনও কেউ হাজিরা দেননি।</p>
+            ) : (
+              <div className="overflow-x-auto">
+                <table className="w-full text-left text-xs border-collapse">
+                  <thead>
+                    <tr className="border-b border-white/10 text-gray-400 font-bold uppercase tracking-wider text-[10px]">
+                      <th className="pb-3">কুশীলব</th>
+                      <th className="pb-3 text-center">রোল</th>
+                      <th className="pb-3 text-center">সময়</th>
+                      <th className="pb-3 text-right">স্ট্যাটাস</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {morningAttendance.map((log) => {
+                      const member = members.find(m => m.id === log.member_id);
+                      const timeVal = log.check_in_time || (log as any).created_at;
+                      const formattedTime = timeVal ? new Date(timeVal).toLocaleTimeString('bn-BD', { hour: '2-digit', minute: '2-digit' }) : 'N/A';
+                      
+                      return (
+                        <tr key={log.id} className="border-b border-white/5 text-gray-300 hover:bg-white/5 transition-all">
+                          <td className="py-3 flex items-center gap-3">
+                            <div className="w-8 h-8 rounded-full overflow-hidden border border-white/10 shrink-0">
+                              <img 
+                                src={member?.avatar_url || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150&auto=format&fit=crop&q=80'} 
+                                alt={member?.name} 
+                                className="w-full h-full object-cover" 
+                              />
+                            </div>
+                            <div>
+                              <h4 className="font-semibold text-white">{member?.name || 'অজানা কুশীলব'}</h4>
+                              <p className="text-[9px] text-gray-500">{member?.role || 'অভিনয় দল'} • {member?.character_name || 'নেপথ্য'}</p>
+                            </div>
+                          </td>
+                          <td className="py-3 text-center font-mono font-bold">{member?.roll || 'N/A'}</td>
+                          <td className="py-3 text-center font-bold text-white">{formattedTime}</td>
+                          <td className="py-3 text-right">
+                            <span className={`badge ${log.is_late ? 'badge-late' : 'badge-present'} text-[8px] py-0.5 px-2`}>
+                              {log.is_late ? 'বিলম্বিত (Late)' : 'সময়মতো (On Time)'}
+                            </span>
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
+            )}
           </div>
 
-          {loading ? (
-            <p className="text-center py-10 text-gray-500 text-xs">ডাটা লোড হচ্ছে...</p>
-          ) : todaysAttendance.length === 0 ? (
-            <p className="text-center py-10 text-gray-500 text-xs">আজকে এখনও কোনো কুশীলব হাজিরা দেননি।</p>
-          ) : (
-            <div className="overflow-x-auto">
-              <table className="w-full text-left text-xs border-collapse">
-                <thead>
-                  <tr className="border-b border-white/10 text-gray-400 font-bold uppercase tracking-wider text-[10px]">
-                    <th className="pb-3">কুশীলব</th>
-                    <th className="pb-3 text-center">রোল</th>
-                    <th className="pb-3 text-center">সময়</th>
-                    <th className="pb-3 text-center">সেশন</th>
-                    <th className="pb-3 text-right">স্ট্যাটাস</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {todaysAttendance.map((log) => {
-                    const member = members.find(m => m.id === log.member_id);
-                    const timeVal = log.check_in_time || (log as any).created_at;
-                    const formattedTime = timeVal ? new Date(timeVal).toLocaleTimeString('bn-BD', { hour: '2-digit', minute: '2-digit' }) : 'N/A';
-                    
-                    return (
-                      <tr key={log.id} className="border-b border-white/5 text-gray-300 hover:bg-white/5 transition-all">
-                        <td className="py-3 flex items-center gap-3">
-                          <div className="w-8 h-8 rounded-full overflow-hidden border border-white/10 shrink-0">
-                            <img 
-                              src={member?.avatar_url || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150&auto=format&fit=crop&q=80'} 
-                              alt={member?.name} 
-                              className="w-full h-full object-cover" 
-                            />
-                          </div>
-                          <div>
-                            <h4 className="font-semibold text-white">{member?.name || 'অজানা কুশীলব'}</h4>
-                            <p className="text-[9px] text-gray-500">{member?.role || 'অভিনয় দল'}</p>
-                          </div>
-                        </td>
-                        <td className="py-3 text-center font-mono font-bold">{member?.roll || 'N/A'}</td>
-                        <td className="py-3 text-center font-bold text-white">{formattedTime}</td>
-                        <td className="py-3 text-center">
-                          <span className={`px-2 py-0.5 rounded text-[9px] font-bold ${log.session === 'afternoon' ? 'bg-[#3498db]/10 border border-[#3498db]/20 text-[#3498db]' : 'bg-[#2ecc71]/10 border border-[#2ecc71]/20 text-[#2ecc71]'}`}>
-                            {log.session === 'afternoon' ? 'লাঞ্চ পরবর্তী' : 'সকালের প্রথম'}
-                          </span>
-                        </td>
-                        <td className="py-3 text-right">
-                          <span className={`badge ${log.is_late ? 'badge-late' : 'badge-present'} text-[8px] py-0.5 px-2`}>
-                            {log.is_late ? 'বিলম্বিত (Late)' : 'সময়মতো (On Time)'}
-                          </span>
-                        </td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
+          {/* Afternoon Session Table */}
+          <div className="glass-panel text-left">
+            <div className="flex items-center justify-between mb-6 border-b border-white/5 pb-4">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl bg-[#3498db]/10 border border-[#3498db]/20 flex items-center justify-center text-[#3498db]">
+                  <Users size={20} />
+                </div>
+                <div>
+                  <h3 className="font-bold text-base text-white">আজকের দুপুরের হাজিরা ({afternoonAttendance.length} জন)</h3>
+                  <p className="text-[10px] text-gray-400">লাঞ্চ পরবর্তী সেশনের রিয়েল-টাইম তালিকা</p>
+                </div>
+              </div>
+              
+              <button 
+                onClick={fetchData} 
+                className="btn-glass text-[10px] py-1.5 px-3 rounded-lg border-white/5 flex items-center gap-1"
+              >
+                রিফ্রেশ করুন
+              </button>
             </div>
-          )}
+
+            {loading ? (
+              <p className="text-center py-10 text-gray-500 text-xs">ডাটা লোড হচ্ছে...</p>
+            ) : afternoonAttendance.length === 0 ? (
+              <p className="text-center py-10 text-gray-500 text-xs">আজকে দুপুরের সেশনে এখনও কেউ হাজিরা দেননি।</p>
+            ) : (
+              <div className="overflow-x-auto">
+                <table className="w-full text-left text-xs border-collapse">
+                  <thead>
+                    <tr className="border-b border-white/10 text-gray-400 font-bold uppercase tracking-wider text-[10px]">
+                      <th className="pb-3">কুশীলব</th>
+                      <th className="pb-3 text-center">রোল</th>
+                      <th className="pb-3 text-center">সময়</th>
+                      <th className="pb-3 text-right">স্ট্যাটাস</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {afternoonAttendance.map((log) => {
+                      const member = members.find(m => m.id === log.member_id);
+                      const timeVal = log.check_in_time || (log as any).created_at;
+                      const formattedTime = timeVal ? new Date(timeVal).toLocaleTimeString('bn-BD', { hour: '2-digit', minute: '2-digit' }) : 'N/A';
+                      
+                      return (
+                        <tr key={log.id} className="border-b border-white/5 text-gray-300 hover:bg-white/5 transition-all">
+                          <td className="py-3 flex items-center gap-3">
+                            <div className="w-8 h-8 rounded-full overflow-hidden border border-white/10 shrink-0">
+                              <img 
+                                src={member?.avatar_url || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150&auto=format&fit=crop&q=80'} 
+                                alt={member?.name} 
+                                className="w-full h-full object-cover" 
+                              />
+                            </div>
+                            <div>
+                              <h4 className="font-semibold text-white">{member?.name || 'অজানা কুশীলব'}</h4>
+                              <p className="text-[9px] text-gray-500">{member?.role || 'অভিনয় দল'} • {member?.character_name || 'নেপথ্য'}</p>
+                            </div>
+                          </td>
+                          <td className="py-3 text-center font-mono font-bold">{member?.roll || 'N/A'}</td>
+                          <td className="py-3 text-center font-bold text-white">{formattedTime}</td>
+                          <td className="py-3 text-right">
+                            <span className={`badge ${log.is_late ? 'badge-late' : 'badge-present'} text-[8px] py-0.5 px-2`}>
+                              {log.is_late ? 'বিলম্বিত (Late)' : 'সময়মতো (On Time)'}
+                            </span>
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
+            )}
+          </div>
+
         </div>
 
       </div>
