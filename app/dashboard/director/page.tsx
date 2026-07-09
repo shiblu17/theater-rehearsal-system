@@ -43,6 +43,7 @@ export default function DirectorDashboard() {
   // Dynamic Cutoff Settings state
   const [morningCutoff, setMorningCutoff] = useState('11:30');
   const [afternoonCutoff, setAfternoonCutoff] = useState('15:00');
+  const [sessionTransition, setSessionTransition] = useState('13:30');
   const [isSavingSettings, setIsSavingSettings] = useState(false);
 
   // Attendance Sheets filtering states
@@ -142,6 +143,7 @@ export default function DirectorDashboard() {
       const data = await res.json();
       if (data.morning_cutoff) setMorningCutoff(data.morning_cutoff);
       if (data.afternoon_cutoff) setAfternoonCutoff(data.afternoon_cutoff);
+      if (data.session_transition) setSessionTransition(data.session_transition);
     } catch (e) {
       console.error('Error fetching settings:', e);
     }
@@ -154,7 +156,11 @@ export default function DirectorDashboard() {
       const res = await fetch('/api/settings', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ morning_cutoff: morningCutoff, afternoon_cutoff: afternoonCutoff }),
+        body: JSON.stringify({ 
+          morning_cutoff: morningCutoff, 
+          afternoon_cutoff: afternoonCutoff,
+          session_transition: sessionTransition
+        }),
       });
       if (res.ok) {
         alert('হাজিরা সময়সীমা সেটিংস সফলভাবে আপডেট হয়েছে!');
@@ -800,9 +806,9 @@ export default function DirectorDashboard() {
                 </div>
 
                 <form onSubmit={handleSaveSettings} className="space-y-6">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                     <div className="form-group mb-0">
-                      <label className="form-label text-xs font-bold text-gray-300">সকালের সেশনের কাট-অফ সময় (Morning Cutoff)</label>
+                      <label className="form-label text-xs font-bold text-gray-300">সকালের সেশনের কাট-অফ সময়</label>
                       <input 
                         type="time" 
                         value={morningCutoff}
@@ -810,11 +816,23 @@ export default function DirectorDashboard() {
                         className="form-input py-3 bg-zinc-950 border border-white/10 rounded-xl px-3 w-full text-gray-300"
                         required
                       />
-                      <p className="text-[10px] text-gray-500 mt-2">এই সময়ের পর কোনো কুশীলব চেক-ইন করলে তার উপস্থিতি "বিলম্বিত (Late)" হিসেবে রেকর্ড হবে।</p>
+                      <p className="text-[10px] text-gray-500 mt-2">এই সময়ের পর চেক-ইন করলে তার উপস্থিতি "বিলম্বিত (Late)" হিসেবে রেকর্ড হবে।</p>
                     </div>
 
                     <div className="form-group mb-0">
-                      <label className="form-label text-xs font-bold text-gray-300">দুপুরের সেশনের কাট-অফ সময় (Afternoon Cutoff)</label>
+                      <label className="form-label text-xs font-bold text-gray-300">সেশন পরিবর্তনের সময় (Transition)</label>
+                      <input 
+                        type="time" 
+                        value={sessionTransition}
+                        onChange={e => setSessionTransition(e.target.value)}
+                        className="form-input py-3 bg-zinc-950 border border-white/10 rounded-xl px-3 w-full text-gray-300"
+                        required
+                      />
+                      <p className="text-[10px] text-gray-500 mt-2">এই সময়ের আগের হাজিরাকে সকালের সেশন এবং পরের হাজিরাকে দুপুরের সেশন ধরা হবে।</p>
+                    </div>
+
+                    <div className="form-group mb-0">
+                      <label className="form-label text-xs font-bold text-gray-300">দুপুরের সেশনের কাট-অফ সময়</label>
                       <input 
                         type="time" 
                         value={afternoonCutoff}
@@ -822,7 +840,7 @@ export default function DirectorDashboard() {
                         className="form-input py-3 bg-zinc-950 border border-white/10 rounded-xl px-3 w-full text-gray-300"
                         required
                       />
-                      <p className="text-[10px] text-gray-500 mt-2">দুপুরের খাবারের বিরতির পর এই সময়ের পর কোনো কুশীলব চেক-ইন করলে তার উপস্থিতি "বিলম্বিত (Late)" হিসেবে রেকর্ড হবে।</p>
+                      <p className="text-[10px] text-gray-500 mt-2">দুপুরের খাবারের বিরতির পর এই সময়ের পর চেক-ইন করলে উপস্থিতি "বিলম্বিত" হবে।</p>
                     </div>
                   </div>
 

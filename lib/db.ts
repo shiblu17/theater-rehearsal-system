@@ -96,6 +96,7 @@ const DEFAULT_MEMBERS: Member[] = [
 export interface SystemSettings {
   morning_cutoff: string; // e.g. "11:30"
   afternoon_cutoff: string; // e.g. "15:00"
+  session_transition: string; // e.g. "13:30"
 }
 
 interface MockDB {
@@ -120,7 +121,7 @@ function readMockDB(): MockDB {
         subscriptions: parsed.subscriptions || [],
         rehearsals: parsed.rehearsals || [],
         notes: parsed.notes || [],
-        settings: parsed.settings || { morning_cutoff: '11:30', afternoon_cutoff: '15:00' }
+        settings: parsed.settings || { morning_cutoff: '11:30', afternoon_cutoff: '15:00', session_transition: '13:30' }
       };
     }
   } catch (error) {
@@ -135,7 +136,7 @@ function readMockDB(): MockDB {
     subscriptions: [],
     rehearsals: [],
     notes: [],
-    settings: { morning_cutoff: '11:30', afternoon_cutoff: '15:00' }
+    settings: { morning_cutoff: '11:30', afternoon_cutoff: '15:00', session_transition: '13:30' }
   };
   writeMockDB(defaultDB);
   return defaultDB;
@@ -221,7 +222,7 @@ export async function verifyTicket(ticketId: string): Promise<Ticket> {
 }
 
 export async function getSystemSettings(): Promise<SystemSettings> {
-  const defaultSettings: SystemSettings = { morning_cutoff: '11:30', afternoon_cutoff: '15:00' };
+  const defaultSettings: SystemSettings = { morning_cutoff: '11:30', afternoon_cutoff: '15:00', session_transition: '13:30' };
 
   if (isSupabaseConfigured && supabase) {
     try {
@@ -233,7 +234,8 @@ export async function getSystemSettings(): Promise<SystemSettings> {
         });
         return {
           morning_cutoff: settingsMap['morning_cutoff'] || '11:30',
-          afternoon_cutoff: settingsMap['afternoon_cutoff'] || '15:00'
+          afternoon_cutoff: settingsMap['afternoon_cutoff'] || '15:00',
+          session_transition: settingsMap['session_transition'] || '13:30'
         };
       }
     } catch (err) {
@@ -248,9 +250,10 @@ export async function getSystemSettings(): Promise<SystemSettings> {
 export async function updateSystemSettings(settings: SystemSettings): Promise<SystemSettings> {
   if (isSupabaseConfigured && supabase) {
     try {
-      // Upsert morning_cutoff and afternoon_cutoff
+      // Upsert settings keys
       await supabase.from('system_settings').upsert({ key: 'morning_cutoff', value: settings.morning_cutoff });
       await supabase.from('system_settings').upsert({ key: 'afternoon_cutoff', value: settings.afternoon_cutoff });
+      await supabase.from('system_settings').upsert({ key: 'session_transition', value: settings.session_transition });
       return settings;
     } catch (err) {
       console.warn('⚠️ Supabase settings upsert failed. Falling back.');
@@ -275,11 +278,11 @@ export async function checkIn(rollNumber: string): Promise<{ attendance: Attenda
   const currentHour = now.getHours();
   const currentMinute = now.getMinutes();
 
-  // Determine session: morning (< 13:30), afternoon (>= 13:30)
-  const session = currentHour < 13 || (currentHour === 13 && currentMinute < 30) ? 'morning' : 'afternoon';
-
-  // Load dynamic settings for cutoff times
+  // Load dynamic settings for cutoff times and session transitions
   const settings = await getSystemSettings();
+  const [transitionHour, transitionMin] = (settings.session_transition || '13:30').split(':').map(Number);
+  const session = currentHour < transitionHour || (currentHour === transitionHour && currentMinute < transitionMin) ? 'morning' : 'afternoon';
+
   const [morningHour, morningMin] = (settings.morning_cutoff || '11:30').split(':').map(Number);
   const [afternoonHour, afternoonMin] = (settings.afternoon_cutoff || '15:00').split(':').map(Number);
 

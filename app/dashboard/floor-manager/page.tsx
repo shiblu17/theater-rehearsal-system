@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { 
   ClipboardList, Users, ArrowRight, ShieldCheck, CheckCircle, 
-  Calendar, Clock, Volume2, AlertCircle, ArrowLeft, QrCode, Ticket 
+  Calendar, Clock, Volume2, AlertCircle, ArrowLeft, QrCode, Ticket, Settings, RefreshCw 
 } from 'lucide-react';
 import { Member, Attendance } from '@/lib/db';
 
@@ -33,17 +33,31 @@ export default function FloorManagerDashboard() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [loading, setLoading] = useState(true);
 
+  // Dynamic Settings states
+  const [morningCutoff, setMorningCutoff] = useState('11:30');
+  const [afternoonCutoff, setAfternoonCutoff] = useState('15:00');
+  const [sessionTransition, setSessionTransition] = useState('13:30');
+  const [isEditingSettings, setIsEditingSettings] = useState(false);
+  const [isSavingSettings, setIsSavingSettings] = useState(false);
+
   const fetchData = async () => {
     try {
-      const [membersRes, attendanceRes] = await Promise.all([
+      const [membersRes, attendanceRes, settingsRes] = await Promise.all([
         fetch('/api/members'),
-        fetch('/api/attendance')
+        fetch('/api/attendance'),
+        fetch('/api/settings')
       ]);
       const membersData = await membersRes.json();
       const attendanceData = await attendanceRes.json();
+      const settingsData = await settingsRes.json();
 
       if (Array.isArray(membersData)) setMembers(membersData);
       if (Array.isArray(attendanceData)) setAttendance(attendanceData);
+      if (settingsData) {
+        if (settingsData.morning_cutoff) setMorningCutoff(settingsData.morning_cutoff);
+        if (settingsData.afternoon_cutoff) setAfternoonCutoff(settingsData.afternoon_cutoff);
+        if (settingsData.session_transition) setSessionTransition(settingsData.session_transition);
+      }
     } catch (e) {
       console.error('Error loading floor manager data:', e);
     } finally {
@@ -135,6 +149,34 @@ export default function FloorManagerDashboard() {
     }
   };
 
+  const handleSaveSettings = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSavingSettings(true);
+    try {
+      const res = await fetch('/api/settings', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ 
+          morning_cutoff: morningCutoff, 
+          afternoon_cutoff: afternoonCutoff, 
+          session_transition: sessionTransition 
+        }),
+      });
+      if (res.ok) {
+        alert('হাজিরা সেটিংস সফলভাবে সংরক্ষণ করা হয়েছে!');
+        setIsEditingSettings(false);
+        fetchData();
+      } else {
+        const err = await res.json();
+        alert(err.error || 'সেটিংস সেভ করতে ব্যর্থ হয়েছে।');
+      }
+    } catch (err) {
+      alert('একটি নেটওয়ার্ক ত্রুটি ঘটেছে।');
+    } finally {
+      setIsSavingSettings(false);
+    }
+  };
+
   const handleVerifyTicket = async (ticketId: string) => {
     if (!ticketId || !ticketId.trim()) return;
     setIsSubmitting(true);
@@ -170,7 +212,6 @@ export default function FloorManagerDashboard() {
     }
   };
 
-  // Filter only today's attendance logs
   const todayStr = new Date().toDateString();
   const todaysAttendance = attendance.filter(a => {
     const timeVal = a.check_in_time || (a as any).created_at;
@@ -182,72 +223,65 @@ export default function FloorManagerDashboard() {
 
   return (
     <div className="section-wrapper min-h-screen py-10 relative overflow-hidden">
-      {/* Background glow effects */}
       <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-[#2ecc71]/5 rounded-full filter blur-[120px] pointer-events-none"></div>
       <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-[#3498db]/5 rounded-full filter blur-[120px] pointer-events-none"></div>
 
       <div className="content-container max-w-6xl relative z-10 space-y-8">
         
         {/* Navigation & Header */}
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 border-b border-white/5 pb-6">
-          <div className="space-y-2 text-left">
-            <Link 
-              href="/dashboard" 
-              className="inline-flex items-center gap-1.5 text-xs text-gray-400 hover:text-white transition-colors"
-            >
-              <ArrowLeft size={12} />
-              <span>ড্যাশবোর্ড পোর্টালে ফিরুন</span>
-            </Link>
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#2ecc71] to-[#3498db] flex items-center justify-center text-white shadow-md">
-                <ClipboardList size={22} />
-              </div>
-              <div>
-                <h1 className="text-2xl md:text-3xl font-black text-white">ফ্লোর ম্যানেজার ড্যাশবোর্ড</h1>
-                <p className="text-xs text-gray-400">মহড়াকক্ষ হাজিরা ও গেট টিকিট পাস ভেরিফিকেশন প্যানেল</p>
-              </div>
+        <div className="flex flex-col md:flex-row justify-between items-center mb-10 gap-6 border-b border-white/5 pb-6">
+          <div className="text-left space-y-1">
+            <div className="flex items-center gap-2">
+              <Link href="/dashboard" className="text-xs text-gray-400 hover:text-white transition-colors">প্যানেল নির্বাচন</Link>
+              <span className="text-xs text-gray-600">/</span>
+              <span className="text-xs text-[#2ecc71] font-bold">ফ্লোর ম্যানেজার</span>
             </div>
+            <h2 className="text-3xl font-black text-white">রক্তকরবী ফ্লোর ম্যানেজার ড্যাশবোর্ড 📋</h2>
+            <p className="text-sm text-gray-400">মহড়াকক্ষ হাজিরা ও গেট টিকিট ভেরিফিকেশন প্যানেল</p>
           </div>
 
-          <div className="flex gap-2">
-            <div className="px-3.5 py-1.5 rounded-xl bg-white/5 border border-white/10 text-xs font-bold text-gray-300 flex items-center gap-1.5">
-              <Calendar size={13} className="text-[#2ecc71]" />
-              <span>আজকের তারিখ: {new Date().toLocaleDateString('bn-BD', { day: 'numeric', month: 'long', year: 'numeric' })}</span>
-            </div>
-          </div>
+          <button 
+            onClick={fetchData} 
+            className="p-2 rounded-xl bg-white/5 border border-white/10 text-gray-400 hover:text-white hover:bg-white/10 transition-all active:scale-95"
+            title="রিফ্রেশ করুন"
+          >
+            <RefreshCw size={18} className={loading ? 'animate-spin' : ''} />
+          </button>
         </div>
 
-        {/* Core Operations Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+        {/* Workspace Dual Layout */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start mb-10">
           
-          {/* LEFT COLUMN: Quick Check-in (Span 5) */}
+          {/* LEFT COLUMN: Quick Check-in Form (Span 5) */}
           <div className="lg:col-span-5 space-y-6">
             <div className="glass-panel text-left">
               <div className="flex items-center gap-3 mb-6 border-b border-white/5 pb-4">
                 <div className="w-10 h-10 rounded-xl bg-[#2ecc71]/10 border border-[#2ecc71]/20 flex items-center justify-center text-[#2ecc71]">
-                  <CheckCircle size={20} />
+                  <Users size={20} />
                 </div>
                 <div>
                   <h3 className="font-bold text-base text-white">কুশীলব কুইক চেক-ইন</h3>
-                  <p className="text-[10px] text-gray-400">ম্যানুয়ালি যেকোনো কুশীলবের হাজিরা এন্ট্রি করুন</p>
+                  <p className="text-[10px] text-gray-400">ম্যানুয়ালি হাজিরা এন্ট্রি দিন</p>
                 </div>
               </div>
 
-              <form onSubmit={handleQuickCheckIn} className="space-y-5">
+              <form onSubmit={handleQuickCheckIn} className="space-y-6">
                 <div className="form-group mb-0">
-                  <label className="form-label text-[10px] font-bold text-gray-300">কুশীলবের নাম সিলেক্ট করুন</label>
+                  <label className="form-label text-[10px] font-bold text-gray-300">কুশীলব নির্বাচন করুন (Select Member)</label>
                   <select 
                     value={selectedMemberId}
                     onChange={e => setSelectedMemberId(e.target.value)}
-                    className="form-input text-xs bg-zinc-950 text-gray-300 outline-none w-full border border-white/10 rounded-xl p-3"
-                    required
+                    className="form-input py-3 text-xs w-full bg-zinc-950 border border-white/10 rounded-xl px-3 text-gray-300 appearance-none cursor-pointer"
                   >
-                    <option value="" disabled>কুশীলবের নাম...</option>
+                    <option value="">কুশীলবের নাম সিলেক্ট করুন...</option>
                     {members.map(m => (
-                      <option key={m.id} value={m.id}>[{m.roll}] {m.name} ({m.role})</option>
+                      <option key={m.id} value={m.id}>
+                        {m.name} (রোল: {m.roll}) - {m.character_name || 'নেপথ্য'}
+                      </option>
                     ))}
                   </select>
                 </div>
+
                 <button 
                   type="submit" 
                   disabled={isSubmitting || !selectedMemberId} 
@@ -265,16 +299,89 @@ export default function FloorManagerDashboard() {
               </form>
             </div>
 
-            <div className="glass-panel p-5 bg-gradient-to-br from-[#2ecc71]/5 to-transparent border-white/5 space-y-3 text-left">
-              <h4 className="font-bold text-xs text-[#2ecc71] uppercase tracking-wider flex items-center gap-1.5">
-                <AlertCircle size={13} /> হাজিরা সেশন নির্দেশিকা
-              </h4>
-              <ul className="text-[10px] text-gray-400 space-y-2 list-disc pl-4 leading-relaxed">
-                <li>দুপুর **১:৩০-এর আগে** হাজিরা দিলে সেটি স্বয়ংক্রিয়ভাবে **সকালের প্রথম সেশন** হিসেবে এন্ট্রি হবে।</li>
-                <li>দুপুর **১:৩০ বা তারপরে** হাজিরা দিলে সেটি **লাঞ্চ পরবর্তী সেশন** হিসেবে সেভ হবে।</li>
-                <li>কোনো কুশীলব একই সেশনে দিনে একবারের বেশি হাজিরা এন্ট্রি করতে পারবেন না।</li>
-              </ul>
-            </div>
+            {/* Dynamic Attendance Session Guidelines & Inline settings editor */}
+            {!isEditingSettings ? (
+              <div className="glass-panel p-5 bg-gradient-to-br from-[#2ecc71]/5 to-transparent border-white/5 space-y-3 text-left relative group">
+                <button 
+                  onClick={() => setIsEditingSettings(true)}
+                  className="absolute top-4 right-4 p-1.5 rounded-lg bg-white/5 border border-white/10 text-gray-400 hover:text-white hover:bg-white/10 transition-all opacity-0 group-hover:opacity-100 focus:opacity-100 cursor-pointer border-0"
+                  title="সেটিংস সম্পাদনা করুন"
+                  type="button"
+                >
+                  <Settings size={14} />
+                </button>
+                
+                <h4 className="font-bold text-xs text-[#2ecc71] uppercase tracking-wider flex items-center gap-1.5">
+                  <AlertCircle size={13} /> হাজিরা সেশন নির্দেশিকা
+                </h4>
+                <ul className="text-[10px] text-gray-400 space-y-2 list-disc pl-4 leading-relaxed">
+                  <li>দুপুর **{sessionTransition}**-এর আগে হাজিরা দিলে সেটি স্বয়ংক্রিয়ভাবে **সকালের প্রথম সেশন** হিসেবে এন্ট্রি হবে।</li>
+                  <li>দুপুর **{sessionTransition}** বা তারপরে হাজিরা দিলে সেটি **লাঞ্চ পরবর্তী সেশন** হিসেবে সেভ হবে।</li>
+                  <li>কোনো কুশীলব একই সেশনে দিনে একবারের বেশি হাজিরা এন্ট্রি করতে পারবেন না।</li>
+                  <li>সকালের লেট কাট-অফ: **{morningCutoff} AM** | দুপুরের লেট কাট-অফ: **{afternoonCutoff} PM**</li>
+                </ul>
+              </div>
+            ) : (
+              <div className="glass-panel p-5 border-[#2ecc71]/20 bg-gradient-to-br from-[#2ecc71]/5 to-transparent space-y-4 text-left">
+                <h4 className="font-bold text-xs text-[#2ecc71] uppercase tracking-wider flex items-center gap-1.5">
+                  <Settings size={13} /> হাজিরা সেশন সেটিংস ⚙️
+                </h4>
+                
+                <form onSubmit={handleSaveSettings} className="space-y-4">
+                  <div className="space-y-3">
+                    <div className="form-group mb-0">
+                      <label className="form-label text-[9px] font-bold text-gray-300">সেশন পরিবর্তন সময়সীমা (Transition Time)</label>
+                      <input 
+                        type="time" 
+                        value={sessionTransition}
+                        onChange={e => setSessionTransition(e.target.value)}
+                        className="form-input py-2 text-xs w-full bg-zinc-950 border border-white/10 rounded-xl px-3 text-gray-300"
+                        required
+                      />
+                    </div>
+                    <div className="grid grid-cols-2 gap-3">
+                      <div className="form-group mb-0">
+                        <label className="form-label text-[9px] font-bold text-gray-300">সকাল লেট কাট-অফ</label>
+                        <input 
+                          type="time" 
+                          value={morningCutoff}
+                          onChange={e => setMorningCutoff(e.target.value)}
+                          className="form-input py-2 text-xs w-full bg-zinc-950 border border-white/10 rounded-xl px-3 text-gray-300"
+                          required
+                        />
+                      </div>
+                      <div className="form-group mb-0">
+                        <label className="form-label text-[9px] font-bold text-gray-300">দুপুর লেট কাট-অফ</label>
+                        <input 
+                          type="time" 
+                          value={afternoonCutoff}
+                          onChange={e => setAfternoonCutoff(e.target.value)}
+                          className="form-input py-2 text-xs w-full bg-zinc-950 border border-white/10 rounded-xl px-3 text-gray-300"
+                          required
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="flex gap-2">
+                    <button 
+                      type="submit"
+                      disabled={isSavingSettings}
+                      className="btn-primary py-2 px-4 text-[10px] bg-[#2ecc71] hover:bg-[#27ae60] text-white rounded-lg cursor-pointer border-0"
+                    >
+                      {isSavingSettings ? 'সংরক্ষণ হচ্ছে...' : 'সংরক্ষণ'}
+                    </button>
+                    <button 
+                      type="button"
+                      onClick={() => setIsEditingSettings(false)}
+                      className="btn-glass py-2 px-4 text-[10px] border-white/10 hover:bg-white/5 text-gray-400 rounded-lg cursor-pointer"
+                    >
+                      বাতিল
+                    </button>
+                  </div>
+                </form>
+              </div>
+            )}
           </div>
 
           {/* RIGHT COLUMN: Ticket Verification (Span 7) */}
@@ -317,7 +424,6 @@ export default function FloorManagerDashboard() {
                         যাচাই
                       </button>
                     </div>
-                    <p className="text-[9px] text-gray-500 mt-2">টিকিট প্রিন্টআউট বা মোবাইলে থাকা ইউনিক আইডি দিয়ে চেক করুন।</p>
                   </div>
                 </div>
 
