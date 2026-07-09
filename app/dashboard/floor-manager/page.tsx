@@ -304,7 +304,7 @@ export default function FloorManagerDashboard() {
               <div className="glass-panel p-5 bg-gradient-to-br from-[#2ecc71]/5 to-transparent border-white/5 space-y-3 text-left relative group">
                 <button 
                   onClick={() => setIsEditingSettings(true)}
-                  className="absolute top-4 right-4 p-1.5 rounded-lg bg-white/5 border border-white/10 text-gray-400 hover:text-white hover:bg-white/10 transition-all opacity-0 group-hover:opacity-100 focus:opacity-100 cursor-pointer border-0"
+                  className="absolute top-4 right-4 p-1.5 rounded-lg bg-white/5 border border-white/10 text-gray-400 hover:text-white hover:bg-white/10 transition-all cursor-pointer border-0"
                   title="সেটিংস সম্পাদনা করুন"
                   type="button"
                 >
@@ -315,10 +315,10 @@ export default function FloorManagerDashboard() {
                   <AlertCircle size={13} /> হাজিরা সেশন নির্দেশিকা
                 </h4>
                 <ul className="text-[10px] text-gray-400 space-y-2 list-disc pl-4 leading-relaxed">
-                  <li>দুপুর **{sessionTransition}**-এর আগে হাজিরা দিলে সেটি স্বয়ংক্রিয়ভাবে **সকালের প্রথম সেশন** হিসেবে এন্ট্রি হবে।</li>
-                  <li>দুপুর **{sessionTransition}** বা তারপরে হাজিরা দিলে সেটি **লাঞ্চ পরবর্তী সেশন** হিসেবে সেভ হবে।</li>
+                  <li>দুপুর <strong className="font-bold text-white">{sessionTransition}</strong>-এর আগে হাজিরা দিলে সেটি স্বয়ংক্রিয়ভাবে <strong className="font-bold text-[#2ecc71]">সকালের প্রথম সেশন</strong> হিসেবে এন্ট্রি হবে।</li>
+                  <li>দুপুর <strong className="font-bold text-white">{sessionTransition}</strong> বা তারপরে হাজিরা দিলে সেটি <strong className="font-bold text-[#3498db]">লাঞ্চ পরবর্তী সেশন</strong> হিসেবে সেভ হবে।</li>
                   <li>কোনো কুশীলব একই সেশনে দিনে একবারের বেশি হাজিরা এন্ট্রি করতে পারবেন না।</li>
-                  <li>সকালের লেট কাট-অফ: **{morningCutoff} AM** | দুপুরের লেট কাট-অফ: **{afternoonCutoff} PM**</li>
+                  <li>সকালের লেট কাট-অফ: <strong className="font-bold text-white">{morningCutoff} AM</strong> | দুপুরের লেট কাট-অফ: <strong className="font-bold text-white">{afternoonCutoff} PM</strong></li>
                 </ul>
               </div>
             ) : (
