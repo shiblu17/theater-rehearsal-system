@@ -188,7 +188,19 @@ export default function ActorDashboard() {
 
   // Sort rehearsals by date (upcoming first)
   const upcomingRehearsals = [...myRehearsals].sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
-  const nextRehearsal = upcomingRehearsals.find(r => new Date(r.date + 'T23:59:59').getTime() >= new Date().getTime());
+  let nextRehearsal = upcomingRehearsals.find(r => new Date(r.date + 'T23:59:59').getTime() >= new Date().getTime());
+  if (!nextRehearsal && myRehearsals.length > 0) {
+    nextRehearsal = myRehearsals[myRehearsals.length - 1];
+  }
+  if (!nextRehearsal) {
+    nextRehearsal = {
+      id: 'default',
+      title: 'দৃশ্য ৪ ও ৫ শেষ রিহার্সাল',
+      date: '2026-07-10',
+      time: '১১:৩০',
+      required_cast: 'নন্দিনী, রাজা, কিশোর, চন্দ্রা'
+    };
+  }
 
   // 2. Filter High-Priority Mentioned Notices
   const characterMentionedNotes = notes.filter(n => 
@@ -217,22 +229,22 @@ export default function ActorDashboard() {
     badges.push({ name: 'মঞ্চের প্রাণ', desc: '৫টির বেশি মহড়ায় অংশগ্রহণ', color: 'from-[#ff7979] to-[#ff4757]' });
   }
   return (
-    <div className="w-full min-h-screen bg-[#080d12] pb-32">
+    <div className="w-full min-h-screen bg-[#0d0d10] pb-32">
       <div className="max-w-md mx-auto px-4 pt-8 flex flex-col gap-6 text-left">
         
         {/* -------------------------------------------------------------
-           ACTOR PROFILE BANNER (Slate-800 Card Layout)
+           ACTOR PROFILE BANNER (Charcoal Card Layout)
            ------------------------------------------------------------- */}
-        <section className="p-6 bg-[#1e293b] border border-[#475569] rounded-2xl flex flex-row items-center justify-between gap-3 text-left w-full shadow-xl shadow-black/40">
+        <section className="p-6 bg-[#16161a] border border-zinc-800 rounded-2xl flex flex-row items-center justify-between gap-3 text-left w-full shadow-xl shadow-black/40">
           <div className="flex items-center gap-3.5 min-w-0 flex-1">
             {member.avatar_url ? (
               <img 
                 src={member.avatar_url} 
                 alt={member.name}
-                className="w-14 h-14 rounded-full border-2 border-amber-500/80 object-cover shrink-0"
+                className="w-14 h-14 rounded-full border-2 border-[#c4a275] object-cover shrink-0"
               />
             ) : (
-              <div className="w-14 h-14 rounded-full bg-gradient-to-tr from-[#c85122] to-[#e59f5b] flex items-center justify-center text-white text-lg font-black border-2 border-amber-500/80 shrink-0">
+              <div className="w-14 h-14 rounded-full bg-gradient-to-tr from-[#c85122] to-[#e59f5b] flex items-center justify-center text-white text-lg font-black border-2 border-[#c4a275] shrink-0">
                 {member.name.substring(0, 1)}
               </div>
             )}
@@ -257,9 +269,9 @@ export default function ActorDashboard() {
         </section>
 
         {/* -------------------------------------------------------------
-           TAB NAVIGATION (Minimal Segmented Control Group - Slate-800 layout)
+           TAB NAVIGATION (Minimal Segmented Control Group - Charcoal layout)
            ------------------------------------------------------------- */}
-        <div className="flex bg-[#1e293b] p-1 rounded-xl gap-0.5 w-full border border-[#475569] shadow-xl overflow-x-auto scrollbar-none shrink-0">
+        <div className="flex bg-[#16161a] p-1.5 rounded-xl gap-0.5 w-full border border-zinc-800 shadow-xl overflow-x-auto scrollbar-none shrink-0">
           {[
             { id: 'home', name: 'হোম' },
             { id: 'notices', name: 'নোটিশ' },
@@ -275,7 +287,7 @@ export default function ActorDashboard() {
                 onClick={() => setActiveTab(tab.id as any)}
                 className={`flex-1 text-center py-2 rounded-lg text-[10px] sm:text-xs font-black transition-all cursor-pointer whitespace-nowrap px-2.5 shrink-0 ${
                   isActive 
-                    ? 'bg-amber-500 text-slate-950 border border-amber-500 shadow-md shadow-amber-500/25' 
+                    ? 'bg-amber-500 text-zinc-950 border border-amber-500 shadow-md shadow-amber-500/25 font-bold' 
                     : 'text-gray-400 hover:text-white border border-transparent'
                 }`}
               >
@@ -294,7 +306,7 @@ export default function ActorDashboard() {
           {activeTab === 'home' && (
             <div className="flex flex-col gap-6">
               {/* METRICS BAR */}
-              <section className="grid grid-cols-4 gap-2 bg-[#1e293b] border border-[#475569] rounded-2xl p-5 shadow-xl shadow-black/30">
+              <section className="grid grid-cols-4 gap-2 bg-[#16161a] border border-zinc-800 rounded-2xl p-5 shadow-xl shadow-black/30">
                 {/* Metric 1 */}
                 <div className="flex flex-col items-center justify-center space-y-2 text-center">
                   <div className="w-13 h-13 rounded-full border-2 border-emerald-500 flex items-center justify-center bg-emerald-500/5 shadow-md shadow-emerald-500/10">
@@ -334,10 +346,10 @@ export default function ActorDashboard() {
                 
                 <div className="flex flex-col gap-3.5">
                   {/* Task 1 */}
-                  <div className="p-4 bg-[#1e293b] border border-[#475569] rounded-2xl flex items-center gap-4 text-left shadow-xl shadow-black/20">
-                    <span className="text-xs font-black text-amber-500 font-mono w-4">1</span>
-                    <div className="w-9 h-9 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center shrink-0">
-                      <Zap size={16} className="text-amber-500" />
+                  <div className="p-4 bg-[#16161a] border border-zinc-800 rounded-2xl flex items-center gap-4 text-left shadow-xl shadow-black/20">
+                    <span className="text-xs font-black text-[#c4a275]/80 font-mono w-4">1</span>
+                    <div className="w-10 h-10 rounded-full bg-[#24211a] border border-[#c4a275]/25 flex items-center justify-center shrink-0">
+                      <Zap size={16} className="text-[#e59f5b]" />
                     </div>
                     <div className="space-y-1 min-w-0 flex-1">
                       <h4 className="text-xs sm:text-sm font-black text-white leading-tight">ল্যাব পর্দা ফিট</h4>
@@ -346,10 +358,10 @@ export default function ActorDashboard() {
                   </div>
 
                   {/* Task 2 */}
-                  <div className="p-4 bg-[#1e293b] border border-[#475569] rounded-2xl flex items-center gap-4 text-left shadow-xl shadow-black/20">
-                    <span className="text-xs font-black text-amber-500 font-mono w-4">2</span>
-                    <div className="w-9 h-9 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center shrink-0">
-                      <Smile size={16} className="text-amber-500" />
+                  <div className="p-4 bg-[#16161a] border border-zinc-800 rounded-2xl flex items-center gap-4 text-left shadow-xl shadow-black/20">
+                    <span className="text-xs font-black text-[#c4a275]/80 font-mono w-4">2</span>
+                    <div className="w-10 h-10 rounded-full bg-[#24211a] border border-[#c4a275]/25 flex items-center justify-center shrink-0">
+                      <Smile size={16} className="text-[#e59f5b]" />
                     </div>
                     <div className="space-y-1 min-w-0 flex-1">
                       <h4 className="text-xs sm:text-sm font-black text-white leading-tight">রক্তকরবী ফুল সজীব করা</h4>
@@ -358,10 +370,10 @@ export default function ActorDashboard() {
                   </div>
 
                   {/* Task 3 */}
-                  <div className="p-4 bg-[#1e293b] border border-[#475569] rounded-2xl flex items-center gap-4 text-left shadow-xl shadow-black/20">
-                    <span className="text-xs font-black text-amber-500 font-mono w-4">3</span>
-                    <div className="w-9 h-9 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center shrink-0">
-                      <Volume2 size={16} className="text-amber-500" />
+                  <div className="p-4 bg-[#16161a] border border-zinc-800 rounded-2xl flex items-center gap-4 text-left shadow-xl shadow-black/20">
+                    <span className="text-xs font-black text-[#c4a275]/80 font-mono w-4">3</span>
+                    <div className="w-10 h-10 rounded-full bg-[#24211a] border border-[#c4a275]/25 flex items-center justify-center shrink-0">
+                      <Volume2 size={16} className="text-[#e59f5b]" />
                     </div>
                     <div className="space-y-1 min-w-0 flex-1">
                       <h4 className="text-xs sm:text-sm font-black text-white leading-tight">বিশু পাগলের লাইটিং ফোকাস</h4>
@@ -370,10 +382,10 @@ export default function ActorDashboard() {
                   </div>
 
                   {/* Task 4 */}
-                  <div className="p-4 bg-[#1e293b] border border-[#475569] rounded-2xl flex items-center gap-4 text-left shadow-xl shadow-black/20">
-                    <span className="text-xs font-black text-amber-500 font-mono w-4">4</span>
-                    <div className="w-9 h-9 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center shrink-0">
-                      <MessageSquare size={16} className="text-amber-500" />
+                  <div className="p-4 bg-[#16161a] border border-zinc-800 rounded-2xl flex items-center gap-4 text-left shadow-xl shadow-black/20">
+                    <span className="text-xs font-black text-[#c4a275]/80 font-mono w-4">4</span>
+                    <div className="w-10 h-10 rounded-full bg-[#24211a] border border-[#c4a275]/25 flex items-center justify-center shrink-0">
+                      <MessageSquare size={16} className="text-[#e59f5b]" />
                     </div>
                     <div className="space-y-1 min-w-0 flex-1">
                       <h4 className="text-xs sm:text-sm font-black text-white leading-tight">সংলাপ ভুল সংশোধন</h4>
@@ -391,9 +403,9 @@ export default function ActorDashboard() {
               {/* Highlight cards */}
               <div className="flex flex-col gap-3.5 w-full">
                 {/* Highlight 1: Flower */}
-                <div className="p-4.5 bg-[#1e293b] border border-[#475569] rounded-2xl flex items-center gap-4 text-left shadow-xl shadow-black/20">
-                  <div className="w-9 h-9 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center shrink-0">
-                    <Flower size={18} className="text-amber-500" />
+                <div className="p-4.5 bg-[#16161a] border border-zinc-800 rounded-2xl flex items-center gap-4 text-left shadow-xl shadow-black/20">
+                  <div className="w-10 h-10 rounded-full bg-[#24211a] border border-[#c4a275]/25 flex items-center justify-center shrink-0">
+                    <Flower size={18} className="text-[#e59f5b]" />
                   </div>
                   <div className="space-y-1 min-w-0 flex-1">
                     <h4 className="text-xs sm:text-sm font-black text-white leading-tight">রক্তকরবী ফুল সজীব করা</h4>
@@ -402,9 +414,9 @@ export default function ActorDashboard() {
                 </div>
 
                 {/* Highlight 2: Lightbulb */}
-                <div className="p-4.5 bg-[#1e293b] border border-[#475569] rounded-2xl flex items-center gap-4 text-left shadow-xl shadow-black/20">
-                  <div className="w-9 h-9 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center shrink-0">
-                    <Lightbulb size={18} className="text-amber-500 animate-pulse" />
+                <div className="p-4.5 bg-[#16161a] border border-zinc-800 rounded-2xl flex items-center gap-4 text-left shadow-xl shadow-black/20">
+                  <div className="w-10 h-10 rounded-full bg-[#24211a] border border-[#c4a275]/25 flex items-center justify-center shrink-0">
+                    <Lightbulb size={18} className="text-[#e59f5b] animate-pulse" />
                   </div>
                   <div className="min-w-0 flex-1">
                     <h4 className="text-xs sm:text-sm font-black text-white leading-snug">বিশু পাগলের প্রবেশ দৃশ্যে আলোর ফোকাস উন্নত করা।</h4>
@@ -419,7 +431,7 @@ export default function ActorDashboard() {
                   <span>নোটিশ বোর্ড</span>
                 </h2>
                 {notes.length === 0 ? (
-                  <div className="p-10 text-center text-gray-500 text-xs border border-[#475569] rounded-2xl bg-[#1e293b]">
+                  <div className="p-10 text-center text-gray-500 text-xs border border-zinc-800 rounded-2xl bg-[#16161a]">
                     আপাতত কোনো সাধারণ নোটিশ জারি করা হয়নি।
                   </div>
                 ) : (
@@ -435,10 +447,10 @@ export default function ActorDashboard() {
                       return (
                         <div 
                           key={note.id} 
-                          className="p-5 bg-[#1e293b] border border-[#475569] rounded-2xl flex gap-3.5 text-left items-start shadow-xl shadow-black/25"
+                          className="p-5 bg-[#16161a] border border-zinc-800 rounded-2xl flex gap-3.5 text-left items-start shadow-xl shadow-black/25"
                         >
-                          <div className="w-9 h-9 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center shrink-0 mt-0.5">
-                            <NoticeIcon size={16} className="text-amber-500" />
+                          <div className="w-10 h-10 rounded-full bg-[#24211a] border border-[#c4a275]/25 flex items-center justify-center shrink-0 mt-0.5">
+                            <NoticeIcon size={16} className="text-[#e59f5b]" />
                           </div>
                           <div className="space-y-1.5 min-w-0 flex-1">
                             <div className="flex items-center justify-between gap-1 text-[11px] font-bold">
@@ -687,27 +699,24 @@ export default function ActorDashboard() {
          UPCOMING NEXT REHEARSAL WIDGET (Mockup Layout - Bottom)
          ------------------------------------------------------------- */}
       {nextRehearsal && (
-        <section className="p-5.5 bg-[#1b232c] border border-[#334454] rounded-2xl text-left space-y-4 relative overflow-hidden shadow-xl shadow-black/30">
-          <div className="flex items-center gap-1.5 text-[10px] font-black uppercase tracking-wider text-amber-500">
+        <section className="p-5 bg-[#16161a] border border-zinc-800 rounded-2xl text-left space-y-3 relative overflow-hidden shadow-xl shadow-black/30">
+          <div className="flex items-center gap-1.5 text-[10px] font-black uppercase tracking-wider text-[#e59f5b]">
             <Clock size={12} />
-            <span>পরবর্তী মহড়া (NEXT REHEARSAL)</span>
+            <span>পরবর্তী মহড়া</span>
           </div>
           
-          <div className="space-y-1.5">
-            <h2 className="text-3xl font-black text-white font-mono tracking-wide">
-              {nextRehearsal.date}
-            </h2>
-            <h3 className="text-sm font-bold text-white">
-              {nextRehearsal.title}
+          <div className="space-y-1">
+            <h3 className="text-sm font-bold text-white leading-snug">
+              {member.name}, {member.roll} • {nextRehearsal.title}
             </h3>
             <p className="text-xs text-gray-400">
               দৃশ্যভিত্তিক কাস্ট: <span className="text-gray-300 font-semibold">{nextRehearsal.required_cast}</span>
             </p>
           </div>
           
-          <div className="border-t border-[#334454] pt-3.5 flex justify-between items-center text-[10px] text-gray-500 font-bold">
+          <div className="border-t border-zinc-800 pt-3 flex justify-between items-center text-[10px] text-gray-500 font-bold">
             <span>সময়: {nextRehearsal.time}</span>
-            <span className="text-amber-500">আসন্ন</span>
+            <span className="text-[#e59f5b]">আসন্ন</span>
           </div>
         </section>
       )}
