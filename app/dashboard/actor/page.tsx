@@ -214,13 +214,13 @@ export default function ActorDashboard() {
     badges.push({ name: 'মঞ্চের প্রাণ', desc: '৫টির বেশি মহড়ায় অংশগ্রহণ', color: 'from-[#ff7979] to-[#ff4757]' });
   }
   return (
-    <div className="w-full min-h-screen bg-[#080d12] pb-28">
-      <div className="max-w-md mx-auto px-4 pt-6 space-y-6 text-left">
+    <div className="w-full min-h-screen bg-[#080d12] pb-32">
+      <div className="max-w-md mx-auto px-4 pt-8 space-y-8 text-left">
         
         {/* -------------------------------------------------------------
            ACTOR PROFILE BANNER (Premium Rounded Card Layout)
            ------------------------------------------------------------- */}
-        <section className="p-4.5 bg-[#141b22] border border-white/10 rounded-2xl flex flex-row items-center justify-between gap-3 text-left w-full shadow-lg shadow-black/30">
+        <section className="p-5 bg-[#1b232c] border border-[#334454] rounded-2xl flex flex-row items-center justify-between gap-3 text-left w-full shadow-xl shadow-black/40">
           <div className="flex items-center gap-3.5 min-w-0 flex-1">
             {member.avatar_url ? (
               <img 
@@ -246,7 +246,7 @@ export default function ActorDashboard() {
 
           <button 
             onClick={handleLogout}
-            className="px-4 py-2 bg-white/5 hover:bg-white/10 text-white rounded-xl text-xs font-bold flex items-center gap-1.5 border border-white/10 transition-all cursor-pointer shrink-0"
+            className="px-4 py-2 bg-white/5 hover:bg-white/10 text-white rounded-xl text-xs font-bold flex items-center gap-1.5 border border-white/15 transition-all cursor-pointer shrink-0"
           >
             <LogOut size={12} className="text-gray-400" />
             <span>Log Out</span>
@@ -256,7 +256,7 @@ export default function ActorDashboard() {
         {/* -------------------------------------------------------------
            METRICS BAR (Sleek Circle Progress Stats - Spacious Layout)
            ------------------------------------------------------------- */}
-        <section className="grid grid-cols-4 gap-2 bg-[#141b22] border border-white/10 rounded-2xl p-4 shadow-lg shadow-black/20">
+        <section className="grid grid-cols-4 gap-2 bg-[#1b232c] border border-[#334454] rounded-2xl p-5 shadow-xl shadow-black/30">
           {/* Metric 1 */}
           <div className="flex flex-col items-center justify-center space-y-2 text-center">
             <div className="w-12 h-12 rounded-full border-2 border-emerald-500 flex items-center justify-center bg-emerald-500/5 shadow-md shadow-emerald-500/10">
@@ -298,7 +298,7 @@ export default function ActorDashboard() {
           
           <div className="space-y-2.5">
             {/* Task 1 */}
-            <div className="p-3.5 bg-[#141b22] border border-white/10 rounded-2xl flex items-center gap-4 text-left shadow-md">
+            <div className="p-3.5 bg-[#1b232c] border border-[#334454] rounded-2xl flex items-center gap-4 text-left shadow-md">
               <span className="text-xs font-black text-amber-500 font-mono w-4">1</span>
               <div className="w-8 h-8 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center shrink-0">
                 <Zap size={14} className="text-amber-500" />
@@ -310,7 +310,7 @@ export default function ActorDashboard() {
             </div>
 
             {/* Task 2 */}
-            <div className="p-3.5 bg-[#141b22] border border-white/10 rounded-2xl flex items-center gap-4 text-left shadow-md">
+            <div className="p-3.5 bg-[#1b232c] border border-[#334454] rounded-2xl flex items-center gap-4 text-left shadow-md">
               <span className="text-xs font-black text-amber-500 font-mono w-4">2</span>
               <div className="w-8 h-8 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center shrink-0">
                 <Smile size={14} className="text-amber-500" />
@@ -322,7 +322,7 @@ export default function ActorDashboard() {
             </div>
 
             {/* Task 3 */}
-            <div className="p-3.5 bg-[#141b22] border border-white/10 rounded-2xl flex items-center gap-4 text-left shadow-md">
+            <div className="p-3.5 bg-[#1b232c] border border-[#334454] rounded-2xl flex items-center gap-4 text-left shadow-md">
               <span className="text-xs font-black text-amber-500 font-mono w-4">3</span>
               <div className="w-8 h-8 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center shrink-0">
                 <Volume2 size={14} className="text-amber-500" />
@@ -334,7 +334,7 @@ export default function ActorDashboard() {
             </div>
 
             {/* Task 4 */}
-            <div className="p-3.5 bg-[#141b22] border border-white/10 rounded-2xl flex items-center gap-4 text-left shadow-md">
+            <div className="p-3.5 bg-[#1b232c] border border-[#334454] rounded-2xl flex items-center gap-4 text-left shadow-md">
               <span className="text-xs font-black text-amber-500 font-mono w-4">4</span>
               <div className="w-8 h-8 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center shrink-0">
                 <MessageSquare size={14} className="text-amber-500" />
@@ -348,9 +348,9 @@ export default function ActorDashboard() {
         </section>
 
         {/* -------------------------------------------------------------
-           TAB NAVIGATION (Minimal Segmented Control Group - Expanded padding)
+           TAB NAVIGATION (Minimal Segmented Control Group - Beautiful layout)
            ------------------------------------------------------------- */}
-        <div className="flex bg-[#141b22] p-1.5 rounded-2xl gap-1 w-full border border-white/10 shadow-md">
+        <div className="flex bg-[#1b232c] p-1.5 rounded-2xl gap-1.5 w-full border border-[#334454] shadow-xl">
           {[
             { id: 'notices', name: 'নোটিশ' },
             { id: 'schedule', name: 'শিডিউল' },
@@ -365,7 +365,7 @@ export default function ActorDashboard() {
                 onClick={() => setActiveTab(tab.id as any)}
                 className={`flex-1 text-center py-2.5 rounded-xl text-xs font-black transition-all cursor-pointer ${
                   isActive 
-                    ? 'bg-amber-500/15 text-amber-500 border border-amber-500/30 shadow-sm' 
+                    ? 'bg-amber-500 text-black border border-amber-500 shadow-md shadow-amber-500/25' 
                     : 'text-gray-400 hover:text-white border border-transparent'
                 }`}
               >
@@ -376,9 +376,9 @@ export default function ActorDashboard() {
         </div>
 
         {/* -------------------------------------------------------------
-           TAB CONTENT (Beautiful spacious layout)
+           TAB CONTENT (Beautiful spacious layout with distinct cards)
            ------------------------------------------------------------- */}
-        <main className="min-h-[22vh] space-y-4 pt-2">
+        <main className="min-h-[25vh] space-y-4 pt-2">
           
           {/* 1. NOTICES TAB */}
           {activeTab === 'notices' && (
@@ -388,11 +388,11 @@ export default function ActorDashboard() {
                 <span>নোটিশ বোর্ড</span>
               </h2>
               {notes.length === 0 ? (
-                <div className="glass-panel p-8 text-center text-gray-500 text-xs">
+                <div className="glass-panel p-8 text-center text-gray-500 text-xs border border-[#334454]">
                   আপাতত কোনো সাধারণ নোটিশ জারি করা হয়নি।
                 </div>
               ) : (
-                <div className="grid grid-cols-1 gap-3">
+                <div className="grid grid-cols-1 gap-3.5">
                   {notes.slice(0, 2).map((note, idx) => {
                     const isMentioned = note.content.includes(myCharacter) || note.content.includes(member.name);
                     
@@ -405,7 +405,7 @@ export default function ActorDashboard() {
                     return (
                       <div 
                         key={note.id} 
-                        className="p-4 bg-[#141b22] border border-white/10 rounded-2xl flex gap-3 text-left items-start shadow-md"
+                        className="p-4.5 bg-[#1b232c] border border-[#334454] rounded-2xl flex gap-3.5 text-left items-start shadow-xl shadow-black/25"
                       >
                         <div className="w-8 h-8 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center shrink-0 mt-0.5">
                           <Volume2 size={14} className="text-amber-500" />
@@ -656,17 +656,17 @@ export default function ActorDashboard() {
          UPCOMING NEXT REHEARSAL WIDGET (Mockup Layout - Bottom)
          ------------------------------------------------------------- */}
       {nextRehearsal && (
-        <section className="p-4 rounded-xl bg-[#1b1f28] border border-white/5 text-left space-y-3 relative overflow-hidden">
-          <div className="flex items-center gap-1.5 text-[9px] font-bold uppercase tracking-wider text-amber-500">
+        <section className="p-5.5 bg-[#1b232c] border border-[#334454] rounded-2xl text-left space-y-4 relative overflow-hidden shadow-xl shadow-black/30">
+          <div className="flex items-center gap-1.5 text-[10px] font-black uppercase tracking-wider text-amber-500">
             <Clock size={12} />
             <span>পরবর্তী মহড়া (NEXT REHEARSAL)</span>
           </div>
           
-          <div className="space-y-1">
-            <h2 className="text-2xl sm:text-3xl font-black text-white font-mono tracking-wide">
+          <div className="space-y-1.5">
+            <h2 className="text-3xl font-black text-white font-mono tracking-wide">
               {nextRehearsal.date}
             </h2>
-            <h3 className="text-sm sm:text-base font-bold text-white">
+            <h3 className="text-sm font-bold text-white">
               {nextRehearsal.title}
             </h3>
             <p className="text-xs text-gray-400">
@@ -674,7 +674,7 @@ export default function ActorDashboard() {
             </p>
           </div>
           
-          <div className="border-t border-white/5 pt-3 flex justify-between items-center text-[10px] text-gray-500 font-bold">
+          <div className="border-t border-[#334454] pt-3.5 flex justify-between items-center text-[10px] text-gray-500 font-bold">
             <span>সময়: {nextRehearsal.time}</span>
             <span className="text-amber-500">আসন্ন</span>
           </div>
