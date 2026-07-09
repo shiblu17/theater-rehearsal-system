@@ -93,6 +93,11 @@ const DEFAULT_MEMBERS: Member[] = [
   { id: 'm23', roll: '1070', name: 'মারিয়া আক্তার রায়শা', role: 'অভিনেত্রী', character_name: 'প্রহরিণী', avatar_url: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&auto=format&fit=crop&q=80', password: 'roktokorobi52' }
 ];
 
+export interface SystemSettings {
+  morning_cutoff: string; // e.g. "11:30"
+  afternoon_cutoff: string; // e.g. "15:00"
+}
+
 interface MockDB {
   members: Member[];
   tickets: Ticket[];
@@ -100,6 +105,7 @@ interface MockDB {
   subscriptions: PushSubscriptionData[];
   rehearsals: Rehearsal[];
   notes: RehearsalNote[];
+  settings?: SystemSettings;
 }
 
 function readMockDB(): MockDB {
@@ -113,7 +119,8 @@ function readMockDB(): MockDB {
         attendance: parsed.attendance || [],
         subscriptions: parsed.subscriptions || [],
         rehearsals: parsed.rehearsals || [],
-        notes: parsed.notes || []
+        notes: parsed.notes || [],
+        settings: parsed.settings || { morning_cutoff: '11:30', afternoon_cutoff: '15:00' }
       };
     }
   } catch (error) {
@@ -127,7 +134,8 @@ function readMockDB(): MockDB {
     attendance: [],
     subscriptions: [],
     rehearsals: [],
-    notes: []
+    notes: [],
+    settings: { morning_cutoff: '11:30', afternoon_cutoff: '15:00' }
   };
   writeMockDB(defaultDB);
   return defaultDB;
@@ -212,6 +220,49 @@ export async function verifyTicket(ticketId: string): Promise<Ticket> {
   return ticket;
 }
 
+export async function getSystemSettings(): Promise<SystemSettings> {
+  const defaultSettings: SystemSettings = { morning_cutoff: '11:30', afternoon_cutoff: '15:00' };
+
+  if (isSupabaseConfigured && supabase) {
+    try {
+      const { data, error } = await supabase.from('system_settings').select('*');
+      if (!error && data && data.length > 0) {
+        const settingsMap: Record<string, string> = {};
+        data.forEach(item => {
+          settingsMap[item.key] = item.value;
+        });
+        return {
+          morning_cutoff: settingsMap['morning_cutoff'] || '11:30',
+          afternoon_cutoff: settingsMap['afternoon_cutoff'] || '15:00'
+        };
+      }
+    } catch (err) {
+      console.warn('⚠️ Supabase system_settings query failed. Falling back.');
+    }
+  }
+
+  const db = readMockDB();
+  return db.settings || defaultSettings;
+}
+
+export async function updateSystemSettings(settings: SystemSettings): Promise<SystemSettings> {
+  if (isSupabaseConfigured && supabase) {
+    try {
+      // Upsert morning_cutoff and afternoon_cutoff
+      await supabase.from('system_settings').upsert({ key: 'morning_cutoff', value: settings.morning_cutoff });
+      await supabase.from('system_settings').upsert({ key: 'afternoon_cutoff', value: settings.afternoon_cutoff });
+      return settings;
+    } catch (err) {
+      console.warn('⚠️ Supabase settings upsert failed. Falling back.');
+    }
+  }
+
+  const db = readMockDB();
+  db.settings = settings;
+  writeMockDB(db);
+  return settings;
+}
+
 export async function checkIn(rollNumber: string): Promise<{ attendance: Attendance; member: Member }> {
   const members = await getMembers();
   const member = members.find(m => m.roll === rollNumber);
@@ -227,14 +278,17 @@ export async function checkIn(rollNumber: string): Promise<{ attendance: Attenda
   // Determine session: morning (< 13:30), afternoon (>= 13:30)
   const session = currentHour < 13 || (currentHour === 13 && currentMinute < 30) ? 'morning' : 'afternoon';
 
+  // Load dynamic settings for cutoff times
+  const settings = await getSystemSettings();
+  const [morningHour, morningMin] = (settings.morning_cutoff || '11:30').split(':').map(Number);
+  const [afternoonHour, afternoonMin] = (settings.afternoon_cutoff || '15:00').split(':').map(Number);
+
   // Determine cutoff for lateness
   let isLate = false;
   if (session === 'morning') {
-    // Morning cutoff: 11:30 AM
-    isLate = currentHour > 11 || (currentHour === 11 && currentMinute > 30);
+    isLate = currentHour > morningHour || (currentHour === morningHour && currentMinute > morningMin);
   } else {
-    // Afternoon cutoff: 3:00 PM (15:00)
-    isLate = currentHour > 15 || (currentHour === 15 && currentMinute > 0);
+    isLate = currentHour > afternoonHour || (currentHour === afternoonHour && currentMinute > afternoonMin);
   }
 
   const status = isLate ? 'late' : 'present';

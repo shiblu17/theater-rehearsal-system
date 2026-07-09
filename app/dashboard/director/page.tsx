@@ -19,7 +19,9 @@ import {
   ShieldCheck,
   Search,
   Volume2,
-  TrendingUp
+  TrendingUp,
+  Settings,
+  ArrowRight
 } from 'lucide-react';
 import { Member, Attendance, Rehearsal, RehearsalNote, Ticket } from '@/lib/db';
 import Link from 'next/link';
@@ -36,7 +38,16 @@ export default function DirectorDashboard() {
   const [loading, setLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [notificationStatus, setNotificationStatus] = useState<'default' | 'granted' | 'denied' | 'unsupported'>('default');
-  const [activeTab, setActiveTab] = useState<'leaderboard' | 'logs' | 'scheduler' | 'verify' | 'diary'>('leaderboard');
+  const [activeTab, setActiveTab] = useState<'leaderboard' | 'logs' | 'scheduler' | 'verify' | 'diary' | 'settings'>('leaderboard');
+
+  // Dynamic Cutoff Settings state
+  const [morningCutoff, setMorningCutoff] = useState('11:30');
+  const [afternoonCutoff, setAfternoonCutoff] = useState('15:00');
+  const [isSavingSettings, setIsSavingSettings] = useState(false);
+
+  // Attendance Sheets filtering states
+  const [sheetDate, setSheetDate] = useState(() => new Date().toISOString().split('T')[0]);
+  const [attendanceView, setAttendanceView] = useState<'tabular' | 'morning' | 'afternoon'>('tabular');
 
   // Input states
   const [selectedMemberId, setSelectedMemberId] = useState<string>('');
@@ -125,8 +136,42 @@ export default function DirectorDashboard() {
     }
   };
 
+  const fetchSettings = async () => {
+    try {
+      const res = await fetch('/api/settings');
+      const data = await res.json();
+      if (data.morning_cutoff) setMorningCutoff(data.morning_cutoff);
+      if (data.afternoon_cutoff) setAfternoonCutoff(data.afternoon_cutoff);
+    } catch (e) {
+      console.error('Error fetching settings:', e);
+    }
+  };
+
+  const handleSaveSettings = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSavingSettings(true);
+    try {
+      const res = await fetch('/api/settings', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ morning_cutoff: morningCutoff, afternoon_cutoff: afternoonCutoff }),
+      });
+      if (res.ok) {
+        alert('হাজিরা সময়সীমা সেটিংস সফলভাবে আপডেট হয়েছে!');
+      } else {
+        const err = await res.json();
+        alert(err.error || 'সেটিংস সেভ করতে ব্যর্থ হয়েছে।');
+      }
+    } catch (err: any) {
+      alert('একটি নেটওয়ার্ক ত্রুটি ঘটেছে।');
+    } finally {
+      setIsSavingSettings(false);
+    }
+  };
+
   useEffect(() => {
     fetchData();
+    fetchSettings();
     
     // Poll data every 5 seconds for real-time check-ins
     const interval = setInterval(fetchData, 5000);
@@ -312,6 +357,26 @@ export default function DirectorDashboard() {
     t.phone.includes(ticketSearchQuery)
   );
 
+  // Attendance sheets processing based on selected sheetDate
+  const selectedDateStr = new Date(sheetDate).toDateString();
+  const selectedDateLogs = logs.filter(log => {
+    const timeVal = log.check_in_time || (log as any).created_at;
+    return timeVal && new Date(timeVal).toDateString() === selectedDateStr;
+  });
+
+  const morningLogs = selectedDateLogs.filter(l => (l.session || 'morning') === 'morning');
+  const afternoonLogs = selectedDateLogs.filter(l => l.session === 'afternoon');
+
+  const tabularData = members.map(m => {
+    const morningLog = morningLogs.find(l => l.member_id === m.id);
+    const afternoonLog = afternoonLogs.find(l => l.member_id === m.id);
+    return {
+      member: m,
+      morning: morningLog,
+      afternoon: afternoonLog
+    };
+  });
+
   return (
     <div className="section-wrapper min-h-screen">
       <div className="content-container">
@@ -462,7 +527,7 @@ export default function DirectorDashboard() {
                 onClick={() => setActiveTab('logs')} 
                 className={`pb-4 px-4 font-semibold text-sm border-b-2 transition-all whitespace-nowrap ${activeTab === 'logs' ? 'border-[#ff7979] text-[#ff7979]' : 'border-transparent text-gray-400 hover:text-white'}`}
               >
-                হাজিরা ইতিহাস লগ
+                দৈনিক হাজিরা শিট 📋
               </button>
               <button 
                 onClick={() => setActiveTab('scheduler')} 
@@ -481,6 +546,12 @@ export default function DirectorDashboard() {
                 className={`pb-4 px-4 font-semibold text-sm border-b-2 transition-all whitespace-nowrap ${activeTab === 'diary' ? 'border-[#ff7979] text-[#ff7979]' : 'border-transparent text-gray-400 hover:text-white'}`}
               >
                 নির্দেশক ডায়েরি
+              </button>
+              <button 
+                onClick={() => setActiveTab('settings')} 
+                className={`pb-4 px-4 font-semibold text-sm border-b-2 transition-all whitespace-nowrap ${activeTab === 'settings' ? 'border-[#ff7979] text-[#ff7979]' : 'border-transparent text-gray-400 hover:text-white'}`}
+              >
+                হাজিরা সেটিংস ⚙️
               </button>
             </div>
 
@@ -570,44 +641,206 @@ export default function DirectorDashboard() {
               </div>
             )}
 
-            {/* TAB CONTENT: HISTORY LOGS */}
+            {/* TAB CONTENT: HISTORY LOGS / ATTENDANCE SHEETS */}
             {activeTab === 'logs' && (
               <div className="glass-panel space-y-4">
-                <h3 className="font-bold text-lg text-white">সাম্প্রতিক চেক-ইন ইতিহাস 📋</h3>
+                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4 border-b border-white/5 pb-4">
+                  <div className="text-left">
+                    <h3 className="font-bold text-lg text-white">দৈনিক মহড়া হাজিরা শিট 📋</h3>
+                    <p className="text-[10px] text-gray-400">সকাল ও দুপুরের সেশনভিত্তিক উপস্থিতি ট্র্যাকিং শিট</p>
+                  </div>
+                  
+                  <div className="flex flex-wrap items-center gap-3">
+                    <input 
+                      type="date"
+                      value={sheetDate}
+                      onChange={e => setSheetDate(e.target.value)}
+                      className="form-input text-xs py-2 px-3 bg-zinc-950 text-gray-300 border border-white/10 rounded-xl"
+                    />
+                    
+                    <div className="flex bg-white/5 border border-white/10 rounded-xl overflow-hidden p-0.5">
+                      <button
+                        onClick={() => setAttendanceView('tabular')}
+                        className={`px-3 py-1.5 text-[10px] font-bold rounded-lg transition-all ${attendanceView === 'tabular' ? 'bg-[#ff7979] text-white' : 'text-gray-400 hover:text-white'}`}
+                      >
+                        সমন্বিত শিট
+                      </button>
+                      <button
+                        onClick={() => setAttendanceView('morning')}
+                        className={`px-3 py-1.5 text-[10px] font-bold rounded-lg transition-all ${attendanceView === 'morning' ? 'bg-[#ff7979] text-white' : 'text-gray-400 hover:text-white'}`}
+                      >
+                        সকাল ({morningLogs.length})
+                      </button>
+                      <button
+                        onClick={() => setAttendanceView('afternoon')}
+                        className={`px-3 py-1.5 text-[10px] font-bold rounded-lg transition-all ${attendanceView === 'afternoon' ? 'bg-[#ff7979] text-white' : 'text-gray-400 hover:text-white'}`}
+                      >
+                        দুপুর ({afternoonLogs.length})
+                      </button>
+                    </div>
+                  </div>
+                </div>
                 
                 {loading ? (
                   <div className="text-center py-10 text-gray-500">লোডিং হচ্ছে...</div>
-                ) : logs.length === 0 ? (
-                  <div className="text-center py-10 text-gray-500">এখনও কোনো চেক-ইন রেকর্ড নেই।</div>
+                ) : attendanceView === 'tabular' ? (
+                  /* Tabular Grid representing both morning & afternoon */
+                  <div className="overflow-x-auto">
+                    <table className="w-full text-left text-xs border-collapse">
+                      <thead>
+                        <tr className="border-b border-white/10 text-gray-400 font-bold uppercase tracking-wider text-[10px]">
+                          <th className="pb-3">কুশীলব</th>
+                          <th className="pb-3 text-center">রোল</th>
+                          <th className="pb-3 text-center">সকালের সেশন ({morningLogs.length} জন)</th>
+                          <th className="pb-3 text-center">দুপুরের সেশন ({afternoonLogs.length} জন)</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {tabularData.map((row) => (
+                          <tr key={row.member.id} className="border-b border-white/5 text-gray-300 hover:bg-white/5 transition-all">
+                            <td className="py-3 flex items-center gap-3">
+                              <div className="w-8 h-8 rounded-full overflow-hidden border border-white/10 shrink-0">
+                                <img 
+                                  src={row.member.avatar_url || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150&auto=format&fit=crop&q=80'} 
+                                  alt={row.member.name} 
+                                  className="w-full h-full object-cover" 
+                                />
+                              </div>
+                              <div>
+                                <h4 className="font-semibold text-white">{row.member.name}</h4>
+                                <p className="text-[9px] text-gray-500">{row.member.role} • {row.member.character_name || 'নেপথ্য'}</p>
+                              </div>
+                            </td>
+                            <td className="py-3 text-center font-mono font-bold">{row.member.roll}</td>
+                            
+                            {/* Morning check-in status */}
+                            <td className="py-3 text-center">
+                              {row.morning ? (
+                                <div className="inline-flex flex-col items-center">
+                                  <span className="font-bold text-white text-[10px]">
+                                    {new Date(row.morning.check_in_time).toLocaleTimeString('bn-BD', { hour: '2-digit', minute: '2-digit' })}
+                                  </span>
+                                  <span className={`text-[8px] font-bold px-1.5 py-0.5 rounded mt-0.5 ${row.morning.is_late ? 'bg-yellow-500/10 text-yellow-500 border border-yellow-500/20' : 'bg-green-500/10 text-green-400 border border-green-500/20'}`}>
+                                    {row.morning.is_late ? 'বিলম্বিত' : 'সময়মতো'}
+                                  </span>
+                                </div>
+                              ) : (
+                                <span className="text-[10px] text-gray-600 font-semibold uppercase tracking-wider">অনুপস্থিত</span>
+                              )}
+                            </td>
+
+                            {/* Afternoon check-in status */}
+                            <td className="py-3 text-center">
+                              {row.afternoon ? (
+                                <div className="inline-flex flex-col items-center">
+                                  <span className="font-bold text-white text-[10px]">
+                                    {new Date(row.afternoon.check_in_time).toLocaleTimeString('bn-BD', { hour: '2-digit', minute: '2-digit' })}
+                                  </span>
+                                  <span className={`text-[8px] font-bold px-1.5 py-0.5 rounded mt-0.5 ${row.afternoon.is_late ? 'bg-yellow-500/10 text-yellow-500 border border-yellow-500/20' : 'bg-green-500/10 text-green-400 border border-green-500/20'}`}>
+                                    {row.afternoon.is_late ? 'বিলম্বিত' : 'সময়মতো'}
+                                  </span>
+                                </div>
+                              ) : (
+                                <span className="text-[10px] text-gray-600 font-semibold uppercase tracking-wider">অনুপস্থিত</span>
+                              )}
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
                 ) : (
+                  /* Morning or Afternoon list feed */
                   <div className="space-y-3">
-                    {logs.map((log) => (
-                      <div key={log.id} className="flex items-center justify-between p-4 bg-white/5 border border-white/5 rounded-xl text-left">
-                        <div className="flex items-center gap-3">
-                          <div className="w-10 h-10 rounded-full overflow-hidden border border-white/10">
-                            <img 
-                              src={log.member?.avatar_url || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150&auto=format&fit=crop&q=80'} 
-                              alt={log.member?.name} 
-                              className="w-full h-full object-cover"
-                            />
+                    {(attendanceView === 'morning' ? morningLogs : afternoonLogs).length === 0 ? (
+                      <div className="text-center py-10 text-gray-500">এই সেশনে কোনো চেক-ইন রেকর্ড নেই।</div>
+                    ) : (
+                      (attendanceView === 'morning' ? morningLogs : afternoonLogs).map((log) => (
+                        <div key={log.id} className="flex items-center justify-between p-4 bg-white/5 border border-white/5 rounded-xl text-left">
+                          <div className="flex items-center gap-3">
+                            <div className="w-10 h-10 rounded-full overflow-hidden border border-white/10">
+                              <img 
+                                src={log.member?.avatar_url || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150&auto=format&fit=crop&q=80'} 
+                                alt={log.member?.name} 
+                                className="w-full h-full object-cover"
+                              />
+                            </div>
+                            <div>
+                              <h4 className="font-bold text-white text-sm">{log.member?.name || 'অজ্ঞাত কুশীলব'}</h4>
+                              <p className="text-[10px] text-gray-400">রোল: {log.member?.roll} • ক্যারেক্টার: {log.member?.character_name || 'নেপথ্য'}</p>
+                            </div>
                           </div>
-                          <div>
-                            <h4 className="font-bold text-white text-sm">{log.member?.name || 'অজ্ঞাত কুশীলব'}</h4>
-                            <p className="text-[10px] text-gray-400">রোল: {log.member?.roll} • ক্যারেক্টার: {log.member?.character_name || 'নেপথ্য'}</p>
+                          <div className="text-right">
+                            <span className={`badge ${log.status === 'late' ? 'badge-late' : 'badge-present'} text-[9px] mb-1`}>
+                              {log.status === 'late' ? 'লেট চেক-ইন' : 'সময়মতো উপস্থিত'}
+                            </span>
+                            <p className="text-[9px] text-gray-400">
+                              {new Date(log.check_in_time).toLocaleTimeString('bn-BD', { hour: '2-digit', minute: '2-digit', second: '2-digit' })}
+                            </p>
                           </div>
                         </div>
-                        <div className="text-right">
-                          <span className={`badge ${log.status === 'late' ? 'badge-late' : 'badge-present'} text-[9px] mb-1`}>
-                            {log.status === 'late' ? 'লেট চেক-ইন' : 'সময়মতো উপস্থিত'} • {log.session === 'afternoon' ? 'লাঞ্চ পরবর্তী' : 'সকালের প্রথম'}
-                          </span>
-                          <p className="text-[9px] text-gray-400">
-                            {new Date(log.check_in_time).toLocaleTimeString('bn-BD', { hour: '2-digit', minute: '2-digit', second: '2-digit' })}
-                          </p>
-                        </div>
-                      </div>
-                    ))}
+                      ))
+                    )}
                   </div>
                 )}
+              </div>
+            )}
+
+            {/* TAB CONTENT: ATTENDANCE CUTOFF SETTINGS */}
+            {activeTab === 'settings' && (
+              <div className="glass-panel text-left">
+                <div className="flex items-center gap-3 mb-6 border-b border-white/5 pb-4">
+                  <div className="w-10 h-10 rounded-xl bg-[#ff7979]/10 border border-[#ff7979]/20 flex items-center justify-center text-[#ff7979]">
+                    <Settings size={20} />
+                  </div>
+                  <div>
+                    <h3 className="font-bold text-lg text-white">হাজিরা সময়সীমা সেটিংস (Cutoff Settings) ⚙️</h3>
+                    <p className="text-xs text-gray-400">সকাল ও দুপুরের সেশনে বিলম্বে উপস্থিতির সময়সীমা নির্ধারণ করুন</p>
+                  </div>
+                </div>
+
+                <form onSubmit={handleSaveSettings} className="space-y-6">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="form-group mb-0">
+                      <label className="form-label text-xs font-bold text-gray-300">সকালের সেশনের কাট-অফ সময় (Morning Cutoff)</label>
+                      <input 
+                        type="time" 
+                        value={morningCutoff}
+                        onChange={e => setMorningCutoff(e.target.value)}
+                        className="form-input py-3 bg-zinc-950 border border-white/10 rounded-xl px-3 w-full text-gray-300"
+                        required
+                      />
+                      <p className="text-[10px] text-gray-500 mt-2">এই সময়ের পর কোনো কুশীলব চেক-ইন করলে তার উপস্থিতি "বিলম্বিত (Late)" হিসেবে রেকর্ড হবে।</p>
+                    </div>
+
+                    <div className="form-group mb-0">
+                      <label className="form-label text-xs font-bold text-gray-300">দুপুরের সেশনের কাট-অফ সময় (Afternoon Cutoff)</label>
+                      <input 
+                        type="time" 
+                        value={afternoonCutoff}
+                        onChange={e => setAfternoonCutoff(e.target.value)}
+                        className="form-input py-3 bg-zinc-950 border border-white/10 rounded-xl px-3 w-full text-gray-300"
+                        required
+                      />
+                      <p className="text-[10px] text-gray-500 mt-2">দুপুরের খাবারের বিরতির পর এই সময়ের পর কোনো কুশীলব চেক-ইন করলে তার উপস্থিতি "বিলম্বিত (Late)" হিসেবে রেকর্ড হবে।</p>
+                    </div>
+                  </div>
+
+                  <button 
+                    type="submit" 
+                    disabled={isSavingSettings}
+                    className="btn-secondary px-6 font-bold py-3 text-xs rounded-xl flex items-center gap-2 cursor-pointer transition-all disabled:opacity-50 disabled:cursor-not-allowed border-0"
+                  >
+                    {isSavingSettings ? (
+                      <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                    ) : (
+                      <>
+                        <span>সেটিংস সংরক্ষণ করুন</span>
+                        <ArrowRight size={14} />
+                      </>
+                    )}
+                  </button>
+                </form>
               </div>
             )}
 
