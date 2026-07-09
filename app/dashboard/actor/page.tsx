@@ -209,33 +209,33 @@ export default function ActorDashboard() {
   }
 
   return (
-    <div className="flex-1 space-y-6 max-w-7xl mx-auto px-4 md:px-8 py-6">
+    <div className="flex-1 space-y-6 max-w-7xl mx-auto px-4 md:px-8 pt-6 pb-16 md:pb-6">
       
       {/* -------------------------------------------------------------
          ACTOR PROFILE BANNER
          ------------------------------------------------------------- */}
-      <section className="glass-panel p-6 bg-opacity-40 overflow-hidden relative flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+      <section className="glass-panel p-6 bg-opacity-40 overflow-hidden relative flex flex-col md:flex-row justify-between items-center gap-6">
         <div className="absolute top-0 right-0 w-64 h-64 bg-[#e056fd]/5 rounded-full filter blur-[80px] pointer-events-none"></div>
         
-        <div className="flex items-center gap-5 relative z-10">
+        <div className="flex flex-col sm:flex-row items-center gap-5 relative z-10 text-center sm:text-left w-full sm:w-auto">
           <div className="w-16 h-16 rounded-2xl bg-gradient-to-tr from-[#ff7979] to-[#e056fd] flex items-center justify-center text-white text-2xl font-bold shadow-lg shadow-[#ff7979]/20 shrink-0">
             {member.name.substring(0, 1)}
           </div>
-          <div className="space-y-1 text-left">
+          <div className="space-y-1">
             <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-white/5 border border-white/10 text-[10px] font-bold text-[#ff7979]">
               <Sparkles className="w-3 h-3" />
               ৫২তম আবর্তন • নাটক ও নাট্যতত্ত্ব
             </div>
             <h1 className="text-2xl md:text-3xl font-black text-white">{member.name}</h1>
             <p className="text-xs text-gray-400 font-medium">
-              রোল: <span className="font-semibold text-white">{member.roll}</span> • চরিত্র: <span className="font-semibold text-[#e056fd]">{member.character_name} ({member.role})</span>
+              রোল: <span className="font-semibold text-white">{member.roll}</span> • চরিত্র: <span className="font-semibold text-[#e056fd]">{member.character_name || 'নেপথ্য'} ({member.role})</span>
             </p>
           </div>
         </div>
 
         <button 
           onClick={handleLogout}
-          className="btn-glass flex items-center gap-2 shrink-0 py-2.5 px-4 text-xs font-semibold text-red-400 border-red-500/10 hover:border-red-500/20 hover:bg-red-500/5"
+          className="btn-glass flex items-center justify-center gap-2 w-full sm:w-auto py-2.5 px-4 text-xs font-semibold text-red-400 border-red-500/10 hover:border-red-500/20 hover:bg-red-500/5 cursor-pointer"
         >
           <LogOut size={14} />
           <span>লগআউট করুন</span>
@@ -254,8 +254,8 @@ export default function ActorDashboard() {
           <div className="grid grid-cols-1 gap-3">
             {characterMentionedNotes.map((note) => (
               <div key={note.id} className="p-5 rounded-2xl bg-red-500/10 border border-red-500/20 text-left space-y-2">
-                <div className="flex items-center justify-between text-[10px] font-bold text-red-400">
-                  <span className="bg-red-500/15 px-2 py-0.5 rounded-md">জরুরি ডাক</span>
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1.5 text-[10px] font-bold text-red-400">
+                  <span className="bg-red-500/15 px-2 py-0.5 rounded-md self-start">জরুরি ডাক</span>
                   <span>{note.date}</span>
                 </div>
                 <p className="text-sm font-medium text-white leading-relaxed">{note.content}</p>
@@ -370,10 +370,10 @@ export default function ActorDashboard() {
                       key={note.id} 
                       className={`glass-panel p-5 bg-opacity-25 text-left space-y-3 transition-all ${isMentioned ? 'border-[#ff7979]/30 bg-[#ff7979]/5' : ''}`}
                     >
-                      <div className="flex items-center justify-between">
+                      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1.5">
                         <span className="text-[10px] font-bold text-gray-500">{note.date}</span>
                         {isMentioned && (
-                          <span className="text-[10px] font-bold text-[#ff7979] bg-[#ff7979]/10 px-2 py-0.5 rounded-full">আপনাকে মেনশন করা হয়েছে</span>
+                          <span className="text-[10px] font-bold text-[#ff7979] bg-[#ff7979]/10 px-2 py-0.5 rounded-full self-start">আপনাকে মেনশন করা হয়েছে</span>
                         )}
                       </div>
                       <p className="text-sm text-gray-300 leading-relaxed font-medium">{note.content}</p>
