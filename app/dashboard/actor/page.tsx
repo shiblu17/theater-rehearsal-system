@@ -229,22 +229,22 @@ export default function ActorDashboard() {
     badges.push({ name: 'মঞ্চের প্রাণ', desc: '৫টির বেশি মহড়ায় অংশগ্রহণ', color: 'from-[#ff7979] to-[#ff4757]' });
   }
   return (
-    <div className="w-full min-h-screen bg-[#0d0d10] pb-32">
+    <div className="w-full min-h-screen bg-[#090d16] pb-32">
       <div className="max-w-md mx-auto px-4 pt-8 flex flex-col gap-6 text-left">
         
         {/* -------------------------------------------------------------
-           ACTOR PROFILE BANNER (Charcoal Card Layout)
+           ACTOR PROFILE BANNER (Premium Dark Layout)
            ------------------------------------------------------------- */}
-        <section className="p-6 bg-[#16161a] border border-zinc-800 rounded-2xl flex flex-row items-center justify-between gap-3 text-left w-full shadow-xl shadow-black/40">
+        <section className="p-6 bg-[#131722]/95 border border-[#262c3e] rounded-2xl flex flex-row items-center justify-between gap-3 text-left w-full shadow-xl shadow-black/50">
           <div className="flex items-center gap-3.5 min-w-0 flex-1">
             {member.avatar_url ? (
               <img 
                 src={member.avatar_url} 
                 alt={member.name}
-                className="w-14 h-14 rounded-full border-2 border-[#c4a275] object-cover shrink-0"
+                className="w-14 h-14 rounded-full border-2 border-amber-500/80 object-cover shrink-0"
               />
             ) : (
-              <div className="w-14 h-14 rounded-full bg-gradient-to-tr from-[#c85122] to-[#e59f5b] flex items-center justify-center text-white text-lg font-black border-2 border-[#c4a275] shrink-0">
+              <div className="w-14 h-14 rounded-full bg-gradient-to-tr from-[#c85122] to-[#e59f5b] flex items-center justify-center text-white text-lg font-black border-2 border-amber-500/80 shrink-0">
                 {member.name.substring(0, 1)}
               </div>
             )}
@@ -269,9 +269,9 @@ export default function ActorDashboard() {
         </section>
 
         {/* -------------------------------------------------------------
-           TAB NAVIGATION (Minimal Segmented Control Group - Charcoal layout)
+           TAB NAVIGATION (Minimal Segmented Control Group)
            ------------------------------------------------------------- */}
-        <div className="flex bg-[#16161a] p-1.5 rounded-xl gap-0.5 w-full border border-zinc-800 shadow-xl overflow-x-auto scrollbar-none shrink-0">
+        <div className="flex bg-[#131722]/95 border border-[#262c3e] p-1.5 rounded-2xl gap-0.5 w-full shadow-xl overflow-x-auto scrollbar-none shrink-0">
           {[
             { id: 'home', name: 'হোম' },
             { id: 'notices', name: 'নোটিশ' },
@@ -285,9 +285,9 @@ export default function ActorDashboard() {
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id as any)}
-                className={`flex-1 text-center py-2 rounded-lg text-[10px] sm:text-xs font-black transition-all cursor-pointer whitespace-nowrap px-2.5 shrink-0 ${
+                className={`flex-1 text-center py-2.5 rounded-xl text-[10px] sm:text-xs font-black transition-all cursor-pointer whitespace-nowrap px-2.5 shrink-0 ${
                   isActive 
-                    ? 'bg-amber-500 text-zinc-950 border border-amber-500 shadow-md shadow-amber-500/25 font-bold' 
+                    ? 'bg-amber-500 text-slate-950 border border-amber-500 shadow-md shadow-amber-500/30 font-bold' 
                     : 'text-gray-400 hover:text-white border border-transparent'
                 }`}
               >
@@ -306,32 +306,32 @@ export default function ActorDashboard() {
           {activeTab === 'home' && (
             <div className="flex flex-col gap-6">
               {/* METRICS BAR */}
-              <section className="grid grid-cols-4 gap-2 bg-[#16161a] border border-zinc-800 rounded-2xl p-5 shadow-xl shadow-black/30">
+              <section className="grid grid-cols-4 gap-2 bg-[#131722]/95 border border-[#262c3e] rounded-2xl p-5 shadow-xl shadow-black/40">
                 {/* Metric 1 */}
                 <div className="flex flex-col items-center justify-center space-y-2 text-center">
-                  <div className="w-13 h-13 rounded-full border-2 border-emerald-500 flex items-center justify-center bg-emerald-500/5 shadow-md shadow-emerald-500/10">
-                    <span className="text-[10px] font-black text-emerald-400">{attendanceRate}%</span>
+                  <div className="w-14 h-14 rounded-full border-4 border-emerald-500/80 flex items-center justify-center bg-emerald-500/10 shadow-[0_0_15px_rgba(16,185,129,0.2)]">
+                    <span className="text-xs font-black text-emerald-400">{attendanceRate}%</span>
                   </div>
                   <span className="text-[9px] text-gray-300 font-bold tracking-tight">উপস্থিতি</span>
                 </div>
                 {/* Metric 2 */}
                 <div className="flex flex-col items-center justify-center space-y-2 text-center">
-                  <div className="w-13 h-13 rounded-full border-2 border-white/10 flex items-center justify-center bg-white/5 shadow-md">
-                    <span className="text-[10px] font-black text-white">{totalRehearsalLogs} দিন</span>
+                  <div className="w-14 h-14 rounded-full border-2 border-zinc-700 flex items-center justify-center bg-zinc-800/20 shadow-md">
+                    <span className="text-xs font-black text-zinc-300">{totalRehearsalLogs} দিন</span>
                   </div>
                   <span className="text-[9px] text-gray-300 font-bold tracking-tight">Work Days</span>
                 </div>
                 {/* Metric 3 */}
                 <div className="flex flex-col items-center justify-center space-y-2 text-center">
-                  <div className="w-13 h-13 rounded-full border-2 border-white/10 flex items-center justify-center bg-white/5 shadow-md">
-                    <span className="text-[10px] font-black text-white">{presentCount}/{lateCount}</span>
+                  <div className="w-14 h-14 rounded-full border-2 border-zinc-700 flex items-center justify-center bg-zinc-800/20 shadow-md">
+                    <span className="text-xs font-black text-zinc-300">{presentCount}/{lateCount}</span>
                   </div>
                   <span className="text-[9px] text-gray-300 font-bold tracking-tight">Completed</span>
                 </div>
                 {/* Metric 4 */}
                 <div className="flex flex-col items-center justify-center space-y-2 text-center">
-                  <div className="w-13 h-13 rounded-full border-2 border-white/10 flex items-center justify-center bg-white/5 shadow-md">
-                    <span className="text-[10px] font-black text-white">{absentCount}</span>
+                  <div className="w-14 h-14 rounded-full border-2 border-zinc-700 flex items-center justify-center bg-zinc-800/20 shadow-md">
+                    <span className="text-xs font-black text-zinc-300">{absentCount}</span>
                   </div>
                   <span className="text-[9px] text-gray-300 font-bold tracking-tight">Other Stats</span>
                 </div>
@@ -346,50 +346,50 @@ export default function ActorDashboard() {
                 
                 <div className="flex flex-col gap-3.5">
                   {/* Task 1 */}
-                  <div className="p-4 bg-[#16161a] border border-zinc-800 rounded-2xl flex items-center gap-4 text-left shadow-xl shadow-black/20">
-                    <span className="text-xs font-black text-[#c4a275]/80 font-mono w-4">1</span>
-                    <div className="w-10 h-10 rounded-full bg-[#24211a] border border-[#c4a275]/25 flex items-center justify-center shrink-0">
-                      <Zap size={16} className="text-[#e59f5b]" />
+                  <div className="p-4.5 bg-[#131722]/95 border border-[#262c3e] rounded-2xl flex items-center gap-4 text-left shadow-xl shadow-black/30">
+                    <span className="text-xs font-black text-amber-500/80 font-mono w-4">1</span>
+                    <div className="w-11 h-11 rounded-full bg-amber-500/10 border border-amber-500/30 flex items-center justify-center shrink-0 shadow-[0_0_10px_rgba(245,158,11,0.1)]">
+                      <Zap size={16} className="text-amber-500" />
                     </div>
                     <div className="space-y-1 min-w-0 flex-1">
-                      <h4 className="text-xs sm:text-sm font-black text-white leading-tight">ল্যাব পর্দা ফিট</h4>
-                      <p className="text-[10px] sm:text-xs text-gray-300 font-medium leading-relaxed">ল্যাব-এর পেছনের কালো পর্দা ফিট করে দেবেন।</p>
+                      <h4 className="text-sm font-black text-white leading-tight">ল্যাব পর্দা ফিট</h4>
+                      <p className="text-xs text-gray-300 font-medium leading-relaxed">ল্যাব-এর পেছনের কালো পর্দা ফিট করে দেবেন।</p>
                     </div>
                   </div>
 
                   {/* Task 2 */}
-                  <div className="p-4 bg-[#16161a] border border-zinc-800 rounded-2xl flex items-center gap-4 text-left shadow-xl shadow-black/20">
-                    <span className="text-xs font-black text-[#c4a275]/80 font-mono w-4">2</span>
-                    <div className="w-10 h-10 rounded-full bg-[#24211a] border border-[#c4a275]/25 flex items-center justify-center shrink-0">
-                      <Smile size={16} className="text-[#e59f5b]" />
+                  <div className="p-4.5 bg-[#131722]/95 border border-[#262c3e] rounded-2xl flex items-center gap-4 text-left shadow-xl shadow-black/30">
+                    <span className="text-xs font-black text-amber-500/80 font-mono w-4">2</span>
+                    <div className="w-11 h-11 rounded-full bg-amber-500/10 border border-amber-500/30 flex items-center justify-center shrink-0 shadow-[0_0_10px_rgba(245,158,11,0.1)]">
+                      <Smile size={16} className="text-amber-500" />
                     </div>
                     <div className="space-y-1 min-w-0 flex-1">
-                      <h4 className="text-xs sm:text-sm font-black text-white leading-tight">রক্তকরবী ফুল সজীব করা</h4>
-                      <p className="text-[10px] sm:text-xs text-gray-300 font-medium leading-relaxed">নন্দিনীর রক্তকরবী ফুলগুলো সজীব দেখানোর জন্য কালার করা।</p>
+                      <h4 className="text-sm font-black text-white leading-tight">রক্তকরবী ফুল সজীব করা</h4>
+                      <p className="text-xs text-gray-300 font-medium leading-relaxed">নন্দিনীর রক্তকরবী ফুলগুলো সজীব দেখানোর জন্য কালার করা।</p>
                     </div>
                   </div>
 
                   {/* Task 3 */}
-                  <div className="p-4 bg-[#16161a] border border-zinc-800 rounded-2xl flex items-center gap-4 text-left shadow-xl shadow-black/20">
-                    <span className="text-xs font-black text-[#c4a275]/80 font-mono w-4">3</span>
-                    <div className="w-10 h-10 rounded-full bg-[#24211a] border border-[#c4a275]/25 flex items-center justify-center shrink-0">
-                      <Volume2 size={16} className="text-[#e59f5b]" />
+                  <div className="p-4.5 bg-[#131722]/95 border border-[#262c3e] rounded-2xl flex items-center gap-4 text-left shadow-xl shadow-black/30">
+                    <span className="text-xs font-black text-amber-500/80 font-mono w-4">3</span>
+                    <div className="w-11 h-11 rounded-full bg-amber-500/10 border border-amber-500/30 flex items-center justify-center shrink-0 shadow-[0_0_10px_rgba(245,158,11,0.1)]">
+                      <Volume2 size={16} className="text-amber-500" />
                     </div>
                     <div className="space-y-1 min-w-0 flex-1">
-                      <h4 className="text-xs sm:text-sm font-black text-white leading-tight">বিশু পাগলের লাইটিং ফোকাস</h4>
-                      <p className="text-[10px] sm:text-xs text-gray-300 font-medium leading-relaxed">বিশু পাগলের প্রবেশ দৃশ্যে আলোর ফোকাস উন্নত করা।</p>
+                      <h4 className="text-sm font-black text-white leading-tight">বিশু পাগলের লাইটিং ফোকাস</h4>
+                      <p className="text-xs text-gray-300 font-medium leading-relaxed">বিশু পাগলের প্রবেশ দৃশ্যে আলোর ফোকাস উন্নত করা।</p>
                     </div>
                   </div>
 
                   {/* Task 4 */}
-                  <div className="p-4 bg-[#16161a] border border-zinc-800 rounded-2xl flex items-center gap-4 text-left shadow-xl shadow-black/20">
-                    <span className="text-xs font-black text-[#c4a275]/80 font-mono w-4">4</span>
-                    <div className="w-10 h-10 rounded-full bg-[#24211a] border border-[#c4a275]/25 flex items-center justify-center shrink-0">
-                      <MessageSquare size={16} className="text-[#e59f5b]" />
+                  <div className="p-4.5 bg-[#131722]/95 border border-[#262c3e] rounded-2xl flex items-center gap-4 text-left shadow-xl shadow-black/30">
+                    <span className="text-xs font-black text-amber-500/80 font-mono w-4">4</span>
+                    <div className="w-11 h-11 rounded-full bg-amber-500/10 border border-amber-500/30 flex items-center justify-center shrink-0 shadow-[0_0_10px_rgba(245,158,11,0.1)]">
+                      <MessageSquare size={16} className="text-amber-500" />
                     </div>
                     <div className="space-y-1 min-w-0 flex-1">
-                      <h4 className="text-xs sm:text-sm font-black text-white leading-tight">সংলাপ ভুল সংশোধন</h4>
-                      <p className="text-[10px] sm:text-xs text-gray-300 font-medium leading-relaxed">চন্দ্রা এবং ফাগুলালের সংলাপ ভুল সংশোধন।</p>
+                      <h4 className="text-sm font-black text-white leading-tight">সংলাপ ভুল সংশোধন</h4>
+                      <p className="text-xs text-gray-300 font-medium leading-relaxed">চন্দ্রা এবং ফাগুলালের সংলাপ ভুল সংশোধন।</p>
                     </div>
                   </div>
                 </div>
@@ -403,23 +403,23 @@ export default function ActorDashboard() {
               {/* Highlight cards */}
               <div className="flex flex-col gap-3.5 w-full">
                 {/* Highlight 1: Flower */}
-                <div className="p-4.5 bg-[#16161a] border border-zinc-800 rounded-2xl flex items-center gap-4 text-left shadow-xl shadow-black/20">
-                  <div className="w-10 h-10 rounded-full bg-[#24211a] border border-[#c4a275]/25 flex items-center justify-center shrink-0">
-                    <Flower size={18} className="text-[#e59f5b]" />
+                <div className="p-4.5 bg-[#131722]/95 border border-[#262c3e] rounded-2xl flex items-center gap-4 text-left shadow-xl shadow-black/30">
+                  <div className="w-11 h-11 rounded-full bg-amber-500/10 border border-amber-500/30 flex items-center justify-center shrink-0 shadow-[0_0_10px_rgba(245,158,11,0.1)]">
+                    <Flower size={18} className="text-amber-500" />
                   </div>
                   <div className="space-y-1 min-w-0 flex-1">
-                    <h4 className="text-xs sm:text-sm font-black text-white leading-tight">রক্তকরবী ফুল সজীব করা</h4>
-                    <p className="text-[10px] sm:text-xs text-gray-300 font-medium leading-relaxed">নন্দিনীর রক্তকরবী ফুলগুলো সজীব দেখানোর জন্য কালার করা।</p>
+                    <h4 className="text-sm font-black text-white leading-tight">রক্তকরবী ফুল সজীব করা</h4>
+                    <p className="text-xs text-gray-300 font-medium leading-relaxed">নন্দিনীর রক্তকরবী ফুলগুলো সজীব দেখানোর জন্য কালার করা।</p>
                   </div>
                 </div>
 
                 {/* Highlight 2: Lightbulb */}
-                <div className="p-4.5 bg-[#16161a] border border-zinc-800 rounded-2xl flex items-center gap-4 text-left shadow-xl shadow-black/20">
-                  <div className="w-10 h-10 rounded-full bg-[#24211a] border border-[#c4a275]/25 flex items-center justify-center shrink-0">
-                    <Lightbulb size={18} className="text-[#e59f5b] animate-pulse" />
+                <div className="p-4.5 bg-[#131722]/95 border border-[#262c3e] rounded-2xl flex items-center gap-4 text-left shadow-xl shadow-black/30">
+                  <div className="w-11 h-11 rounded-full bg-amber-500/10 border border-amber-500/30 flex items-center justify-center shrink-0 shadow-[0_0_10px_rgba(245,158,11,0.1)]">
+                    <Lightbulb size={18} className="text-amber-500 animate-pulse" />
                   </div>
                   <div className="min-w-0 flex-1">
-                    <h4 className="text-xs sm:text-sm font-black text-white leading-snug">বিশু পাগলের প্রবেশ দৃশ্যে আলোর ফোকাস উন্নত করা।</h4>
+                    <h4 className="text-sm font-black text-white leading-snug">বিশু পাগলের প্রবেশ দৃশ্যে আলোর ফোকাস উন্নত করা।</h4>
                   </div>
                 </div>
               </div>
@@ -431,7 +431,7 @@ export default function ActorDashboard() {
                   <span>নোটিশ বোর্ড</span>
                 </h2>
                 {notes.length === 0 ? (
-                  <div className="p-10 text-center text-gray-500 text-xs border border-zinc-800 rounded-2xl bg-[#16161a]">
+                  <div className="p-10 text-center text-gray-500 text-xs border border-[#262c3e] rounded-2xl bg-[#131722]/95">
                     আপাতত কোনো সাধারণ নোটিশ জারি করা হয়নি।
                   </div>
                 ) : (
@@ -447,7 +447,7 @@ export default function ActorDashboard() {
                       return (
                         <div 
                           key={note.id} 
-                          className="p-5 bg-[#16161a] border border-zinc-800 rounded-2xl flex gap-3.5 text-left items-start shadow-xl shadow-black/25"
+                          className="p-5 bg-[#131722]/95 border border-[#262c3e] rounded-2xl flex gap-3.5 text-left items-start shadow-xl shadow-black/30"
                         >
                           <div className="w-10 h-10 rounded-full bg-[#24211a] border border-[#c4a275]/25 flex items-center justify-center shrink-0 mt-0.5">
                             <NoticeIcon size={16} className="text-[#e59f5b]" />
