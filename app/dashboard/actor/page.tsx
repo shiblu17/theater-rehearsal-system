@@ -209,26 +209,22 @@ export default function ActorDashboard() {
   }
 
   return (
-    <div className="flex-1 space-y-6 max-w-7xl mx-auto px-4 md:px-8 pt-6 pb-16 md:pb-6">
+    <div className="flex-1 space-y-4 max-w-7xl mx-auto px-4 md:px-8 pt-4 pb-16 md:pb-6">
       
       {/* -------------------------------------------------------------
-         ACTOR PROFILE BANNER
+         ACTOR PROFILE BANNER (Slim Header Layout)
          ------------------------------------------------------------- */}
       <section className="glass-panel p-4 bg-opacity-40 overflow-hidden relative flex flex-row items-center justify-between gap-3 text-left">
         <div className="absolute top-0 right-0 w-32 h-32 bg-[#e056fd]/5 rounded-full filter blur-[50px] pointer-events-none"></div>
         
         <div className="flex items-center gap-3 relative z-10">
-          <div className="w-12 h-12 rounded-xl bg-gradient-to-tr from-[#ff7979] to-[#e056fd] flex items-center justify-center text-white text-lg font-bold shadow-lg shadow-[#ff7979]/20 shrink-0">
+          <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-[#ff7979] to-[#e056fd] flex items-center justify-center text-white text-sm font-bold shadow-md shadow-[#ff7979]/20 shrink-0">
             {member.name.substring(0, 1)}
           </div>
           <div className="space-y-0.5">
-            <div className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-white/5 border border-white/10 text-[8px] font-bold text-[#ff7979]">
-              <Sparkles className="w-2 h-2" />
-              ৫২তম আবর্তন
-            </div>
-            <h1 className="text-base sm:text-2xl font-black text-white leading-tight">{member.name}</h1>
+            <h2 className="text-sm font-bold text-white leading-none">{member.name}</h2>
             <p className="text-[10px] text-gray-400 font-medium">
-              রোল: <span className="font-semibold text-white">{member.roll}</span> • চরিত্র: <span className="font-semibold text-[#e056fd]">{member.character_name || 'নেপথ্য'} ({member.role})</span>
+              রোল: <span className="text-white font-semibold">{member.roll}</span> • চরিত্র: <span className="text-[#e056fd] font-semibold">{member.character_name || 'নেপথ্য'} ({member.role})</span>
             </p>
           </div>
         </div>
@@ -242,24 +238,24 @@ export default function ActorDashboard() {
           <span>লগআউট</span>
         </button>
       </section>
-
+      
       {/* -------------------------------------------------------------
          HIGH-PRIORITY CHARACTER-MENTIONED NOTICES
          ------------------------------------------------------------- */}
       {characterMentionedNotes.length > 0 && (
-        <section className="space-y-3">
-          <div className="flex items-center gap-2 text-xs font-bold text-[#ff7979] uppercase tracking-wider">
-            <AlertCircle size={14} className="animate-pulse" />
+        <section className="space-y-2">
+          <div className="flex items-center gap-2 text-[10px] font-bold text-[#ff7979] uppercase tracking-wider">
+            <AlertCircle size={12} className="animate-pulse" />
             <span>আপনার জন্য গুরুত্বপূর্ণ নোটিশ ({characterMentionedNotes.length})</span>
           </div>
-          <div className="grid grid-cols-1 gap-3">
+          <div className="grid grid-cols-1 gap-2.5">
             {characterMentionedNotes.map((note) => (
-              <div key={note.id} className="p-5 rounded-2xl bg-red-500/10 border border-red-500/20 text-left space-y-2">
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1.5 text-[10px] font-bold text-red-400">
-                  <span className="bg-red-500/15 px-2 py-0.5 rounded-md self-start">জরুরি ডাক</span>
+              <div key={note.id} className="p-4 rounded-xl bg-red-500/10 border border-red-500/20 text-left space-y-1.5">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 text-[9px] font-bold text-red-400">
+                  <span className="bg-red-500/15 px-1.5 py-0.5 rounded self-start">জরুরি ডাক</span>
                   <span>{note.date}</span>
                 </div>
-                <p className="text-sm font-medium text-white leading-relaxed">{note.content}</p>
+                <p className="text-xs font-semibold text-white leading-relaxed">{note.content}</p>
               </div>
             ))}
           </div>
@@ -267,68 +263,51 @@ export default function ActorDashboard() {
       )}
 
       {/* -------------------------------------------------------------
-         STATS WIDGET
+         STATS WIDGET (Compact Layout)
          ------------------------------------------------------------- */}
-      <section className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <div className="glass-panel p-5 bg-opacity-30 text-left space-y-1">
-          <span className="text-[10px] font-bold text-gray-500 uppercase">উপস্থিতির হার</span>
-          <h3 className="text-3xl font-black text-white">{attendanceRate}%</h3>
-          <div className="w-full h-1 bg-white/5 rounded-full overflow-hidden">
-            <div className="h-full bg-gradient-to-r from-[#22a6b3] to-[#e056fd]" style={{ width: `${attendanceRate}%` }}></div>
+      <section className="grid grid-cols-2 md:grid-cols-4 gap-3">
+        {[
+          { label: 'উপস্থিতির হার', val: `${attendanceRate}%`, color: 'text-emerald-400' },
+          { label: 'মোট মহড়া', val: `${totalRehearsalLogs} দিন`, color: 'text-[#22a6b3]' },
+          { label: 'অনটাইম/লেট', val: `${presentCount}/${lateCount}`, color: 'text-[#e056fd]' },
+          { label: 'অনুপস্থিত', val: `${absentCount} দিন`, color: 'text-[#ff7979]' }
+        ].map((stat, idx) => (
+          <div key={idx} className="glass-panel p-3 text-left space-y-0.5">
+            <span className="text-[9px] font-bold text-gray-500 uppercase tracking-wide">{stat.label}</span>
+            <h3 className={`text-base font-black ${stat.color}`}>{stat.val}</h3>
           </div>
-        </div>
-        <div className="glass-panel p-5 bg-opacity-30 text-left space-y-1">
-          <span className="text-[10px] font-bold text-gray-500 uppercase">মোট মহড়া ট্র্যাকিং</span>
-          <h3 className="text-3xl font-black text-[#22a6b3]">{totalRehearsalLogs} দিন</h3>
-          <p className="text-[10px] text-gray-400 font-medium">হাজিরা তালিকায় মোট রেকর্ড</p>
-        </div>
-        <div className="glass-panel p-5 bg-opacity-30 text-left space-y-1">
-          <span className="text-[10px] font-bold text-gray-500 uppercase">উপস্থিতি / লেট</span>
-          <h3 className="text-3xl font-black text-[#e056fd]">{presentCount} / {lateCount}</h3>
-          <p className="text-[10px] text-gray-400 font-medium">অনটাইম উপস্থিতি বনাম লেট</p>
-        </div>
-        <div className="glass-panel p-5 bg-opacity-30 text-left space-y-1">
-          <span className="text-[10px] font-bold text-gray-500 uppercase">অনুপস্থিতি</span>
-          <h3 className="text-3xl font-black text-[#ff7979]">{absentCount} দিন</h3>
-          <p className="text-[10px] text-gray-400 font-medium">অনুপস্থিত থাকা দিন সংখ্যা</p>
-        </div>
+        ))}
       </section>
 
       {/* -------------------------------------------------------------
-         UPCOMING NEXT REHEARSAL WIDGET
+         UPCOMING NEXT REHEARSAL WIDGET (Compact Layout)
          ------------------------------------------------------------- */}
       {nextRehearsal && (
-        <section className="p-6 rounded-2xl bg-[#e056fd]/5 border border-[#e056fd]/15 text-left flex flex-col md:flex-row justify-between items-start md:items-center gap-6 shadow-lg shadow-[#e056fd]/5">
-          <div className="space-y-1">
-            <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[#e056fd]">
-              <Timer size={14} className="animate-spin" />
-              <span>আপনার পরবর্তী মহড়া (Next Rehearsal)</span>
+        <section className="p-4 rounded-xl bg-[#e056fd]/5 border border-[#e056fd]/15 text-left flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+          <div className="space-y-0.5">
+            <div className="flex items-center gap-1.5 text-[9px] font-bold uppercase tracking-wider text-[#e056fd]">
+              <Timer size={10} className="animate-spin" />
+              <span>পরবর্তী মহড়া (Next Rehearsal)</span>
             </div>
-            <h3 className="text-xl font-bold text-white">{nextRehearsal.title}</h3>
-            <p className="text-xs text-gray-400">দৃশ্যভিত্তিক কাস্ট: <span className="font-semibold text-white">{nextRehearsal.required_cast}</span></p>
+            <h3 className="text-sm font-bold text-white">{nextRehearsal.title}</h3>
+            <p className="text-[10px] text-gray-400">দৃশ্যভিত্তিক কাস্ট: <span className="text-white font-medium">{nextRehearsal.required_cast}</span></p>
           </div>
           
-          <div className="flex flex-wrap gap-4 shrink-0 font-medium text-xs">
-            <div className="px-3.5 py-2 rounded-xl bg-black/40 border border-white/5 flex items-center gap-2 text-white">
-              <Calendar size={14} className="text-[#ff7979]" />
-              <span>{nextRehearsal.date}</span>
-            </div>
-            <div className="px-3.5 py-2 rounded-xl bg-black/40 border border-white/5 flex items-center gap-2 text-white">
-              <Clock size={14} className="text-[#e056fd]" />
-              <span>{nextRehearsal.time}</span>
-            </div>
+          <div className="flex gap-2 font-bold text-[9px] shrink-0">
+            <span className="px-2 py-1 rounded bg-black/40 border border-white/5 text-gray-300">{nextRehearsal.date}</span>
+            <span className="px-2 py-1 rounded bg-black/40 border border-white/5 text-[#e056fd]">{nextRehearsal.time}</span>
           </div>
         </section>
       )}
 
       {/* -------------------------------------------------------------
-         TAB NAVIGATION
+         TAB NAVIGATION (Responsive / Non-Colliding)
          ------------------------------------------------------------- */}
-      <div className="flex border-b border-white/5 scrollbar-none overflow-x-auto gap-4">
+      <div className="flex flex-row flex-nowrap border-b border-white/5 scrollbar-none overflow-x-auto gap-3 pb-0.5">
         {[
           { id: 'notices', name: 'নোটিশ বোর্ড', icon: FileText },
-          { id: 'schedule', name: 'আমার মহড়া শিডিউল', icon: Calendar },
-          { id: 'attendance', name: 'হাজিরা ইতিহাস ও অর্জন', icon: Award },
+          { id: 'schedule', name: 'মহড়া শিডিউল', icon: Calendar },
+          { id: 'attendance', name: 'হাজিরা ইতিহাস', icon: Award },
           { id: 'finance', name: 'হিসাব ও ফিস 💰', icon: Coins },
           { id: 'settings', name: 'সেটিংস', icon: Lock }
         ].map((tab) => {
@@ -338,9 +317,9 @@ export default function ActorDashboard() {
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id as any)}
-              className={`flex items-center gap-2 pb-3 text-sm font-semibold transition-all relative shrink-0 ${isActive ? 'text-[#e056fd]' : 'text-gray-400 hover:text-white'}`}
+              className={`flex items-center gap-1.5 pb-2.5 text-xs font-bold transition-all relative shrink-0 whitespace-nowrap ${isActive ? 'text-[#e056fd]' : 'text-gray-400 hover:text-white'}`}
             >
-              <Icon size={16} />
+              <Icon size={14} />
               <span>{tab.name}</span>
               {isActive && (
                 <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#e056fd]"></div>
