@@ -18,7 +18,13 @@ import {
   Activity,
   ChevronRight,
   Lock,
-  Coins
+  Coins,
+  Smile,
+  Zap,
+  Volume2,
+  Bell,
+  MessageSquare,
+  Sparkle
 } from 'lucide-react';
 
 interface Member {
@@ -209,30 +215,30 @@ export default function ActorDashboard() {
   }
 
   return (
-    <div className="flex-1 space-y-4 max-w-7xl mx-auto px-4 md:px-8 pt-4 pb-16 md:pb-6">
+    <div className="flex-1 space-y-5 max-w-md mx-auto px-4 pt-4 pb-20 text-left bg-[#0c141a] min-h-screen">
       
       {/* -------------------------------------------------------------
          ACTOR PROFILE BANNER (Mockup Layout)
          ------------------------------------------------------------- */}
-      <section className="glass-panel p-4 bg-[#1b1f28] border border-white/5 rounded-2xl flex flex-row items-center justify-between gap-3 text-left">
-        <div className="flex items-center gap-3.5 relative z-10">
+      <section className="p-4 bg-[#1b252e]/85 border border-white/5 rounded-2xl flex flex-row items-center justify-between gap-3 text-left">
+        <div className="flex items-center gap-3 relative z-10">
           {member.avatar_url ? (
             <img 
               src={member.avatar_url} 
               alt={member.name}
-              className="w-14 h-14 rounded-full border-2 border-amber-500 object-cover shrink-0"
+              className="w-14 h-14 rounded-full border-2 border-amber-500/80 object-cover shrink-0"
             />
           ) : (
-            <div className="w-14 h-14 rounded-full bg-gradient-to-tr from-[#ff7979] to-[#e056fd] flex items-center justify-center text-white text-xl font-bold border-2 border-amber-500 shrink-0">
+            <div className="w-14 h-14 rounded-full bg-gradient-to-tr from-[#c85122] to-[#e59f5b] flex items-center justify-center text-white text-xl font-bold border-2 border-amber-500/80 shrink-0">
               {member.name.substring(0, 1)}
             </div>
           )}
           <div className="space-y-0.5 text-left">
-            <h1 className="text-base sm:text-lg font-black text-white leading-tight">{member.name}</h1>
-            <p className="text-[10px] sm:text-xs text-gray-400 font-semibold">
+            <h1 className="text-sm sm:text-base font-black text-white leading-tight">{member.name}</h1>
+            <p className="text-[10px] text-gray-400 font-semibold leading-none">
               রোল: <span className="font-mono text-gray-200">{member.roll}</span> • চরিত্র:
             </p>
-            <p className="text-[11px] sm:text-xs font-bold text-amber-500">
+            <p className="text-[11px] font-bold text-amber-500">
               {member.character_name || 'নেপথ্য'} ({member.role})
             </p>
           </div>
@@ -240,60 +246,109 @@ export default function ActorDashboard() {
 
         <button 
           onClick={handleLogout}
-          className="px-4 py-2 bg-white/5 hover:bg-white/10 text-white rounded-full text-xs font-bold flex items-center gap-2 border border-white/10 transition-all cursor-pointer shrink-0"
+          className="px-3.5 py-1.5 bg-white/5 hover:bg-white/10 text-white rounded-xl text-[10px] font-bold flex items-center gap-1.5 border border-white/10 transition-all cursor-pointer shrink-0"
         >
-          <LogOut size={12} />
+          <LogOut size={12} className="text-gray-400" />
           <span>Log Out</span>
         </button>
       </section>
-      
-      {/* -------------------------------------------------------------
-         HIGH-PRIORITY CHARACTER-MENTIONED NOTICES (Unified Red Container)
-         ------------------------------------------------------------- */}
-      {characterMentionedNotes.length > 0 && (
-        <section className="p-4 rounded-2xl bg-red-500/5 border border-red-500/20 text-left space-y-3">
-          <div className="flex items-center gap-2 text-red-500 font-bold text-sm">
-            <AlertCircle size={14} className="animate-pulse" />
-            <span>জরুরি ডাক</span>
-          </div>
-          <div className="space-y-3 text-xs sm:text-sm font-semibold text-gray-200 leading-relaxed">
-            {characterMentionedNotes.map((note) => (
-              <p key={note.id} className="leading-relaxed">
-                {note.content}
-              </p>
-            ))}
-          </div>
-        </section>
-      )}
 
       {/* -------------------------------------------------------------
-         STATS WIDGET (Exact Mockup Layout Mapping)
+         METRICS BAR (Sleek Circle Progress Stats)
          ------------------------------------------------------------- */}
-      <section className="grid grid-cols-4 gap-2">
-        <div className="bg-[#1b1f28]/65 border border-white/5 rounded-xl p-2.5 text-center flex flex-col justify-between h-20">
-          <span className="text-[9px] text-gray-500 font-bold leading-none">Attendance</span>
-          <span className="text-[9px] text-gray-500 font-bold leading-none">উ.</span>
-          <span className="text-xs sm:text-sm font-black text-white">{attendanceRate}%</span>
+      <section className="grid grid-cols-4 gap-2 bg-[#1b252e]/50 border border-white/5 rounded-2xl p-3">
+        {/* Metric 1 */}
+        <div className="flex flex-col items-center justify-center space-y-1">
+          <div className="w-11 h-11 rounded-full border-2 border-emerald-500/50 flex items-center justify-center relative bg-emerald-500/5">
+            <span className="text-[9px] font-black text-emerald-400">{attendanceRate}%</span>
+          </div>
+          <span className="text-[9px] text-gray-400 font-bold">উপস্থিতি</span>
         </div>
-        <div className="bg-[#1b1f28]/65 border border-white/5 rounded-xl p-2.5 text-center flex flex-col justify-between h-20">
-          <span className="text-[9px] text-gray-500 font-bold leading-none">মো.</span>
-          <span className="text-xs sm:text-sm font-black text-emerald-400">{totalRehearsalLogs}</span>
-          <span className="text-[9px] text-emerald-500/80 font-bold leading-none">দিন</span>
+        {/* Metric 2 */}
+        <div className="flex flex-col items-center justify-center space-y-1">
+          <div className="w-11 h-11 rounded-full border-2 border-white/10 flex items-center justify-center relative bg-white/5">
+            <span className="text-[9px] font-black text-white">{totalRehearsalLogs} দিন</span>
+          </div>
+          <span className="text-[9px] text-gray-400 font-bold">Work Days</span>
         </div>
-        <div className="bg-[#1b1f28]/65 border border-white/5 rounded-xl p-2.5 text-center flex flex-col justify-between h-20">
-          <span className="text-[9px] text-gray-500 font-bold leading-none">অ.</span>
-          <span className="text-xs sm:text-sm font-black text-amber-500">{presentCount}/{lateCount}</span>
-          <span className="text-[9px] text-amber-500/50 font-bold leading-none">&nbsp;</span>
+        {/* Metric 3 */}
+        <div className="flex flex-col items-center justify-center space-y-1">
+          <div className="w-11 h-11 rounded-full border-2 border-white/10 flex items-center justify-center relative bg-white/5">
+            <span className="text-[9px] font-black text-white">{presentCount}/{lateCount}</span>
+          </div>
+          <span className="text-[9px] text-gray-400 font-bold">Completed Tasks</span>
         </div>
-        <div className="bg-[#1b1f28]/65 border border-white/5 rounded-xl p-2.5 text-center flex flex-col justify-between h-20">
-          <span className="text-[9px] text-gray-500 font-bold leading-none">অ.</span>
-          <span className="text-xs sm:text-sm font-black text-red-400">{absentCount}</span>
-          <span className="text-[9px] text-red-500/80 font-bold leading-none">দিন</span>
+        {/* Metric 4 */}
+        <div className="flex flex-col items-center justify-center space-y-1">
+          <div className="w-11 h-11 rounded-full border-2 border-white/10 flex items-center justify-center relative bg-white/5">
+            <span className="text-[9px] font-black text-white">{absentCount}</span>
+          </div>
+          <span className="text-[9px] text-gray-400 font-bold">Other Stats</span>
         </div>
       </section>
 
       {/* -------------------------------------------------------------
-         TAB NAVIGATION (Responsive / Non-Colliding)
+         URGENT TASKS (জরুরি কাজ - Unified Sleek Container)
+         ------------------------------------------------------------- */}
+      <section className="space-y-2.5">
+        <h2 className="text-sm font-black text-amber-500 flex items-center gap-1.5">
+          <Sparkle size={14} className="text-amber-500" />
+          <span>জরুরি কাজ</span>
+        </h2>
+        
+        <div className="space-y-2">
+          {/* Task 1 */}
+          <div className="p-3 bg-[#1b252e]/80 border border-white/5 rounded-2xl flex items-center gap-3 text-left">
+            <span className="text-xs font-black text-amber-500 font-mono w-4">1</span>
+            <div className="w-8 h-8 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center shrink-0">
+              <Zap size={14} className="text-amber-500" />
+            </div>
+            <div className="space-y-0.5 min-w-0">
+              <h4 className="text-xs font-bold text-white leading-tight">ল্যাব পর্দা ফিট</h4>
+              <p className="text-[10px] text-gray-400 font-medium truncate">ল্যাব-এর পেছনের কালো পর্দা ফিট করে দেবেন।</p>
+            </div>
+          </div>
+
+          {/* Task 2 */}
+          <div className="p-3 bg-[#1b252e]/80 border border-white/5 rounded-2xl flex items-center gap-3 text-left">
+            <span className="text-xs font-black text-amber-500 font-mono w-4">2</span>
+            <div className="w-8 h-8 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center shrink-0">
+              <Smile size={14} className="text-amber-500" />
+            </div>
+            <div className="space-y-0.5 min-w-0">
+              <h4 className="text-xs font-bold text-white leading-tight">রক্তকরবী ফুল সজীব করা</h4>
+              <p className="text-[10px] text-gray-400 font-medium truncate">নন্দিনীর রক্তকরবী ফুলগুলো সজীব দেখানোর জন্য কালার করা।</p>
+            </div>
+          </div>
+
+          {/* Task 3 */}
+          <div className="p-3 bg-[#1b252e]/80 border border-white/5 rounded-2xl flex items-center gap-3 text-left">
+            <span className="text-xs font-black text-amber-500 font-mono w-4">3</span>
+            <div className="w-8 h-8 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center shrink-0">
+              <Volume2 size={14} className="text-amber-500" />
+            </div>
+            <div className="space-y-0.5 min-w-0">
+              <h4 className="text-xs font-bold text-white leading-tight">বিশু পাগলের লাইটিং ফোকাস</h4>
+              <p className="text-[10px] text-gray-400 font-medium truncate">বিশু পাগলের প্রবেশ দৃশ্যে আলোর ফোকাস উন্নত করা।</p>
+            </div>
+          </div>
+
+          {/* Task 4 */}
+          <div className="p-3 bg-[#1b252e]/80 border border-white/5 rounded-2xl flex items-center gap-3 text-left">
+            <span className="text-xs font-black text-amber-500 font-mono w-4">4</span>
+            <div className="w-8 h-8 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center shrink-0">
+              <MessageSquare size={14} className="text-amber-500" />
+            </div>
+            <div className="space-y-0.5 min-w-0">
+              <h4 className="text-xs font-bold text-white leading-tight">সংলাপ ভুল সংশোধন</h4>
+              <p className="text-[10px] text-gray-400 font-medium truncate">চন্দ্রা এবং ফাগুলালের সংলাপ ভুল সংশোধন।</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* -------------------------------------------------------------
+         TAB NAVIGATION (Hidden for notices since notices is direct on mockup page layout, but kept active to render dynamic parts if clicked)
          ------------------------------------------------------------- */}
       <div className="flex flex-row flex-nowrap border-b border-white/5 scrollbar-none overflow-x-auto gap-4 pb-0.5">
         {[
@@ -309,12 +364,12 @@ export default function ActorDashboard() {
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id as any)}
-              className={`flex items-center gap-1.5 pb-2 text-xs font-bold transition-all relative shrink-0 whitespace-nowrap ${isActive ? 'text-[#e056fd]' : 'text-gray-400 hover:text-white'}`}
+              className={`flex items-center gap-1.5 pb-2 text-xs font-bold transition-all relative shrink-0 whitespace-nowrap ${isActive ? 'text-amber-500' : 'text-gray-400 hover:text-white'}`}
             >
               <Icon size={14} />
               <span>{tab.name}</span>
               {isActive && (
-                <div className="absolute bottom-[-1px] left-0 right-0 h-0.5 bg-[#e056fd] rounded-full"></div>
+                <div className="absolute bottom-[-1px] left-0 right-0 h-0.5 bg-amber-500 rounded-full"></div>
               )}
             </button>
           );
@@ -324,19 +379,22 @@ export default function ActorDashboard() {
       {/* -------------------------------------------------------------
          TAB CONTENT
          ------------------------------------------------------------- */}
-      <main className="min-h-[40vh]">
+      <main className="min-h-[20vh] space-y-4">
         
         {/* 1. NOTICES TAB */}
         {activeTab === 'notices' && (
           <div className="space-y-3">
-            <h2 className="text-base font-bold text-red-500 text-left">জরুরি নোটিশ</h2>
+            <h2 className="text-sm font-black text-amber-500 flex items-center gap-1.5">
+              <Bell size={14} className="text-amber-500" />
+              <span>নোটিশ বোর্ড</span>
+            </h2>
             {notes.length === 0 ? (
               <div className="glass-panel p-8 text-center text-gray-500 text-xs">
                 আপাতত কোনো সাধারণ নোটিশ জারি করা হয়নি।
               </div>
             ) : (
-              <div className="grid grid-cols-1 gap-3">
-                {notes.map((note, idx) => {
+              <div className="grid grid-cols-1 gap-2.5">
+                {notes.slice(0, 2).map((note, idx) => {
                   const isMentioned = note.content.includes(myCharacter) || note.content.includes(member.name);
                   
                   // Extract day and month name to generate header like "৫ জুলাই ডাক"
@@ -348,24 +406,22 @@ export default function ActorDashboard() {
                   return (
                     <div 
                       key={note.id} 
-                      className="p-4 rounded-xl text-left space-y-2 bg-[#1b1f28]/60 border border-white/5"
+                      className="p-3 bg-[#1b252e]/60 border border-white/5 rounded-2xl flex gap-3 text-left items-start"
                     >
-                      <div className="flex items-center justify-between text-xs font-bold">
-                        <span className="text-gray-300">{noticeTitle}</span>
-                        {isMentioned && (
-                          <span className={`text-[9px] font-bold px-2 py-0.5 rounded-full ${
-                            idx % 2 === 0 
-                              ? "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20" 
-                              : "bg-blue-500/10 text-blue-400 border border-blue-500/20"
-                          }`}>
-                            @ আপনাকে মেনশন করা হয়েছে
-                          </span>
-                        )}
+                      <div className="w-7 h-7 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center shrink-0 mt-0.5">
+                        <Volume2 size={12} className="text-amber-500" />
                       </div>
-                      <p className="text-xs text-gray-300 leading-relaxed font-semibold">{note.content}</p>
-                      <div className="flex items-center gap-1 text-[9px] text-gray-500 font-bold">
-                        <Calendar size={10} />
-                        <span>{note.date}</span>
+                      <div className="space-y-1 min-w-0">
+                        <div className="flex items-center justify-between gap-1 text-[10px] font-bold">
+                          <span className="text-white font-black">{noticeTitle}</span>
+                          {isMentioned && (
+                            <span className="text-[8px] font-bold px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                              @ আপনাকে মেনশন করা হয়েছে
+                            </span>
+                          )}
+                        </div>
+                        <p className="text-[11px] text-gray-300 leading-relaxed font-semibold line-clamp-2">{note.content}</p>
+                        <span className="text-[8px] text-gray-500 font-bold block">{note.date}</span>
                       </div>
                     </div>
                   );
