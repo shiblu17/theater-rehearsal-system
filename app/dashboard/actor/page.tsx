@@ -212,93 +212,85 @@ export default function ActorDashboard() {
     <div className="flex-1 space-y-4 max-w-7xl mx-auto px-4 md:px-8 pt-4 pb-16 md:pb-6">
       
       {/* -------------------------------------------------------------
-         ACTOR PROFILE BANNER (Slim Header Layout)
+         ACTOR PROFILE BANNER (Mockup Layout)
          ------------------------------------------------------------- */}
-      <section className="glass-panel p-4 bg-opacity-40 overflow-hidden relative flex flex-row items-center justify-between gap-3 text-left">
-        <div className="absolute top-0 right-0 w-32 h-32 bg-[#e056fd]/5 rounded-full filter blur-[50px] pointer-events-none"></div>
-        
-        <div className="flex items-center gap-3 relative z-10">
-          <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-[#ff7979] to-[#e056fd] flex items-center justify-center text-white text-sm font-bold shadow-md shadow-[#ff7979]/20 shrink-0">
-            {member.name.substring(0, 1)}
-          </div>
+      <section className="glass-panel p-4 bg-[#1b1f28] border border-white/5 rounded-2xl flex flex-row items-center justify-between gap-3 text-left">
+        <div className="flex items-center gap-3.5 relative z-10">
+          {member.avatar_url ? (
+            <img 
+              src={member.avatar_url} 
+              alt={member.name}
+              className="w-14 h-14 rounded-full border-2 border-amber-500 object-cover shrink-0"
+            />
+          ) : (
+            <div className="w-14 h-14 rounded-full bg-gradient-to-tr from-[#ff7979] to-[#e056fd] flex items-center justify-center text-white text-xl font-bold border-2 border-amber-500 shrink-0">
+              {member.name.substring(0, 1)}
+            </div>
+          )}
           <div className="space-y-0.5 text-left">
-            <h2 className="text-sm font-bold text-white leading-none">{member.name}</h2>
-            <p className="text-[10px] text-gray-400 font-medium">
-              রোল: <span className="text-white font-semibold">{member.roll}</span> • চরিত্র: <span className="text-[#e056fd] font-semibold">{member.character_name || 'নেপথ্য'} ({member.role})</span>
+            <h1 className="text-base sm:text-lg font-black text-white leading-tight">{member.name}</h1>
+            <p className="text-[10px] sm:text-xs text-gray-400 font-semibold">
+              রোল: <span className="font-mono text-gray-200">{member.roll}</span> • চরিত্র:
+            </p>
+            <p className="text-[11px] sm:text-xs font-bold text-amber-500">
+              {member.character_name || 'নেপথ্য'} ({member.role})
             </p>
           </div>
         </div>
 
         <button 
           onClick={handleLogout}
-          className="btn-glass flex items-center justify-center gap-1.5 py-1.5 px-2.5 text-[10px] font-bold text-red-400 border-red-500/10 hover:border-red-500/20 hover:bg-red-500/5 cursor-pointer rounded-lg shrink-0"
-          title="লগআউট করুন"
+          className="px-4 py-2 bg-white/5 hover:bg-white/10 text-white rounded-full text-xs font-bold flex items-center gap-2 border border-white/10 transition-all cursor-pointer shrink-0"
         >
           <LogOut size={12} />
-          <span>লগআউট</span>
+          <span>Log Out</span>
         </button>
       </section>
       
       {/* -------------------------------------------------------------
-         HIGH-PRIORITY CHARACTER-MENTIONED NOTICES (Unified Sleek Container)
+         HIGH-PRIORITY CHARACTER-MENTIONED NOTICES (Unified Red Container)
          ------------------------------------------------------------- */}
       {characterMentionedNotes.length > 0 && (
-        <div className="p-3.5 rounded-xl bg-red-500/5 border border-red-500/20 text-left space-y-2.5">
-          <div className="flex items-center gap-1.5 text-[10px] font-bold text-[#ff7979] uppercase tracking-wider">
-            <AlertCircle size={12} className="animate-pulse" />
-            <span>জরুরি নোটিশ ({characterMentionedNotes.length})</span>
+        <section className="p-4 rounded-2xl bg-red-500/5 border border-red-500/20 text-left space-y-3">
+          <div className="flex items-center gap-2 text-red-500 font-bold text-sm">
+            <AlertCircle size={14} className="animate-pulse" />
+            <span>জরুরি ডাক</span>
           </div>
-          <div className="space-y-2">
+          <div className="space-y-3 text-xs sm:text-sm font-semibold text-gray-200 leading-relaxed">
             {characterMentionedNotes.map((note) => (
-              <div key={note.id} className="text-xs text-gray-300 border-l-2 border-[#ff7979] pl-3 py-0.5">
-                <div className="flex items-center justify-between text-[9px] text-gray-500 font-bold mb-0.5">
-                  <span>জরুরি ডাক</span>
-                  <span>{note.date}</span>
-                </div>
-                <p className="leading-relaxed font-semibold text-white text-xs">{note.content}</p>
-              </div>
+              <p key={note.id} className="leading-relaxed">
+                {note.content}
+              </p>
             ))}
-          </div>
-        </div>
-      )}
-
-      {/* -------------------------------------------------------------
-         STATS WIDGET (Compact Layout)
-         ------------------------------------------------------------- */}
-      <section className="grid grid-cols-4 gap-2">
-        {[
-          { label: 'উপস্থিতি', val: `${attendanceRate}%`, color: 'text-emerald-400' },
-          { label: 'মোট মহড়া', val: `${totalRehearsalLogs} দিন`, color: 'text-[#22a6b3]' },
-          { label: 'অনটাইম/লেট', val: `${presentCount}/${lateCount}`, color: 'text-[#e056fd]' },
-          { label: 'অনুপস্থিত', val: `${absentCount} দিন`, color: 'text-[#ff7979]' }
-        ].map((stat, idx) => (
-          <div key={idx} className="glass-panel p-2.5 text-center space-y-0.5">
-            <span className="text-[8px] font-bold text-gray-500 uppercase tracking-tight block truncate">{stat.label}</span>
-            <h3 className={`text-xs sm:text-sm font-black ${stat.color}`}>{stat.val}</h3>
-          </div>
-        ))}
-      </section>
-
-      {/* -------------------------------------------------------------
-         UPCOMING NEXT REHEARSAL WIDGET (Compact Layout)
-         ------------------------------------------------------------- */}
-      {nextRehearsal && (
-        <section className="p-3.5 rounded-xl bg-[#e056fd]/5 border border-[#e056fd]/15 text-left flex items-center justify-between gap-4">
-          <div className="space-y-0.5 min-w-0">
-            <div className="flex items-center gap-1.5 text-[9px] font-bold uppercase tracking-wider text-[#e056fd]">
-              <Timer size={10} className="animate-spin" />
-              <span>পরবর্তী মহড়া (Next Rehearsal)</span>
-            </div>
-            <h3 className="text-xs font-bold text-white truncate">{nextRehearsal.title}</h3>
-            <p className="text-[10px] text-gray-400 truncate">দৃশ্যভিত্তিক কাস্ট: <span className="text-white font-medium">{nextRehearsal.required_cast}</span></p>
-          </div>
-          
-          <div className="flex flex-col items-end gap-1 font-bold text-[9px] shrink-0">
-            <span className="px-2 py-0.5 rounded bg-black/40 border border-white/5 text-gray-300">{nextRehearsal.date}</span>
-            <span className="px-2 py-0.5 rounded bg-black/40 border border-white/5 text-[#e056fd]">{nextRehearsal.time}</span>
           </div>
         </section>
       )}
+
+      {/* -------------------------------------------------------------
+         STATS WIDGET (Exact Mockup Layout Mapping)
+         ------------------------------------------------------------- */}
+      <section className="grid grid-cols-4 gap-2">
+        <div className="bg-[#1b1f28]/65 border border-white/5 rounded-xl p-2.5 text-center flex flex-col justify-between h-20">
+          <span className="text-[9px] text-gray-500 font-bold leading-none">Attendance</span>
+          <span className="text-[9px] text-gray-500 font-bold leading-none">উ.</span>
+          <span className="text-xs sm:text-sm font-black text-white">{attendanceRate}%</span>
+        </div>
+        <div className="bg-[#1b1f28]/65 border border-white/5 rounded-xl p-2.5 text-center flex flex-col justify-between h-20">
+          <span className="text-[9px] text-gray-500 font-bold leading-none">মো.</span>
+          <span className="text-xs sm:text-sm font-black text-emerald-400">{totalRehearsalLogs}</span>
+          <span className="text-[9px] text-emerald-500/80 font-bold leading-none">দিন</span>
+        </div>
+        <div className="bg-[#1b1f28]/65 border border-white/5 rounded-xl p-2.5 text-center flex flex-col justify-between h-20">
+          <span className="text-[9px] text-gray-500 font-bold leading-none">অ.</span>
+          <span className="text-xs sm:text-sm font-black text-amber-500">{presentCount}/{lateCount}</span>
+          <span className="text-[9px] text-amber-500/50 font-bold leading-none">&nbsp;</span>
+        </div>
+        <div className="bg-[#1b1f28]/65 border border-white/5 rounded-xl p-2.5 text-center flex flex-col justify-between h-20">
+          <span className="text-[9px] text-gray-500 font-bold leading-none">অ.</span>
+          <span className="text-xs sm:text-sm font-black text-red-400">{absentCount}</span>
+          <span className="text-[9px] text-red-500/80 font-bold leading-none">দিন</span>
+        </div>
+      </section>
 
       {/* -------------------------------------------------------------
          TAB NAVIGATION (Responsive / Non-Colliding)
@@ -337,26 +329,44 @@ export default function ActorDashboard() {
         {/* 1. NOTICES TAB */}
         {activeTab === 'notices' && (
           <div className="space-y-3">
+            <h2 className="text-base font-bold text-red-500 text-left">জরুরি নোটিশ</h2>
             {notes.length === 0 ? (
               <div className="glass-panel p-8 text-center text-gray-500 text-xs">
                 আপাতত কোনো সাধারণ নোটিশ জারি করা হয়নি।
               </div>
             ) : (
               <div className="grid grid-cols-1 gap-3">
-                {notes.map((note) => {
+                {notes.map((note, idx) => {
                   const isMentioned = note.content.includes(myCharacter) || note.content.includes(member.name);
+                  
+                  // Extract day and month name to generate header like "৫ জুলাই ডাক"
+                  const dayMatch = note.date.match(/\d+\s+[ক-য়]+/);
+                  const noticeTitle = isMentioned
+                    ? (dayMatch ? `${dayMatch[0]} ডাক` : "জরুরি ডাক")
+                    : "সাধারণ নোটিশ";
+
                   return (
                     <div 
                       key={note.id} 
-                      className={`p-4 rounded-xl text-left space-y-2 transition-all bg-white/5 border border-white/5 ${isMentioned ? 'border-[#ff7979]/20 bg-[#ff7979]/5' : ''}`}
+                      className="p-4 rounded-xl text-left space-y-2 bg-[#1b1f28]/60 border border-white/5"
                     >
-                      <div className="flex items-center justify-between text-[9px] font-bold">
-                        <span className="text-gray-500">{note.date}</span>
+                      <div className="flex items-center justify-between text-xs font-bold">
+                        <span className="text-gray-300">{noticeTitle}</span>
                         {isMentioned && (
-                          <span className="text-[#ff7979] bg-[#ff7979]/10 px-1.5 py-0.5 rounded">আপনাকে মেনশন করা হয়েছে</span>
+                          <span className={`text-[9px] font-bold px-2 py-0.5 rounded-full ${
+                            idx % 2 === 0 
+                              ? "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20" 
+                              : "bg-blue-500/10 text-blue-400 border border-blue-500/20"
+                          }`}>
+                            @ আপনাকে মেনশন করা হয়েছে
+                          </span>
                         )}
                       </div>
                       <p className="text-xs text-gray-300 leading-relaxed font-semibold">{note.content}</p>
+                      <div className="flex items-center gap-1 text-[9px] text-gray-500 font-bold">
+                        <Calendar size={10} />
+                        <span>{note.date}</span>
+                      </div>
                     </div>
                   );
                 })}
@@ -586,6 +596,35 @@ export default function ActorDashboard() {
         )}
 
       </main>
+
+      {/* -------------------------------------------------------------
+         UPCOMING NEXT REHEARSAL WIDGET (Mockup Layout - Bottom)
+         ------------------------------------------------------------- */}
+      {nextRehearsal && (
+        <section className="p-4 rounded-xl bg-[#1b1f28] border border-white/5 text-left space-y-3 relative overflow-hidden">
+          <div className="flex items-center gap-1.5 text-[9px] font-bold uppercase tracking-wider text-amber-500">
+            <Clock size={12} />
+            <span>পরবর্তী মহড়া (NEXT REHEARSAL)</span>
+          </div>
+          
+          <div className="space-y-1">
+            <h2 className="text-2xl sm:text-3xl font-black text-white font-mono tracking-wide">
+              {nextRehearsal.date}
+            </h2>
+            <h3 className="text-sm sm:text-base font-bold text-white">
+              {nextRehearsal.title}
+            </h3>
+            <p className="text-xs text-gray-400">
+              দৃশ্যভিত্তিক কাস্ট: <span className="text-gray-300 font-semibold">{nextRehearsal.required_cast}</span>
+            </p>
+          </div>
+          
+          <div className="border-t border-white/5 pt-3 flex justify-between items-center text-[10px] text-gray-500 font-bold">
+            <span>সময়: {nextRehearsal.time}</span>
+            <span className="text-amber-500">আসন্ন</span>
+          </div>
+        </section>
+      )}
 
     </div>
   );
