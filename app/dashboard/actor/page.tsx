@@ -214,20 +214,20 @@ export default function ActorDashboard() {
       {/* -------------------------------------------------------------
          ACTOR PROFILE BANNER
          ------------------------------------------------------------- */}
-      <section className="glass-panel p-6 bg-opacity-40 overflow-hidden relative flex flex-col md:flex-row justify-between items-center gap-6">
-        <div className="absolute top-0 right-0 w-64 h-64 bg-[#e056fd]/5 rounded-full filter blur-[80px] pointer-events-none"></div>
+      <section className="glass-panel p-4 bg-opacity-40 overflow-hidden relative flex flex-row items-center justify-between gap-3 text-left">
+        <div className="absolute top-0 right-0 w-32 h-32 bg-[#e056fd]/5 rounded-full filter blur-[50px] pointer-events-none"></div>
         
-        <div className="flex flex-col sm:flex-row items-center gap-5 relative z-10 text-center sm:text-left w-full sm:w-auto">
-          <div className="w-16 h-16 rounded-2xl bg-gradient-to-tr from-[#ff7979] to-[#e056fd] flex items-center justify-center text-white text-2xl font-bold shadow-lg shadow-[#ff7979]/20 shrink-0">
+        <div className="flex items-center gap-3 relative z-10">
+          <div className="w-12 h-12 rounded-xl bg-gradient-to-tr from-[#ff7979] to-[#e056fd] flex items-center justify-center text-white text-lg font-bold shadow-lg shadow-[#ff7979]/20 shrink-0">
             {member.name.substring(0, 1)}
           </div>
-          <div className="space-y-1">
-            <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-white/5 border border-white/10 text-[10px] font-bold text-[#ff7979]">
-              <Sparkles className="w-3 h-3" />
-              ৫২তম আবর্তন • নাটক ও নাট্যতত্ত্ব
+          <div className="space-y-0.5">
+            <div className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-white/5 border border-white/10 text-[8px] font-bold text-[#ff7979]">
+              <Sparkles className="w-2 h-2" />
+              ৫২তম আবর্তন
             </div>
-            <h1 className="text-2xl md:text-3xl font-black text-white">{member.name}</h1>
-            <p className="text-xs text-gray-400 font-medium">
+            <h1 className="text-base sm:text-2xl font-black text-white leading-tight">{member.name}</h1>
+            <p className="text-[10px] text-gray-400 font-medium">
               রোল: <span className="font-semibold text-white">{member.roll}</span> • চরিত্র: <span className="font-semibold text-[#e056fd]">{member.character_name || 'নেপথ্য'} ({member.role})</span>
             </p>
           </div>
@@ -235,10 +235,11 @@ export default function ActorDashboard() {
 
         <button 
           onClick={handleLogout}
-          className="btn-glass flex items-center justify-center gap-2 w-full sm:w-auto py-2.5 px-4 text-xs font-semibold text-red-400 border-red-500/10 hover:border-red-500/20 hover:bg-red-500/5 cursor-pointer"
+          className="btn-glass flex items-center justify-center gap-1.5 py-1.5 px-2.5 text-[10px] font-bold text-red-400 border-red-500/10 hover:border-red-500/20 hover:bg-red-500/5 cursor-pointer rounded-lg shrink-0"
+          title="লগআউট করুন"
         >
-          <LogOut size={14} />
-          <span>লগআউট করুন</span>
+          <LogOut size={12} />
+          <span>লগআউট</span>
         </button>
       </section>
 
