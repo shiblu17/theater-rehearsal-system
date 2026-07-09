@@ -215,25 +215,25 @@ export default function ActorDashboard() {
   }
   return (
     <div className="w-full min-h-screen bg-[#080d12] pb-32">
-      <div className="max-w-md mx-auto px-4 pt-8 space-y-8 text-left">
+      <div className="max-w-md mx-auto px-4 pt-8 flex flex-col gap-6 text-left">
         
         {/* -------------------------------------------------------------
-           ACTOR PROFILE BANNER (Premium Rounded Card Layout)
+           ACTOR PROFILE BANNER (Slate-800 Card Layout)
            ------------------------------------------------------------- */}
-        <section className="p-5 bg-[#1b232c] border border-[#334454] rounded-2xl flex flex-row items-center justify-between gap-3 text-left w-full shadow-xl shadow-black/40">
+        <section className="p-6 bg-[#1e293b] border border-[#475569] rounded-2xl flex flex-row items-center justify-between gap-3 text-left w-full shadow-xl shadow-black/40">
           <div className="flex items-center gap-3.5 min-w-0 flex-1">
             {member.avatar_url ? (
               <img 
                 src={member.avatar_url} 
                 alt={member.name}
-                className="w-13 h-13 rounded-full border-2 border-amber-500/80 object-cover shrink-0"
+                className="w-14 h-14 rounded-full border-2 border-amber-500/80 object-cover shrink-0"
               />
             ) : (
-              <div className="w-13 h-13 rounded-full bg-gradient-to-tr from-[#c85122] to-[#e59f5b] flex items-center justify-center text-white text-base font-black border-2 border-amber-500/80 shrink-0">
+              <div className="w-14 h-14 rounded-full bg-gradient-to-tr from-[#c85122] to-[#e59f5b] flex items-center justify-center text-white text-lg font-black border-2 border-amber-500/80 shrink-0">
                 {member.name.substring(0, 1)}
               </div>
             )}
-            <div className="space-y-0.5 min-w-0 flex-1">
+            <div className="space-y-1 min-w-0 flex-1">
               <h1 className="text-sm sm:text-base font-black text-white truncate">{member.name}</h1>
               <p className="text-[10px] text-gray-400 font-semibold leading-none truncate">
                 রোল: <span className="font-mono text-gray-200">{member.roll}</span>
@@ -254,103 +254,103 @@ export default function ActorDashboard() {
         </section>
 
         {/* -------------------------------------------------------------
-           METRICS BAR (Sleek Circle Progress Stats - Spacious Layout)
+           METRICS BAR (Sleek Circle Progress Stats - Slate-800 Layout)
            ------------------------------------------------------------- */}
-        <section className="grid grid-cols-4 gap-2 bg-[#1b232c] border border-[#334454] rounded-2xl p-5 shadow-xl shadow-black/30">
+        <section className="grid grid-cols-4 gap-2 bg-[#1e293b] border border-[#475569] rounded-2xl p-5 shadow-xl shadow-black/30">
           {/* Metric 1 */}
           <div className="flex flex-col items-center justify-center space-y-2 text-center">
-            <div className="w-12 h-12 rounded-full border-2 border-emerald-500 flex items-center justify-center bg-emerald-500/5 shadow-md shadow-emerald-500/10">
+            <div className="w-13 h-13 rounded-full border-2 border-emerald-500 flex items-center justify-center bg-emerald-500/5 shadow-md shadow-emerald-500/10">
               <span className="text-[10px] font-black text-emerald-400">{attendanceRate}%</span>
             </div>
-            <span className="text-[9px] text-gray-400 font-bold tracking-tight">উপস্থিতি</span>
+            <span className="text-[9px] text-gray-300 font-bold tracking-tight">উপস্থিতি</span>
           </div>
           {/* Metric 2 */}
           <div className="flex flex-col items-center justify-center space-y-2 text-center">
-            <div className="w-12 h-12 rounded-full border-2 border-white/10 flex items-center justify-center bg-white/5 shadow-md">
+            <div className="w-13 h-13 rounded-full border-2 border-white/10 flex items-center justify-center bg-white/5 shadow-md">
               <span className="text-[10px] font-black text-white">{totalRehearsalLogs} দিন</span>
             </div>
-            <span className="text-[9px] text-gray-400 font-bold tracking-tight">Work Days</span>
+            <span className="text-[9px] text-gray-300 font-bold tracking-tight">Work Days</span>
           </div>
           {/* Metric 3 */}
           <div className="flex flex-col items-center justify-center space-y-2 text-center">
-            <div className="w-12 h-12 rounded-full border-2 border-white/10 flex items-center justify-center bg-white/5 shadow-md">
+            <div className="w-13 h-13 rounded-full border-2 border-white/10 flex items-center justify-center bg-white/5 shadow-md">
               <span className="text-[10px] font-black text-white">{presentCount}/{lateCount}</span>
             </div>
-            <span className="text-[9px] text-gray-400 font-bold tracking-tight">Completed</span>
+            <span className="text-[9px] text-gray-300 font-bold tracking-tight">Completed</span>
           </div>
           {/* Metric 4 */}
           <div className="flex flex-col items-center justify-center space-y-2 text-center">
-            <div className="w-12 h-12 rounded-full border-2 border-white/10 flex items-center justify-center bg-white/5 shadow-md">
+            <div className="w-13 h-13 rounded-full border-2 border-white/10 flex items-center justify-center bg-white/5 shadow-md">
               <span className="text-[10px] font-black text-white">{absentCount}</span>
             </div>
-            <span className="text-[9px] text-gray-400 font-bold tracking-tight">Other Stats</span>
+            <span className="text-[9px] text-gray-300 font-bold tracking-tight">Other Stats</span>
           </div>
         </section>
 
         {/* -------------------------------------------------------------
-           URGENT TASKS (জরুরি কাজ - Beautiful Spaced Cards)
+           URGENT TASKS (জরুরি কাজ - Slate-800 Spaced Cards)
            ------------------------------------------------------------- */}
-        <section className="space-y-3">
+        <section className="flex flex-col gap-3">
           <h2 className="text-xs font-black text-amber-500 flex items-center gap-1.5 px-0.5 tracking-wider uppercase">
             <Sparkle size={12} className="text-amber-500 animate-pulse" />
             <span>জরুরি কাজ</span>
           </h2>
           
-          <div className="space-y-2.5">
+          <div className="flex flex-col gap-3.5">
             {/* Task 1 */}
-            <div className="p-3.5 bg-[#1b232c] border border-[#334454] rounded-2xl flex items-center gap-4 text-left shadow-md">
+            <div className="p-4 bg-[#1e293b] border border-[#475569] rounded-2xl flex items-center gap-4 text-left shadow-xl shadow-black/20">
               <span className="text-xs font-black text-amber-500 font-mono w-4">1</span>
-              <div className="w-8 h-8 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center shrink-0">
-                <Zap size={14} className="text-amber-500" />
+              <div className="w-9 h-9 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center shrink-0">
+                <Zap size={16} className="text-amber-500" />
               </div>
-              <div className="space-y-0.5 min-w-0 flex-1">
-                <h4 className="text-xs font-black text-white leading-tight">ল্যাব পর্দা ফিট</h4>
-                <p className="text-[10px] text-gray-400 font-medium leading-relaxed">ল্যাব-এর পেছনের কালো পর্দা ফিট করে দেবেন।</p>
+              <div className="space-y-1 min-w-0 flex-1">
+                <h4 className="text-xs sm:text-sm font-black text-white leading-tight">ল্যাব পর্দা ফিট</h4>
+                <p className="text-[10px] sm:text-xs text-gray-300 font-medium leading-relaxed">ল্যাব-এর পেছনের কালো পর্দা ফিট করে দেবেন।</p>
               </div>
             </div>
 
             {/* Task 2 */}
-            <div className="p-3.5 bg-[#1b232c] border border-[#334454] rounded-2xl flex items-center gap-4 text-left shadow-md">
+            <div className="p-4 bg-[#1e293b] border border-[#475569] rounded-2xl flex items-center gap-4 text-left shadow-xl shadow-black/20">
               <span className="text-xs font-black text-amber-500 font-mono w-4">2</span>
-              <div className="w-8 h-8 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center shrink-0">
-                <Smile size={14} className="text-amber-500" />
+              <div className="w-9 h-9 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center shrink-0">
+                <Smile size={16} className="text-amber-500" />
               </div>
-              <div className="space-y-0.5 min-w-0 flex-1">
-                <h4 className="text-xs font-black text-white leading-tight">রক্তকরবী ফুল সজীব করা</h4>
-                <p className="text-[10px] text-gray-400 font-medium leading-relaxed">নন্দিনীর রক্তকরবী ফুলগুলো সজীব দেখানোর জন্য কালার করা।</p>
+              <div className="space-y-1 min-w-0 flex-1">
+                <h4 className="text-xs sm:text-sm font-black text-white leading-tight">রক্তকরবী ফুল সজীব করা</h4>
+                <p className="text-[10px] sm:text-xs text-gray-300 font-medium leading-relaxed">নন্দিনীর রক্তকরবী ফুলগুলো সজীব দেখানোর জন্য কালার করা।</p>
               </div>
             </div>
 
             {/* Task 3 */}
-            <div className="p-3.5 bg-[#1b232c] border border-[#334454] rounded-2xl flex items-center gap-4 text-left shadow-md">
+            <div className="p-4 bg-[#1e293b] border border-[#475569] rounded-2xl flex items-center gap-4 text-left shadow-xl shadow-black/20">
               <span className="text-xs font-black text-amber-500 font-mono w-4">3</span>
-              <div className="w-8 h-8 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center shrink-0">
-                <Volume2 size={14} className="text-amber-500" />
+              <div className="w-9 h-9 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center shrink-0">
+                <Volume2 size={16} className="text-amber-500" />
               </div>
-              <div className="space-y-0.5 min-w-0 flex-1">
-                <h4 className="text-xs font-black text-white leading-tight">বিশু পাগলের লাইটিং ফোকাস</h4>
-                <p className="text-[10px] text-gray-400 font-medium leading-relaxed">বিশু পাগলের প্রবেশ দৃশ্যে আলোর ফোকাস উন্নত করা।</p>
+              <div className="space-y-1 min-w-0 flex-1">
+                <h4 className="text-xs sm:text-sm font-black text-white leading-tight">বিশু পাগলের লাইটিং ফোকাস</h4>
+                <p className="text-[10px] sm:text-xs text-gray-300 font-medium leading-relaxed">বিশু পাগলের প্রবেশ দৃশ্যে আলোর ফোকাস উন্নত করা।</p>
               </div>
             </div>
 
             {/* Task 4 */}
-            <div className="p-3.5 bg-[#1b232c] border border-[#334454] rounded-2xl flex items-center gap-4 text-left shadow-md">
+            <div className="p-4 bg-[#1e293b] border border-[#475569] rounded-2xl flex items-center gap-4 text-left shadow-xl shadow-black/20">
               <span className="text-xs font-black text-amber-500 font-mono w-4">4</span>
-              <div className="w-8 h-8 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center shrink-0">
-                <MessageSquare size={14} className="text-amber-500" />
+              <div className="w-9 h-9 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center shrink-0">
+                <MessageSquare size={16} className="text-amber-500" />
               </div>
-              <div className="space-y-0.5 min-w-0 flex-1">
-                <h4 className="text-xs font-black text-white leading-tight">সংলাপ ভুল সংশোধন</h4>
-                <p className="text-[10px] text-gray-400 font-medium leading-relaxed">চন্দ্রা এবং ফাগুলালের সংলাপ ভুল সংশোধন।</p>
+              <div className="space-y-1 min-w-0 flex-1">
+                <h4 className="text-xs sm:text-sm font-black text-white leading-tight">সংলাপ ভুল সংশোধন</h4>
+                <p className="text-[10px] sm:text-xs text-gray-300 font-medium leading-relaxed">চন্দ্রা এবং ফাগুলালের সংলাপ ভুল সংশোধন।</p>
               </div>
             </div>
           </div>
         </section>
 
         {/* -------------------------------------------------------------
-           TAB NAVIGATION (Minimal Segmented Control Group - Beautiful layout)
+           TAB NAVIGATION (Minimal Segmented Control Group - Slate-800 layout)
            ------------------------------------------------------------- */}
-        <div className="flex bg-[#1b232c] p-1.5 rounded-2xl gap-1.5 w-full border border-[#334454] shadow-xl">
+        <div className="flex bg-[#1e293b] p-1.5 rounded-2xl gap-1.5 w-full border border-[#475569] shadow-xl">
           {[
             { id: 'notices', name: 'নোটিশ' },
             { id: 'schedule', name: 'শিডিউল' },
@@ -365,7 +365,7 @@ export default function ActorDashboard() {
                 onClick={() => setActiveTab(tab.id as any)}
                 className={`flex-1 text-center py-2.5 rounded-xl text-xs font-black transition-all cursor-pointer ${
                   isActive 
-                    ? 'bg-amber-500 text-black border border-amber-500 shadow-md shadow-amber-500/25' 
+                    ? 'bg-amber-500 text-slate-950 border border-amber-500 shadow-md shadow-amber-500/25' 
                     : 'text-gray-400 hover:text-white border border-transparent'
                 }`}
               >
@@ -378,21 +378,21 @@ export default function ActorDashboard() {
         {/* -------------------------------------------------------------
            TAB CONTENT (Beautiful spacious layout with distinct cards)
            ------------------------------------------------------------- */}
-        <main className="min-h-[25vh] space-y-4 pt-2">
+        <main className="min-h-[25vh] flex flex-col gap-4 pt-2">
           
           {/* 1. NOTICES TAB */}
           {activeTab === 'notices' && (
-            <div className="space-y-3">
+            <div className="flex flex-col gap-4">
               <h2 className="text-xs font-black text-amber-500 flex items-center gap-1.5 px-0.5 tracking-wider uppercase">
-                <Bell size={12} className="text-amber-500" />
+                <Bell size={12} className="text-amber-500 animate-pulse" />
                 <span>নোটিশ বোর্ড</span>
               </h2>
               {notes.length === 0 ? (
-                <div className="glass-panel p-8 text-center text-gray-500 text-xs border border-[#334454]">
+                <div className="p-10 text-center text-gray-500 text-xs border border-[#475569] rounded-2xl bg-[#1e293b]">
                   আপাতত কোনো সাধারণ নোটিশ জারি করা হয়নি।
                 </div>
               ) : (
-                <div className="grid grid-cols-1 gap-3.5">
+                <div className="flex flex-col gap-4">
                   {notes.slice(0, 2).map((note, idx) => {
                     const isMentioned = note.content.includes(myCharacter) || note.content.includes(member.name);
                     
@@ -405,10 +405,10 @@ export default function ActorDashboard() {
                     return (
                       <div 
                         key={note.id} 
-                        className="p-4.5 bg-[#1b232c] border border-[#334454] rounded-2xl flex gap-3.5 text-left items-start shadow-xl shadow-black/25"
+                        className="p-5 bg-[#1e293b] border border-[#475569] rounded-2xl flex gap-3.5 text-left items-start shadow-xl shadow-black/25"
                       >
-                        <div className="w-8 h-8 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center shrink-0 mt-0.5">
-                          <Volume2 size={14} className="text-amber-500" />
+                        <div className="w-8.5 h-8.5 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center shrink-0 mt-0.5">
+                          <Volume2 size={16} className="text-amber-500" />
                         </div>
                         <div className="space-y-1.5 min-w-0 flex-1">
                           <div className="flex items-center justify-between gap-1 text-[11px] font-bold">
