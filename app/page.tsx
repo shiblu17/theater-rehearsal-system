@@ -141,7 +141,7 @@ export default function HomePage() {
         <div className="content-container hero-layout w-full relative z-10">
           <div className="hero-text-block">
             <img 
-              src="/banner_52.png" 
+              src="/banner_52_nobg.jpg" 
               alt="৫২তম আবর্তন নাটক ও নাট্যতত্ত্ব বিভাগ" 
               className="w-full max-w-[480px] h-auto object-contain select-none pointer-events-none"
             />
