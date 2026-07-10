@@ -229,13 +229,13 @@ export default function ActorDashboard() {
     badges.push({ name: 'মঞ্চের প্রাণ', desc: '৫টির বেশি মহড়ায় অংশগ্রহণ', color: 'from-[#ff7979] to-[#ff4757]' });
   }
   return (
-    <div className="w-full min-h-screen bg-[#090d16] pb-32">
+    <div className="w-full min-h-screen bg-white pb-32 text-slate-900">
       <div className="max-w-md mx-auto px-4 pt-8 flex flex-col gap-6 text-left">
         
         {/* -------------------------------------------------------------
            ACTOR PROFILE BANNER (Premium Dark Layout)
            ------------------------------------------------------------- */}
-        <section className="p-6 bg-[#131722]/95 border border-[#262c3e] rounded-2xl flex flex-row items-center justify-between gap-3 text-left w-full shadow-xl shadow-black/50">
+        <section className="p-6 bg-slate-50 border border-slate-200 rounded-2xl flex flex-row items-center justify-between gap-3 text-left w-full shadow-sm">
           <div className="flex items-center gap-3.5 min-w-0 flex-1">
             {member.avatar_url ? (
               <img 
@@ -249,11 +249,11 @@ export default function ActorDashboard() {
               </div>
             )}
             <div className="space-y-1 min-w-0 flex-1">
-              <h1 className="text-sm sm:text-base font-black text-white truncate">{member.name}</h1>
-              <p className="text-[10px] text-gray-400 font-semibold leading-none truncate">
-                রোল: <span className="font-mono text-gray-200">{member.roll}</span>
+              <h1 className="text-sm sm:text-base font-black text-slate-900 truncate">{member.name}</h1>
+              <p className="text-[10px] text-slate-500 font-semibold leading-none truncate">
+                রোল: <span className="font-mono text-slate-700">{member.roll}</span>
               </p>
-              <p className="text-[11px] font-black text-amber-500 leading-none truncate mt-0.5">
+              <p className="text-[11px] font-black text-amber-600 leading-none truncate mt-0.5">
                 {member.character_name || 'নেপথ্য'} ({member.role})
               </p>
             </div>
@@ -261,9 +261,9 @@ export default function ActorDashboard() {
 
           <button 
             onClick={handleLogout}
-            className="px-4 py-2 bg-white/5 hover:bg-white/10 text-white rounded-xl text-xs font-bold flex items-center gap-1.5 border border-white/15 transition-all cursor-pointer shrink-0"
+            className="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-800 rounded-xl text-xs font-bold flex items-center gap-1.5 border border-slate-200 transition-all cursor-pointer shrink-0"
           >
-            <LogOut size={12} className="text-gray-400" />
+            <LogOut size={12} className="text-slate-500" />
             <span>Log Out</span>
           </button>
         </section>
@@ -271,7 +271,7 @@ export default function ActorDashboard() {
         {/* -------------------------------------------------------------
            TAB NAVIGATION (Minimal Segmented Control Group)
            ------------------------------------------------------------- */}
-        <div className="flex bg-[#131722]/95 border border-[#262c3e] p-1.5 rounded-2xl gap-0.5 w-full shadow-xl overflow-x-auto scrollbar-none shrink-0">
+        <div className="flex bg-slate-50 border border-slate-200 p-1.5 rounded-2xl gap-0.5 w-full shadow-sm overflow-x-auto scrollbar-none shrink-0">
           {[
             { id: 'home', name: 'হোম' },
             { id: 'notices', name: 'নোটিশ' },
@@ -306,90 +306,90 @@ export default function ActorDashboard() {
           {activeTab === 'home' && (
             <div className="flex flex-col gap-6">
               {/* METRICS BAR */}
-              <section className="grid grid-cols-4 gap-2 bg-[#131722]/95 border border-[#262c3e] rounded-2xl p-5 shadow-xl shadow-black/40">
+              <section className="grid grid-cols-4 gap-2 bg-slate-50 border border-slate-200 rounded-2xl p-5 shadow-sm">
                 {/* Metric 1 */}
                 <div className="flex flex-col items-center justify-center space-y-2 text-center">
-                  <div className="w-14 h-14 rounded-full border-4 border-emerald-500/80 flex items-center justify-center bg-emerald-500/10 shadow-[0_0_15px_rgba(16,185,129,0.2)]">
-                    <span className="text-xs font-black text-emerald-400">{attendanceRate}%</span>
+                  <div className="w-14 h-14 rounded-full border-4 border-emerald-500 flex items-center justify-center bg-emerald-50 shadow-sm">
+                    <span className="text-xs font-black text-emerald-600">{attendanceRate}%</span>
                   </div>
-                  <span className="text-[9px] text-gray-300 font-bold tracking-tight">উপস্থিতি</span>
+                  <span className="text-[9px] text-slate-500 font-bold tracking-tight">উপস্থিতি</span>
                 </div>
                 {/* Metric 2 */}
                 <div className="flex flex-col items-center justify-center space-y-2 text-center">
-                  <div className="w-14 h-14 rounded-full border-2 border-zinc-700 flex items-center justify-center bg-zinc-800/20 shadow-md">
-                    <span className="text-xs font-black text-zinc-300">{totalRehearsalLogs} দিন</span>
+                  <div className="w-14 h-14 rounded-full border-2 border-slate-300 flex items-center justify-center bg-slate-100 shadow-sm">
+                    <span className="text-xs font-black text-slate-700">{totalRehearsalLogs} দিন</span>
                   </div>
-                  <span className="text-[9px] text-gray-300 font-bold tracking-tight">Work Days</span>
+                  <span className="text-[9px] text-slate-500 font-bold tracking-tight">Work Days</span>
                 </div>
                 {/* Metric 3 */}
                 <div className="flex flex-col items-center justify-center space-y-2 text-center">
-                  <div className="w-14 h-14 rounded-full border-2 border-zinc-700 flex items-center justify-center bg-zinc-800/20 shadow-md">
-                    <span className="text-xs font-black text-zinc-300">{presentCount}/{lateCount}</span>
+                  <div className="w-14 h-14 rounded-full border-2 border-slate-300 flex items-center justify-center bg-slate-100 shadow-sm">
+                    <span className="text-xs font-black text-slate-700">{presentCount}/{lateCount}</span>
                   </div>
-                  <span className="text-[9px] text-gray-300 font-bold tracking-tight">Completed</span>
+                  <span className="text-[9px] text-slate-500 font-bold tracking-tight">Completed</span>
                 </div>
                 {/* Metric 4 */}
                 <div className="flex flex-col items-center justify-center space-y-2 text-center">
-                  <div className="w-14 h-14 rounded-full border-2 border-zinc-700 flex items-center justify-center bg-zinc-800/20 shadow-md">
-                    <span className="text-xs font-black text-zinc-300">{absentCount}</span>
+                  <div className="w-14 h-14 rounded-full border-2 border-slate-300 flex items-center justify-center bg-slate-100 shadow-sm">
+                    <span className="text-xs font-black text-slate-700">{absentCount}</span>
                   </div>
-                  <span className="text-[9px] text-gray-300 font-bold tracking-tight">Other Stats</span>
+                  <span className="text-[9px] text-slate-500 font-bold tracking-tight">Other Stats</span>
                 </div>
               </section>
 
               {/* URGENT TASKS */}
               <section className="flex flex-col gap-3">
-                <h2 className="text-xs font-black text-amber-500 flex items-center gap-1.5 px-0.5 tracking-wider uppercase">
-                  <Sparkle size={12} className="text-amber-500 animate-pulse" />
+                <h2 className="text-xs font-black text-amber-600 flex items-center gap-1.5 px-0.5 tracking-wider uppercase">
+                  <Sparkle size={12} className="text-amber-600 animate-pulse" />
                   <span>জরুরি কাজ</span>
                 </h2>
                 
                 <div className="flex flex-col gap-3.5">
                   {/* Task 1 */}
-                  <div className="p-4.5 bg-[#131722]/95 border border-[#262c3e] rounded-2xl flex items-center gap-4 text-left shadow-xl shadow-black/30">
-                    <span className="text-xs font-black text-amber-500/80 font-mono w-4">1</span>
-                    <div className="w-11 h-11 rounded-full bg-amber-500/10 border border-amber-500/30 flex items-center justify-center shrink-0 shadow-[0_0_10px_rgba(245,158,11,0.1)]">
-                      <Zap size={16} className="text-amber-500" />
+                  <div className="p-4.5 bg-slate-50 border border-slate-200 rounded-2xl flex items-center gap-4 text-left shadow-sm">
+                    <span className="text-xs font-black text-amber-600 font-mono w-4">1</span>
+                    <div className="w-11 h-11 rounded-full bg-amber-50 border border-amber-200 flex items-center justify-center shrink-0">
+                      <Zap size={16} className="text-amber-600" />
                     </div>
                     <div className="space-y-1 min-w-0 flex-1">
-                      <h4 className="text-sm font-black text-white leading-tight">ল্যাব পর্দা ফিট</h4>
-                      <p className="text-xs text-gray-300 font-medium leading-relaxed">ল্যাব-এর পেছনের কালো পর্দা ফিট করে দেবেন।</p>
+                      <h4 className="text-sm font-black text-slate-900 leading-tight">ল্যাব পর্দা ফিট</h4>
+                      <p className="text-xs text-slate-600 font-medium leading-relaxed">ল্যাব-এর পেছনের কালো পর্দা ফিট করে দেবেন।</p>
                     </div>
                   </div>
 
                   {/* Task 2 */}
-                  <div className="p-4.5 bg-[#131722]/95 border border-[#262c3e] rounded-2xl flex items-center gap-4 text-left shadow-xl shadow-black/30">
-                    <span className="text-xs font-black text-amber-500/80 font-mono w-4">2</span>
-                    <div className="w-11 h-11 rounded-full bg-amber-500/10 border border-amber-500/30 flex items-center justify-center shrink-0 shadow-[0_0_10px_rgba(245,158,11,0.1)]">
-                      <Smile size={16} className="text-amber-500" />
+                  <div className="p-4.5 bg-slate-50 border border-slate-200 rounded-2xl flex items-center gap-4 text-left shadow-sm">
+                    <span className="text-xs font-black text-amber-600 font-mono w-4">2</span>
+                    <div className="w-11 h-11 rounded-full bg-amber-50 border border-amber-200 flex items-center justify-center shrink-0">
+                      <Smile size={16} className="text-amber-600" />
                     </div>
                     <div className="space-y-1 min-w-0 flex-1">
-                      <h4 className="text-sm font-black text-white leading-tight">রক্তকরবী ফুল সজীব করা</h4>
-                      <p className="text-xs text-gray-300 font-medium leading-relaxed">নন্দিনীর রক্তকরবী ফুলগুলো সজীব দেখানোর জন্য কালার করা।</p>
+                      <h4 className="text-sm font-black text-slate-900 leading-tight">রক্তকরবী ফুল সজীব করা</h4>
+                      <p className="text-xs text-slate-600 font-medium leading-relaxed">নন্দিনীর রক্তকরবী ফুলগুলো সজীব দেখানোর জন্য কালার করা।</p>
                     </div>
                   </div>
 
                   {/* Task 3 */}
-                  <div className="p-4.5 bg-[#131722]/95 border border-[#262c3e] rounded-2xl flex items-center gap-4 text-left shadow-xl shadow-black/30">
-                    <span className="text-xs font-black text-amber-500/80 font-mono w-4">3</span>
-                    <div className="w-11 h-11 rounded-full bg-amber-500/10 border border-amber-500/30 flex items-center justify-center shrink-0 shadow-[0_0_10px_rgba(245,158,11,0.1)]">
-                      <Volume2 size={16} className="text-amber-500" />
+                  <div className="p-4.5 bg-slate-50 border border-slate-200 rounded-2xl flex items-center gap-4 text-left shadow-sm">
+                    <span className="text-xs font-black text-amber-600 font-mono w-4">3</span>
+                    <div className="w-11 h-11 rounded-full bg-amber-50 border border-amber-200 flex items-center justify-center shrink-0">
+                      <Volume2 size={16} className="text-amber-600" />
                     </div>
                     <div className="space-y-1 min-w-0 flex-1">
-                      <h4 className="text-sm font-black text-white leading-tight">বিশু পাগলের লাইটিং ফোকাস</h4>
-                      <p className="text-xs text-gray-300 font-medium leading-relaxed">বিশু পাগলের প্রবেশ দৃশ্যে আলোর ফোকাস উন্নত করা।</p>
+                      <h4 className="text-sm font-black text-slate-900 leading-tight">বিশু পাগলের লাইটিং ফোকাস</h4>
+                      <p className="text-xs text-slate-600 font-medium leading-relaxed">বিশু পাগলের প্রবেশ দৃশ্যে আলোর ফোকাস উন্নত করা।</p>
                     </div>
                   </div>
 
                   {/* Task 4 */}
-                  <div className="p-4.5 bg-[#131722]/95 border border-[#262c3e] rounded-2xl flex items-center gap-4 text-left shadow-xl shadow-black/30">
-                    <span className="text-xs font-black text-amber-500/80 font-mono w-4">4</span>
-                    <div className="w-11 h-11 rounded-full bg-amber-500/10 border border-amber-500/30 flex items-center justify-center shrink-0 shadow-[0_0_10px_rgba(245,158,11,0.1)]">
-                      <MessageSquare size={16} className="text-amber-500" />
+                  <div className="p-4.5 bg-slate-50 border border-slate-200 rounded-2xl flex items-center gap-4 text-left shadow-sm">
+                    <span className="text-xs font-black text-amber-600 font-mono w-4">4</span>
+                    <div className="w-11 h-11 rounded-full bg-amber-50 border border-amber-200 flex items-center justify-center shrink-0">
+                      <MessageSquare size={16} className="text-amber-600" />
                     </div>
                     <div className="space-y-1 min-w-0 flex-1">
-                      <h4 className="text-sm font-black text-white leading-tight">সংলাপ ভুল সংশোধন</h4>
-                      <p className="text-xs text-gray-300 font-medium leading-relaxed">চন্দ্রা এবং ফাগুলালের সংলাপ ভুল সংশোধন।</p>
+                      <h4 className="text-sm font-black text-slate-900 leading-tight">সংলাপ ভুল সংশোধন</h4>
+                      <p className="text-xs text-slate-600 font-medium leading-relaxed">চন্দ্রা এবং ফাগুলালের সংলাপ ভুল সংশোধন।</p>
                     </div>
                   </div>
                 </div>
@@ -403,20 +403,20 @@ export default function ActorDashboard() {
               {/* Highlight cards */}
               <div className="flex flex-col gap-3.5 w-full">
                 {/* Highlight 1: Flower */}
-                <div className="p-4.5 bg-[#131722]/95 border border-[#262c3e] rounded-2xl flex items-center gap-4 text-left shadow-xl shadow-black/30">
-                  <div className="w-11 h-11 rounded-full bg-amber-500/10 border border-amber-500/30 flex items-center justify-center shrink-0 shadow-[0_0_10px_rgba(245,158,11,0.1)]">
-                    <Flower size={18} className="text-amber-500" />
+                <div className="p-4.5 bg-slate-50 border border-slate-200 rounded-2xl flex items-center gap-4 text-left shadow-sm">
+                  <div className="w-11 h-11 rounded-full bg-amber-50 border border-amber-200 flex items-center justify-center shrink-0">
+                    <Flower size={18} className="text-amber-600" />
                   </div>
                   <div className="space-y-1 min-w-0 flex-1">
-                    <h4 className="text-sm font-black text-white leading-tight">রক্তকরবী ফুল সজীব করা</h4>
-                    <p className="text-xs text-gray-300 font-medium leading-relaxed">নন্দিনীর রক্তকরবী ফুলগুলো সজীব দেখানোর জন্য কালার করা।</p>
+                    <h4 className="text-sm font-black text-slate-900 leading-tight">রক্তকরবী ফুল সজীব করা</h4>
+                    <p className="text-xs text-slate-600 font-medium leading-relaxed">নন্দিনীর রক্তকরবী ফুলগুলো সজীব দেখানোর জন্য কালার করা।</p>
                   </div>
                 </div>
 
                 {/* Highlight 2: Lightbulb */}
-                <div className="p-4.5 bg-[#131722]/95 border border-[#262c3e] rounded-2xl flex items-center gap-4 text-left shadow-xl shadow-black/30">
-                  <div className="w-11 h-11 rounded-full bg-amber-500/10 border border-amber-500/30 flex items-center justify-center shrink-0 shadow-[0_0_10px_rgba(245,158,11,0.1)]">
-                    <Lightbulb size={18} className="text-amber-500 animate-pulse" />
+                <div className="p-4.5 bg-slate-50 border border-slate-200 rounded-2xl flex items-center gap-4 text-left shadow-sm">
+                  <div className="w-11 h-11 rounded-full bg-amber-50 border border-amber-200 flex items-center justify-center shrink-0">
+                    <Lightbulb size={18} className="text-amber-600 animate-pulse" />
                   </div>
                   <div className="min-w-0 flex-1">
                     <h4 className="text-sm font-black text-white leading-snug">বিশু পাগলের প্রবেশ দৃশ্যে আলোর ফোকাস উন্নত করা।</h4>
@@ -426,12 +426,12 @@ export default function ActorDashboard() {
 
               {/* Notices board */}
               <div className="flex flex-col gap-4 w-full">
-                <h2 className="text-xs font-black text-amber-500 flex items-center gap-1.5 px-0.5 tracking-wider uppercase">
-                  <Bell size={12} className="text-amber-500" />
+                <h2 className="text-xs font-black text-amber-600 flex items-center gap-1.5 px-0.5 tracking-wider uppercase">
+                  <Bell size={12} className="text-amber-600" />
                   <span>নোটিশ বোর্ড</span>
                 </h2>
                 {notes.length === 0 ? (
-                  <div className="p-10 text-center text-gray-500 text-xs border border-[#262c3e] rounded-2xl bg-[#131722]/95">
+                  <div className="p-10 text-center text-slate-500 text-xs border border-slate-200 rounded-2xl bg-slate-50">
                     আপাতত কোনো সাধারণ নোটিশ জারি করা হয়নি।
                   </div>
                 ) : (
@@ -447,22 +447,22 @@ export default function ActorDashboard() {
                       return (
                         <div 
                           key={note.id} 
-                          className="p-5 bg-[#131722]/95 border border-[#262c3e] rounded-2xl flex gap-3.5 text-left items-start shadow-xl shadow-black/30"
+                          className="p-5 bg-slate-50 border border-slate-200 rounded-2xl flex gap-3.5 text-left items-start shadow-sm"
                         >
                           <div className="w-10 h-10 rounded-full bg-[#24211a] border border-[#c4a275]/25 flex items-center justify-center shrink-0 mt-0.5">
-                            <NoticeIcon size={16} className="text-[#e59f5b]" />
+                            <NoticeIcon size={16} className="text-amber-600" />
                           </div>
                           <div className="space-y-1.5 min-w-0 flex-1">
                             <div className="flex items-center justify-between gap-1 text-[11px] font-bold">
-                              <span className="text-white font-black">{noticeTitle}</span>
+                              <span className="text-slate-900 font-black">{noticeTitle}</span>
                               {isMentioned && (
-                                <span className="text-[8px] font-bold px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 shrink-0">
+                                <span className="text-[8px] font-bold px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-600 border border-emerald-500/20 shrink-0">
                                   @ আপনাকে মেনশন করা হয়েছে
                                 </span>
                               )}
                             </div>
-                            <p className="text-xs text-gray-300 leading-relaxed font-semibold">{note.content}</p>
-                            <span className="text-[9px] text-gray-500 font-bold block">7 hours ago ({note.date})</span>
+                            <p className="text-xs text-slate-700 leading-relaxed font-semibold">{note.content}</p>
+                            <span className="text-[9px] text-slate-400 font-bold block">7 hours ago ({note.date})</span>
                           </div>
                         </div>
                       );
@@ -477,31 +477,31 @@ export default function ActorDashboard() {
         {activeTab === 'schedule' && (
           <div className="space-y-4">
             {myRehearsals.length === 0 ? (
-              <div className="glass-panel p-12 text-center text-gray-500 text-sm">
+              <div className="p-12 text-center text-slate-500 text-sm border border-slate-200 bg-slate-50 rounded-2xl">
                 আপনার কোনো মহড়া শিডিউল নির্ধারিত নেই।
               </div>
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {myRehearsals.map((r) => (
-                  <div key={r.id} className="glass-panel p-5 bg-opacity-20 text-left space-y-4">
+                  <div key={r.id} className="p-5 bg-slate-50 border border-slate-200 rounded-2xl text-left space-y-4 shadow-sm">
                     <div className="space-y-1">
-                      <h4 className="font-bold text-white text-base">{r.title}</h4>
-                      {r.description && <p className="text-xs text-gray-400 font-medium line-clamp-2">{r.description}</p>}
+                      <h4 className="font-bold text-slate-900 text-base">{r.title}</h4>
+                      {r.description && <p className="text-xs text-slate-500 font-medium line-clamp-2">{r.description}</p>}
                     </div>
 
-                    <div className="grid grid-cols-2 gap-2.5 pt-2 text-xs font-semibold text-gray-300">
-                      <div className="p-2.5 rounded-xl bg-white/5 border border-white/5 flex items-center gap-2">
-                        <Calendar size={14} className="text-[#ff7979]" />
+                    <div className="grid grid-cols-2 gap-2.5 pt-2 text-xs font-semibold text-slate-800">
+                      <div className="p-2.5 rounded-xl bg-slate-100 border border-slate-200 flex items-center gap-2 text-slate-700">
+                        <Calendar size={14} className="text-red-600" />
                         <span>{r.date}</span>
                       </div>
-                      <div className="p-2.5 rounded-xl bg-white/5 border border-white/5 flex items-center gap-2">
+                      <div className="p-2.5 rounded-xl bg-slate-100 border border-slate-200 flex items-center gap-2 text-slate-700">
                         <Clock size={14} className="text-[#e056fd]" />
                         <span>{r.time}</span>
                       </div>
                     </div>
 
-                    <div className="p-2.5 rounded-xl bg-black/40 border border-white/5 text-[10px] font-bold text-gray-400">
-                      দৃশ্যভিত্তিক কাস্ট: <span className="text-white font-semibold">{r.required_cast}</span>
+                    <div className="p-2.5 rounded-xl bg-slate-100 border border-slate-200 text-[10px] font-bold text-slate-600">
+                      দৃশ্যভিত্তিক কাস্ট: <span className="text-slate-900 font-semibold">{r.required_cast}</span>
                     </div>
                   </div>
                 ))}
@@ -516,22 +516,22 @@ export default function ActorDashboard() {
             
             {/* Badges Column */}
             <div className="lg:col-span-1 space-y-4">
-              <h4 className="text-sm font-bold text-white text-left uppercase tracking-wider">রবীন্দ্র ব্যাজ ও অর্জন (Badges)</h4>
+              <h4 className="text-sm font-bold text-slate-800 text-left uppercase tracking-wider">রবীন্দ্র ব্যাজ ও অর্জন (Badges)</h4>
               
               {badges.length === 0 ? (
-                <div className="glass-panel p-8 text-center text-gray-500 text-xs">
+                <div className="p-8 text-center text-slate-500 text-xs border border-slate-200 bg-slate-50 rounded-2xl">
                   অন্তত ৩ দিন মহড়ার হাজিরা সম্পন্ন হলে অর্জিত ব্যাজ এখানে প্রদর্শিত হবে।
                 </div>
               ) : (
                 <div className="grid grid-cols-1 gap-3">
                   {badges.map((badge, idx) => (
-                    <div key={idx} className="glass-panel p-4 bg-opacity-30 text-left flex items-center gap-4 border-l-4 border-l-[#e056fd]">
+                    <div key={idx} className="bg-slate-50 border border-slate-200 p-4 text-left flex items-center gap-4 border-l-4 border-l-purple-500 rounded-2xl shadow-sm">
                       <div className={`w-10 h-10 rounded-xl bg-gradient-to-tr ${badge.color} flex items-center justify-center text-white shrink-0`}>
                         <Award size={20} />
                       </div>
                       <div className="space-y-0.5">
-                        <h5 className="font-bold text-white text-sm">{badge.name}</h5>
-                        <p className="text-[10px] text-gray-400 font-medium">{badge.desc}</p>
+                        <h5 className="font-bold text-slate-900 text-sm">{badge.name}</h5>
+                        <p className="text-[10px] text-slate-500 font-medium">{badge.desc}</p>
                       </div>
                     </div>
                   ))}
@@ -541,18 +541,18 @@ export default function ActorDashboard() {
 
             {/* Attendance Logs Column */}
             <div className="lg:col-span-2 space-y-4">
-              <h4 className="text-sm font-bold text-white text-left uppercase tracking-wider">হাজিরা ইতিহাস (Check-in Logs)</h4>
+              <h4 className="text-sm font-bold text-slate-800 text-left uppercase tracking-wider">হাজিরা ইতিহাস (Check-in Logs)</h4>
               
               {attendance.length === 0 ? (
-                <div className="glass-panel p-12 text-center text-gray-500 text-sm">
+                <div className="p-12 text-center text-slate-500 text-sm border border-slate-200 bg-slate-50 rounded-2xl">
                   আপনার কোনো মহড়ার হাজিরা রেকর্ড পাওয়া যায়নি।
                 </div>
               ) : (
-                <div className="glass-panel overflow-hidden border-white/5">
+                <div className="overflow-hidden border border-slate-200 bg-white rounded-2xl shadow-sm">
                   <div className="overflow-x-auto">
-                    <table className="w-full text-left border-collapse text-xs font-semibold text-gray-300">
+                    <table className="w-full text-left border-collapse text-xs font-semibold text-slate-800">
                       <thead>
-                        <tr className="border-b border-white/5 bg-white/5 text-gray-400">
+                        <tr className="border-b border-slate-200 bg-slate-50 text-slate-600">
                           <th className="p-4">চেক-ইন সময়</th>
                           <th className="p-4">লেট কাউন্ট?</th>
                           <th className="p-4">স্ট্যাটাস</th>
@@ -560,20 +560,20 @@ export default function ActorDashboard() {
                       </thead>
                       <tbody>
                         {attendance.map((log) => (
-                          <tr key={log.id} className="border-b border-white/5 hover:bg-white/5">
+                          <tr key={log.id} className="border-b border-slate-100 hover:bg-slate-50/50 text-slate-700">
                             <td className="p-4 flex items-center gap-2 font-mono">
                               <Activity size={12} className="text-gray-500" />
                               <span>{new Date(log.check_in_time).toLocaleString('bn-BD', { hour12: true })}</span>
                             </td>
                             <td className="p-4">
                               {log.is_late ? (
-                                <span className="text-[#ff7979]">হ্যাঁ (লেট)</span>
+                                <span className="text-red-600">হ্যাঁ (লেট)</span>
                               ) : (
-                                <span className="text-green-400">না</span>
+                                <span className="text-green-600">না</span>
                               )}
                             </td>
                             <td className="p-4">
-                              <span className={`inline-flex px-2.5 py-0.5 rounded-full text-[10px] font-bold ${log.status === 'present' ? 'bg-green-500/10 text-green-400' : log.status === 'late' ? 'bg-yellow-500/10 text-yellow-400' : 'bg-red-500/10 text-[#ff7979]'}`}>
+                              <span className={`inline-flex px-2.5 py-0.5 rounded-full text-[10px] font-bold ${log.status === 'present' ? 'bg-green-500/10 text-green-600' : log.status === 'late' ? 'bg-yellow-500/10 text-yellow-400' : 'bg-red-500/10 text-red-600'}`}>
                                 {log.status === 'present' ? 'উপস্থিত' : log.status === 'late' ? 'বিলম্বিত' : 'অনুপস্থিত'}
                               </span>
                             </td>
@@ -592,39 +592,39 @@ export default function ActorDashboard() {
         {/* 4. SETTINGS TAB */}
         {activeTab === 'settings' && (
           <div className="max-w-md mx-auto">
-            <div className="glass-panel p-6 bg-opacity-30 space-y-6 text-left">
+            <div className="p-6 bg-slate-50 border border-slate-200 rounded-2xl space-y-6 text-left shadow-sm">
               
-              <div className="space-y-1.5 border-b border-white/5 pb-4">
-                <div className="flex items-center gap-2 text-sm font-bold text-white">
+              <div className="space-y-1.5 border-b border-slate-200 pb-4">
+                <div className="flex items-center gap-2 text-sm font-bold text-slate-800">
                   <KeyRound size={16} className="text-[#e056fd]" />
                   <span>পাসওয়ার্ড পরিবর্তন করুন</span>
                 </div>
-                <p className="text-[10px] text-gray-400 font-medium">নিরাপত্তার স্বার্থে প্রাথমিক ডিফল্ট পাসওয়ার্ড পরিবর্তন করুন।</p>
+                <p className="text-[10px] text-slate-500 font-medium">নিরাপত্তার স্বার্থে প্রাথমিক ডিফল্ট পাসওয়ার্ড পরিবর্তন করুন।</p>
               </div>
 
               <form onSubmit={handlePasswordChange} className="space-y-4">
                 {passwordStatus && (
-                  <div className={`p-4 rounded-xl text-xs font-semibold leading-relaxed flex items-start gap-2.5 ${passwordStatus.type === 'success' ? 'bg-green-500/10 border border-green-500/20 text-green-400' : 'bg-red-500/10 border border-red-500/20 text-red-400'}`}>
+                  <div className={`p-4 rounded-xl text-xs font-semibold leading-relaxed flex items-start gap-2.5 ${passwordStatus.type === 'success' ? 'bg-green-500/10 border border-green-500/20 text-green-600' : 'bg-red-50 border border-red-200 text-red-700'}`}>
                     {passwordStatus.type === 'success' ? <CheckCircle size={14} className="mt-0.5 shrink-0" /> : <AlertCircle size={14} className="mt-0.5 shrink-0" />}
                     <span>{passwordStatus.message}</span>
                   </div>
                 )}
 
                 <div className="space-y-1.5">
-                  <label className="text-xs font-semibold text-gray-300">নতুন পাসওয়ার্ড</label>
+                  <label className="text-xs font-semibold text-slate-800">নতুন পাসওয়ার্ড</label>
                   <input
                     type="password"
                     placeholder="পাসওয়ার্ড লিখুন..."
                     value={newPassword}
                     onChange={(e) => setNewPassword(e.target.value)}
-                    className="w-full px-4 py-3 rounded-xl bg-black/30 border border-white/5 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-[#e056fd] transition-all font-medium"
+                    className="w-full px-4 py-3 rounded-xl bg-white border border-slate-200 text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:border-amber-500 transition-all font-medium"
                   />
                 </div>
 
                 <button
                   type="submit"
                   disabled={passwordLoading}
-                  className="btn-primary w-full justify-center py-3 mt-4"
+                  className="bg-amber-500 hover:bg-amber-600 text-white font-bold py-3 px-6 rounded-xl shadow-sm transition-all w-full justify-center mt-4 cursor-pointer flex items-center gap-1.5"
                 >
                   <span>{passwordLoading ? 'সংরক্ষণ করা হচ্ছে...' : 'পাসওয়ার্ড আপডেট করুন'}</span>
                 </button>
@@ -639,21 +639,21 @@ export default function ActorDashboard() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
             
             {/* Section 1: Production Fee */}
-            <div className="glass-panel p-6 bg-gradient-to-br from-[#ff7979]/5 to-transparent border-white/5 space-y-4 text-left relative overflow-hidden">
+            <div className="p-6 bg-slate-50 border border-slate-200 rounded-2xl space-y-4 text-left relative overflow-hidden shadow-sm">
               <div className="absolute top-0 right-0 w-32 h-32 bg-[#ff7979]/5 rounded-full filter blur-[30px] pointer-events-none"></div>
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-[#ff7979]/10 border border-[#ff7979]/20 flex items-center justify-center text-[#ff7979]">
+                <div className="w-10 h-10 rounded-xl bg-[#ff7979]/10 border border-[#ff7979]/20 flex items-center justify-center text-red-600">
                   <Coins size={20} />
                 </div>
                 <div>
-                  <h4 className="font-bold text-white text-base">প্রোডাকশন ফি (Production Fee)</h4>
+                  <h4 className="font-bold text-slate-900 text-base">প্রোডাকশন ফি (Production Fee)</h4>
                   <p className="text-[10px] text-gray-400">নাটক প্রযোজনা ও আনুষঙ্গিক ফিস</p>
                 </div>
               </div>
               
-              <div className="p-5 rounded-2xl bg-black/40 border border-white/5 space-y-2">
+              <div className="p-5 rounded-2xl bg-slate-100 border border-slate-200 space-y-2">
                 <span className="text-[10px] text-gray-500 font-bold uppercase tracking-wider">পরিশোধিত পরিমাণ (Paid Amount)</span>
-                <div className="text-3xl font-black text-white flex items-baseline gap-1">
+                <div className="text-3xl font-black text-slate-900 flex items-baseline gap-1">
                   <span className="text-xs text-gray-400 font-normal">৳</span>
                   <span>{member.production_fee_paid || 0}</span>
                 </div>
@@ -665,21 +665,21 @@ export default function ActorDashboard() {
             </div>
 
             {/* Section 2: Snacks Money */}
-            <div className="glass-panel p-6 bg-gradient-to-br from-[#e056fd]/5 to-transparent border-white/5 space-y-4 text-left relative overflow-hidden">
+            <div className="p-6 bg-slate-50 border border-slate-200 rounded-2xl space-y-4 text-left relative overflow-hidden shadow-sm">
               <div className="absolute top-0 right-0 w-32 h-32 bg-[#e056fd]/5 rounded-full filter blur-[30px] pointer-events-none"></div>
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-[#e056fd]/10 border border-[#e056fd]/20 flex items-center justify-center text-[#e056fd]">
+                <div className="w-10 h-10 rounded-xl bg-purple-50 border border-purple-200 flex items-center justify-center text-purple-600">
                   <Coins size={20} />
                 </div>
                 <div>
-                  <h4 className="font-bold text-white text-base">নাস্তার টাকা (Snacks Money)</h4>
+                  <h4 className="font-bold text-slate-900 text-base">নাস্তার টাকা (Snacks Money)</h4>
                   <p className="text-[10px] text-gray-400">মহড়াকালীন নাস্তা ও ক্যাটারিং ফিস</p>
                 </div>
               </div>
               
-              <div className="p-5 rounded-2xl bg-black/40 border border-white/5 space-y-2">
+              <div className="p-5 rounded-2xl bg-slate-100 border border-slate-200 space-y-2">
                 <span className="text-[10px] text-gray-500 font-bold uppercase tracking-wider">পরিশোধিত পরিমাণ (Paid Amount)</span>
-                <div className="text-3xl font-black text-white flex items-baseline gap-1">
+                <div className="text-3xl font-black text-slate-900 flex items-baseline gap-1">
                   <span className="text-xs text-gray-400 font-normal">৳</span>
                   <span>{member.snacks_fee_paid || 0}</span>
                 </div>
@@ -699,24 +699,24 @@ export default function ActorDashboard() {
          UPCOMING NEXT REHEARSAL WIDGET (Mockup Layout - Bottom)
          ------------------------------------------------------------- */}
       {nextRehearsal && (
-        <section className="p-5 bg-[#16161a] border border-zinc-800 rounded-2xl text-left space-y-3 relative overflow-hidden shadow-xl shadow-black/30">
-          <div className="flex items-center gap-1.5 text-[10px] font-black uppercase tracking-wider text-[#e59f5b]">
+        <section className="p-5 bg-slate-50 border border-slate-200 rounded-2xl text-left space-y-3 relative overflow-hidden shadow-sm">
+          <div className="flex items-center gap-1.5 text-[10px] font-black uppercase tracking-wider text-amber-600">
             <Clock size={12} />
             <span>পরবর্তী মহড়া</span>
           </div>
           
           <div className="space-y-1">
-            <h3 className="text-sm font-bold text-white leading-snug">
+            <h3 className="text-sm font-bold text-slate-900 leading-snug">
               {member.name}, {member.roll} • {nextRehearsal.title}
             </h3>
             <p className="text-xs text-gray-400">
-              দৃশ্যভিত্তিক কাস্ট: <span className="text-gray-300 font-semibold">{nextRehearsal.required_cast}</span>
+              দৃশ্যভিত্তিক কাস্ট: <span className="text-slate-800 font-semibold">{nextRehearsal.required_cast}</span>
             </p>
           </div>
           
-          <div className="border-t border-zinc-800 pt-3 flex justify-between items-center text-[10px] text-gray-500 font-bold">
+          <div className="border-t border-slate-200 pt-3 flex justify-between items-center text-[10px] text-slate-400 font-bold">
             <span>সময়: {nextRehearsal.time}</span>
-            <span className="text-[#e59f5b]">আসন্ন</span>
+            <span className="text-amber-600">আসন্ন</span>
           </div>
         </section>
       )}
