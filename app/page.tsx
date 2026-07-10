@@ -145,10 +145,12 @@ export default function HomePage() {
               alt="৫২তম আবর্তন নাটক ও নাট্যতত্ত্ব বিভাগ" 
               className="w-full max-w-[480px] h-auto object-contain select-none pointer-events-none"
             />
-            
-            <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight leading-tight">
-              রক্তকরবী
-            </h1>
+            <h1 className="sr-only">রক্তকরবী</h1>
+            <img 
+              src="/roktokorobi_title.jpg" 
+              alt="রক্তকরবী" 
+              className="w-full max-w-[540px] h-auto object-contain select-none pointer-events-none -ml-6 mb-2"
+            />
             <p className="hero-subtitle">
               রবীন্দ্রনাথ ঠাকুরের কালজয়ী প্রতীকী নাটক
             </p>
