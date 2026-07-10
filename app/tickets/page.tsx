@@ -55,18 +55,18 @@ export default function TicketsPage() {
         
         {/* Success Modal / Display */}
         {successTicket ? (
-          <div className="md:col-span-12 glass-panel p-8 text-center space-y-6 max-w-lg mx-auto w-full border-[#6ab04c]/30 shadow-lg shadow-[#6ab04c]/5">
+          <div className="md:col-span-12 p-8 text-center space-y-6 max-w-lg mx-auto w-full border border-slate-200 bg-slate-50 rounded-2xl shadow-sm">
             <div className="w-16 h-16 rounded-full bg-[#6ab04c]/10 text-[#6ab04c] flex items-center justify-center mx-auto border border-[#6ab04c]/30 animate-bounce">
               <CheckCircle size={36} />
             </div>
 
             <div className="space-y-2">
-              <h2 className="text-2xl font-black text-white">টিকিট বুকিং সফল হয়েছে!</h2>
-              <p className="text-xs text-gray-400">আপনার ডিজিটাল এন্ট্রি পাসটি নিচে তৈরি করা হয়েছে। একই সাথে আপনার ইমেইল ও মোবাইল নম্বরে (SMS) কিউআর কোডসহ টিকিট পাঠানো হয়েছে।</p>
+              <h2 className="text-2xl font-black text-slate-900">টিকিট বুকিং সফল হয়েছে!</h2>
+              <p className="text-xs text-slate-500">আপনার ডিজিটাল এন্ট্রি পাসটি নিচে তৈরি করা হয়েছে। একই সাথে আপনার ইমেইল ও মোবাইল নম্বরে (SMS) কিউআর কোডসহ টিকিট পাঠানো হয়েছে।</p>
             </div>
 
             {/* Ticket Card visual representation */}
-            <div className="border border-white/10 rounded-2xl bg-black/40 overflow-hidden relative text-left">
+            <div className="border border-slate-200 rounded-2xl bg-white overflow-hidden relative text-left shadow-sm">
               {/* Top accent border */}
               <div className="h-1.5 bg-gradient-to-r from-[#ff7979] to-[#e056fd]"></div>
               
@@ -74,43 +74,43 @@ export default function TicketsPage() {
               <div className="p-6 space-y-4">
                 <div className="flex justify-between items-start border-b border-white/5 pb-3">
                   <div>
-                    <h3 className="font-bold text-white text-base">রক্তকরবী (রবীন্দ্র নাট্যোৎসব)</h3>
-                    <p className="text-[10px] text-gray-400 mt-0.5">৫২তম আবর্তন • নাটক ও নাট্যতত্ত্ব বিভাগ</p>
+                    <h3 className="font-bold text-slate-900 text-base">রক্তকরবী (রবীন্দ্র নাট্যোৎসব)</h3>
+                    <p className="text-[10px] text-slate-500 mt-0.5">৫২তম আবর্তন • নাটক ও নাট্যতত্ত্ব বিভাগ</p>
                   </div>
                   <span className="badge badge-role text-[9px]">১ম শ্রেণীর টিকিট</span>
                 </div>
 
                 <div className="grid grid-cols-2 gap-4 text-xs">
                   <div>
-                    <span className="text-[10px] text-gray-500 block">দর্শকের নাম</span>
-                    <span className="font-bold text-gray-200">{successTicket.name}</span>
+                    <span className="text-[10px] text-slate-400 block">দর্শকের নাম</span>
+                    <span className="font-bold text-slate-800">{successTicket.name}</span>
                   </div>
                   <div>
-                    <span className="text-[10px] text-gray-500 block">ফোন নম্বর</span>
-                    <span className="font-bold text-gray-200">{successTicket.phone}</span>
+                    <span className="text-[10px] text-slate-400 block">ফোন নম্বর</span>
+                    <span className="font-bold text-slate-800">{successTicket.phone}</span>
                   </div>
                   <div>
-                    <span className="text-[10px] text-gray-500 block">তারিখ ও সময়</span>
+                    <span className="text-[10px] text-slate-400 block">তারিখ ও সময়</span>
                     <span className="font-bold text-[#ff7979]">৩০ জুন ২০২৬, সকাল ১১:৩০</span>
                   </div>
                   <div>
-                    <span className="text-[10px] text-gray-500 block">আসন সংখ্যা (Seats)</span>
+                    <span className="text-[10px] text-slate-400 block">আসন সংখ্যা (Seats)</span>
                     <span className="font-bold text-[#e056fd]">{successTicket.seats} টি আসন</span>
                   </div>
                 </div>
 
                 {/* Decorative cutouts */}
                 <div className="flex items-center gap-2 my-4">
-                  <div className="w-4 h-4 rounded-full bg-[#06060c] -ml-8 border-r border-white/10"></div>
-                  <div className="flex-1 border-t border-dashed border-white/10"></div>
-                  <div className="w-4 h-4 rounded-full bg-[#06060c] -mr-8 border-l border-white/10"></div>
+                  <div className="w-4 h-4 rounded-full bg-white -ml-8 border-r border-slate-200"></div>
+                  <div className="flex-1 border-t border-dashed border-slate-200"></div>
+                  <div className="w-4 h-4 rounded-full bg-white -mr-8 border-l border-slate-200"></div>
                 </div>
 
                 {/* QR Code section */}
-                <div className="flex items-center justify-between bg-white/5 p-4 rounded-xl border border-white/5">
+                <div className="flex items-center justify-between bg-slate-50 p-4 rounded-xl border border-slate-200">
                   <div>
-                    <span className="text-[9px] text-gray-400 block">ডিজিটাল টিকিট আইডি</span>
-                    <code className="text-[10px] font-mono text-gray-200">{successTicket.id}</code>
+                    <span className="text-[9px] text-slate-500 block">ডিজিটাল টিকিট আইডি</span>
+                    <code className="text-[10px] font-mono text-slate-800">{successTicket.id}</code>
                     <p className="text-[9px] text-yellow-500/70 mt-1">* হল প্রবেশের সময় এই কিউআর দেখান।</p>
                   </div>
                   
@@ -162,30 +162,30 @@ export default function TicketsPage() {
             <div className="md:col-span-5 flex flex-col justify-center space-y-6">
               <div className="space-y-2">
                 <span className="text-xs font-bold text-[#ff7979] tracking-wider uppercase">টিকিট রিজার্ভেশন</span>
-                <h2 className="text-3xl md:text-4xl font-extrabold text-white leading-tight">ডিজিটাল টিকিট পোর্টাল</h2>
-                <p className="text-sm text-gray-400">
+                <h2 className="text-3xl md:text-4xl font-extrabold text-slate-900 leading-tight">ডিজিটাল টিকিট পোর্টাল</h2>
+                <p className="text-sm text-slate-600">
                   নাটক ও নাট্যতত্ত্ব বিভাগ কর্তৃক আয়োজিত "রক্তকরবী" নাটকের প্রবেশ টিকিট সংগ্রহ করুন।
                 </p>
               </div>
 
               <div className="space-y-4">
                 <div className="flex items-start gap-4">
-                  <div className="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-[#ff7979] shrink-0">
+                  <div className="w-10 h-10 rounded-xl bg-red-50 border border-slate-200 flex items-center justify-center text-[#ff7979] shrink-0">
                     <Award size={20} />
                   </div>
                   <div>
-                    <h4 className="text-sm font-bold text-white">ফ্রি এন্ট্রি পাস</h4>
-                    <p className="text-xs text-gray-400 mt-0.5">বিশ্ববিদ্যালয়ের শিক্ষক-শিক্ষার্থী এবং থিয়েটারপ্রেমীদের জন্য কোনো ফি ছাড়াই আসন সংখ্যা লিমিটেড বুকিং করা যাচ্ছে।</p>
+                    <h4 className="text-sm font-bold text-slate-900">ফ্রি এন্ট্রি পাস</h4>
+                    <p className="text-xs text-slate-500 mt-0.5">বিশ্ববিদ্যালয়ের শিক্ষক-শিক্ষার্থী এবং থিয়েটারপ্রেমীদের জন্য কোনো ফি ছাড়াই আসন সংখ্যা লিমিটেড বুকিং করা যাচ্ছে।</p>
                   </div>
                 </div>
 
                 <div className="flex items-start gap-4">
-                  <div className="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-[#e056fd] shrink-0">
+                  <div className="w-10 h-10 rounded-xl bg-purple-50 border border-slate-200 flex items-center justify-center text-[#e056fd] shrink-0">
                     <QrCode size={20} />
                   </div>
                   <div>
-                    <h4 className="text-sm font-bold text-white">ডিজিটাল প্রবেশাধিকার</h4>
-                    <p className="text-xs text-gray-400 mt-0.5">বুকিং শেষে তাত্ক্ষণিকভাবে একটি ডিজিটাল কিউআর কোডসহ টিকিট পাবেন। এটি আপনার ফোনে সংরক্ষণ করে হল গেটে দেখাবেন।</p>
+                    <h4 className="text-sm font-bold text-slate-900">ডিজিটাল প্রবেশাধিকার</h4>
+                    <p className="text-xs text-slate-500 mt-0.5">বুকিং শেষে তাত্ক্ষণিকভাবে একটি ডিজিটাল কিউআর কোডসহ টিকিট পাবেন। এটি আপনার ফোনে সংরক্ষণ করে হল গেটে দেখাবেন।</p>
                   </div>
                 </div>
               </div>
@@ -193,8 +193,8 @@ export default function TicketsPage() {
 
             {/* Right Form Panel */}
             <div className="md:col-span-7">
-              <div className="glass-panel p-8 bg-opacity-40">
-                <h3 className="text-lg font-bold text-white mb-6 flex items-center gap-2">
+              <div className="p-8 border border-slate-200 bg-slate-50 rounded-2xl shadow-sm">
+                <h3 className="text-lg font-bold text-slate-900 mb-6 flex items-center gap-2">
                   <Ticket size={20} className="text-[#ff7979]" />
                   <span>টিকিট বুকিং ফর্ম</span>
                 </h3>
@@ -286,7 +286,7 @@ export default function TicketsPage() {
                           +
                         </button>
                       </div>
-                      <span className="text-xs text-gray-400">
+                      <span className="text-xs text-slate-500">
                         * সর্বোচ্চ ৫টি আসন একসাথে বুক করা যাবে। (বুকিং নিশ্চিত হওয়ার পর আপনার ইমেইল ও মোবাইলে (SMS) কিউআর কোড পাঠানো হবে)
                       </span>
                     </div>

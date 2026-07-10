@@ -200,7 +200,7 @@ export default function HomePage() {
                 <div className="absolute bottom-6 left-6 right-6 z-20 space-y-2 text-left">
                   <span className="text-[10px] font-bold tracking-widest text-amber-600 uppercase">প্রযোজনা</span>
                   <h3 className="text-2xl font-black text-white leading-tight">রক্তকরবী</h3>
-                  <p className="text-[10px] text-gray-300">নাটক ও নাট্যতত্ত্ব বিভাগ, জাবি</p>
+                  <p className="text-[10px] text-slate-700">নাটক ও নাট্যতত্ত্ব বিভাগ, জাবি</p>
                 </div>
               </div>
             </div>
@@ -214,7 +214,7 @@ export default function HomePage() {
       {nextRehearsal && (
         <section className="content-container px-4 py-2">
           <div className="glass-panel border-l-4 border-l-[#c85122] p-4 text-center hover:transform-none">
-            <div className="font-mono text-sm md:text-base font-extrabold text-white tracking-wide flex items-center justify-center gap-3">
+            <div className="font-mono text-sm md:text-base font-extrabold text-slate-800 tracking-wide flex items-center justify-center gap-3">
               <span className="w-2 h-2 rounded-full bg-[#c85122] animate-pulse shrink-0"></span>
               <span>{countdownText || 'হিসাব করা হচ্ছে...'}</span>
             </div>
@@ -226,26 +226,26 @@ export default function HomePage() {
          Notice Board (Director Feedback Daily Notes)
          ------------------------------------------------------------- */}
       {notes.length > 0 && (
-        <section className="section-wrapper bg-gradient-to-r from-[#ff7979]/5 to-transparent border-y border-white/5 py-12">
+        <section className="section-wrapper bg-gradient-to-r from-[#ff7979]/5 to-transparent border-y border-slate-200 py-12">
           <div className="content-container">
             <div className="flex items-center gap-3 mb-6">
-              <div className="w-10 h-10 rounded-xl bg-[#ff7979]/15 flex items-center justify-center text-amber-600">
+              <div className="w-10 h-10 rounded-xl bg-red-50 flex items-center justify-center text-red-500 border border-red-200">
                 <AlertCircle size={20} />
               </div>
               <div className="text-left">
-                <h3 className="text-lg font-bold text-white">নির্দেশক শিবলু ভাইয়ের মহড়া ডায়েরি 📝</h3>
-                <p className="text-xs text-gray-400">সর্বশেষ মহড়ার ফিডব্যাক ও বিশেষ নোটিশ</p>
+                <h3 className="text-lg font-bold text-slate-900">নির্দেশক শিবলু ভাইয়ের মহড়া ডায়েরি 📝</h3>
+                <p className="text-xs text-slate-500">সর্বশেষ মহড়ার ফিডব্যাক ও বিশেষ নোটিশ</p>
               </div>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {notes.map(n => (
-                <div key={n.id} className="glass-panel p-5 bg-black/40 border-white/5 rounded-xl space-y-2 text-left">
-                  <div className="flex justify-between items-center text-[10px] border-b border-white/5 pb-2 text-gray-400">
+                <div key={n.id} className="glass-panel p-5 bg-slate-50 border-slate-200 border rounded-xl space-y-2 text-left">
+                  <div className="flex justify-between items-center text-[10px] border-b border-slate-200 pb-2 text-slate-500">
                     <span className="font-bold text-amber-600 uppercase">হালনাগাদ ফিডব্যাক</span>
                     <span>{n.date}</span>
                   </div>
-                  <p className="text-xs text-gray-300 leading-relaxed pt-1 whitespace-pre-wrap">{n.content}</p>
+                  <p className="text-xs text-slate-700 leading-relaxed pt-1 whitespace-pre-wrap">{n.content}</p>
                 </div>
               ))}
             </div>
@@ -260,19 +260,19 @@ export default function HomePage() {
         <div className="content-container max-w-4xl space-y-4">
           
           {/* Accordion 1: কাহিনী সংক্ষেপ */}
-          <div className="border border-white/5 rounded-2xl bg-[#12121c]/50 overflow-hidden transition-all duration-300">
+          <div className="border border-slate-200 rounded-2xl bg-slate-50 overflow-hidden transition-all duration-300">
             <button 
               type="button"
               onClick={() => setIsSynopsisOpen(!isSynopsisOpen)}
-              className="w-full flex items-center justify-between p-5 text-left transition-colors hover:bg-white/5 focus:outline-none"
+              className="w-full flex items-center justify-between p-5 text-left transition-colors hover:bg-slate-100 focus:outline-none"
             >
               <div className="flex items-center gap-4">
-                <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center text-amber-600">
+                <div className="w-10 h-10 rounded-xl bg-slate-100 border border-slate-200 flex items-center justify-center text-amber-600">
                   <BookOpen size={20} />
                 </div>
                 <div>
-                  <h3 className="font-bold text-white text-base">কাহিনী সংক্ষেপ</h3>
-                  <p className="text-xs text-gray-400">যক্ষপুরের জটিল খনি ও নন্দিনীর আগমনের মূল গল্প</p>
+                  <h3 className="font-bold text-slate-900 text-base">কাহিনী সংক্ষেপ</h3>
+                  <p className="text-xs text-slate-500">যক্ষপুরের জটিল খনি ও নন্দিনীর আগমনের মূল গল্প</p>
                 </div>
               </div>
               <span className={`transform transition-transform duration-300 text-gray-400 ${isSynopsisOpen ? 'rotate-180' : ''}`}>
@@ -287,26 +287,26 @@ export default function HomePage() {
                 visibility: isSynopsisOpen ? 'visible' : 'hidden'
               }}
             >
-              <div className="p-6 border-t border-white/5 bg-black/20 text-sm text-gray-300 leading-relaxed">
+              <div className="p-6 border-t border-slate-200 bg-slate-50 text-sm text-slate-700 leading-relaxed">
                 রক্তকরবী নাটকের মূলে রয়েছে যক্ষপুরী নামক একটি যান্ত্রিক খনি শহর। এখানে মানুষ সোনার লোভে অন্ধ হয়ে খনির গর্ভে মাটির নিচে প্রাণহীন পাথর খুঁড়ছে। রাজা স্বয়ং নিজেকে এক জটিল জালের আড়ালে বন্দি করে রেখেছেন এবং মানুষকে শুধু উৎপাদনের যন্ত্রে পরিণত করেছেন। এই শ্বাসরুদ্ধকর পরিবেশের মাঝে রক্তকরবী ফুলের মতো রাঙা রূপ আর অফুরন্ত প্রাণশক্তি নিয়ে হাজির হয় নন্দিনী। তার উপস্থিতি খনির শ্রমিকদের অসাড় চেতনায় মুক্তির কম্পন জাগায় এবং শেষ পর্যন্ত অত্যাচারী ও জটিল শাসন ব্যবস্থার ভিত কাঁপিয়ে দেয়।
               </div>
             </div>
           </div>
 
           {/* Accordion 2: রূপক তত্ত্ব ও বিশ্লেষণ */}
-          <div className="border border-white/5 rounded-2xl bg-[#12121c]/50 overflow-hidden transition-all duration-300">
+          <div className="border border-slate-200 rounded-2xl bg-slate-50 overflow-hidden transition-all duration-300">
             <button 
               type="button"
               onClick={() => setIsAnalysisOpen(!isAnalysisOpen)}
-              className="w-full flex items-center justify-between p-5 text-left transition-colors hover:bg-white/5 focus:outline-none"
+              className="w-full flex items-center justify-between p-5 text-left transition-colors hover:bg-slate-100 focus:outline-none"
             >
               <div className="flex items-center gap-4">
-                <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center text-[#e056fd]">
+                <div className="w-10 h-10 rounded-xl bg-slate-100 border border-slate-200 flex items-center justify-center text-[#e056fd]">
                   <SparklesIcon className="w-5 h-5" />
                 </div>
                 <div>
-                  <h3 className="font-bold text-white text-base">রূপক তত্ত্ব ও বিশ্লেষণ</h3>
-                  <p className="text-xs text-gray-400">প্রতীকীবাদ, রক্তকরবী ফুল ও রূপকের গূঢ় অর্থ</p>
+                  <h3 className="font-bold text-slate-900 text-base">রূপক তত্ত্ব ও বিশ্লেষণ</h3>
+                  <p className="text-xs text-slate-500">প্রতীকীবাদ, রক্তকরবী ফুল ও রূপকের গূঢ় অর্থ</p>
                 </div>
               </div>
               <span className={`transform transition-transform duration-300 text-gray-400 ${isAnalysisOpen ? 'rotate-180' : ''}`}>
@@ -321,26 +321,26 @@ export default function HomePage() {
                 visibility: isAnalysisOpen ? 'visible' : 'hidden'
               }}
             >
-              <div className="p-6 border-t border-white/5 bg-black/20 text-sm text-gray-300 leading-relaxed">
+              <div className="p-6 border-t border-slate-200 bg-slate-50 text-sm text-slate-700 leading-relaxed">
                 রক্তকরবী রবীন্দ্রনাথের অন্যতম শ্রেষ্ঠ রূপক ও প্রতীকী নাটক (Symbolic Drama)। এখানে প্রতিটি চরিত্র ও অনুষঙ্গ এক একটি দর্শনের প্রতিনিধিত্ব করে। যেমন- 'নন্দিনী' হলো অকৃত্রিম প্রকৃতি ও সৌন্দর্যের প্রতীক; 'রাজা' হলো অন্ধ পুঁজিবাদ, শোষণ ও একাকিত্বের প্রতীক; 'রক্তকরবী ফুল' হলো ওজস্বী যৌবনের জাগরণ এবং আত্মদানের প্রতীক। ৫২তম আবর্তনের এই মঞ্চায়নে আধুনিক আলোকসম্পাত, শক্তিশালী আবহসংগীত এবং গ্লাসমরফিক কোরিওগ্রাফির মাধ্যমে চিরায়ত রূপক নাটকের সাথে রিয়ালিজমের এক চমৎকার যুগলবন্দী ফুটিয়ে তোলা হয়েছে।
               </div>
             </div>
           </div>
 
           {/* Accordion 3: মহড়ার সময়সূচী */}
-          <div className="border border-white/5 rounded-2xl bg-[#12121c]/50 overflow-hidden transition-all duration-300">
+          <div className="border border-slate-200 rounded-2xl bg-slate-50 overflow-hidden transition-all duration-300">
             <button 
               type="button"
               onClick={() => setIsScheduleOpen(!isScheduleOpen)}
-              className="w-full flex items-center justify-between p-5 text-left transition-colors hover:bg-white/5 focus:outline-none"
+              className="w-full flex items-center justify-between p-5 text-left transition-colors hover:bg-slate-100 focus:outline-none"
             >
               <div className="flex items-center gap-4">
-                <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center text-[#22a6b3]">
+                <div className="w-10 h-10 rounded-xl bg-slate-100 border border-slate-200 flex items-center justify-center text-[#22a6b3]">
                   <Calendar size={20} />
                 </div>
                 <div>
-                  <h3 className="font-bold text-white text-base">মহড়ার সময়সূচী</h3>
-                  <p className="text-xs text-gray-400">আসন্ন মহড়া ক্যালেন্ডার ও প্রয়োজনীয় কাস্টের বিবরণ</p>
+                  <h3 className="font-bold text-slate-900 text-base">মহড়ার সময়সূচী</h3>
+                  <p className="text-xs text-slate-500">আসন্ন মহড়া ক্যালেন্ডার ও প্রয়োজনীয় কাস্টের বিবরণ</p>
                 </div>
               </div>
               <span className={`transform transition-transform duration-300 text-gray-400 ${isScheduleOpen ? 'rotate-180' : ''}`}>
@@ -355,7 +355,7 @@ export default function HomePage() {
                 visibility: isScheduleOpen ? 'visible' : 'hidden'
               }}
             >
-              <div className="p-6 border-t border-white/5 bg-black/20">
+              <div className="p-6 border-t border-slate-200 bg-slate-50">
                 {rehearsals.length === 0 ? (
                   <div className="p-8 text-center text-sm text-gray-500 max-w-xl mx-auto">
                     সময়সূচী এখনও প্রকাশিত হয়নি
@@ -363,26 +363,26 @@ export default function HomePage() {
                 ) : (
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                     {rehearsals.map(r => (
-                      <div key={r.id} className="border border-white/5 p-5 bg-black/30 rounded-xl flex flex-col justify-between text-left hover:border-[#e056fd]/30 transition-all">
+                      <div key={r.id} className="border border-slate-200 p-5 bg-white rounded-xl shadow-sm flex flex-col justify-between text-left hover:border-[#e056fd]/30 transition-all">
                         <div className="space-y-3">
                           <div className="flex justify-between items-center text-[9px] text-[#e056fd] font-bold tracking-widest uppercase">
                             <span>রিহার্সাল অ্যালার্ট</span>
                             <span className="bg-[#e056fd]/10 py-0.5 px-2 rounded-full border border-[#e056fd]/25">UPCOMING</span>
                           </div>
-                          <h3 className="text-base font-bold text-white">{r.title}</h3>
-                          {r.description && <p className="text-xs text-gray-400 leading-relaxed">{r.description}</p>}
+                          <h3 className="text-base font-bold text-slate-900">{r.title}</h3>
+                          {r.description && <p className="text-xs text-slate-600 leading-relaxed">{r.description}</p>}
                         </div>
                         
-                        <div className="border-t border-white/5 mt-5 pt-4 space-y-2 text-xs">
-                          <div className="flex items-center gap-2 text-gray-300">
+                        <div className="border-t border-slate-100 mt-5 pt-4 space-y-2 text-xs">
+                          <div className="flex items-center gap-2 text-slate-700">
                             <Calendar size={12} className="text-amber-600" />
                             <span>তারিখ: {r.date}</span>
                           </div>
-                          <div className="flex items-center gap-2 text-gray-300">
+                          <div className="flex items-center gap-2 text-slate-700">
                             <Clock size={12} className="text-[#e056fd]" />
                             <span>সময়: {r.time}</span>
                           </div>
-                          <div className="flex items-center gap-2 text-gray-300">
+                          <div className="flex items-center gap-2 text-slate-700">
                             <Users size={12} className="text-[#22a6b3]" />
                             <span>চরিত্র: <span className="font-semibold text-white">{r.required_cast}</span></span>
                           </div>
@@ -396,19 +396,19 @@ export default function HomePage() {
           </div>
 
           {/* Accordion 4: গুরুত্বপূর্ণ ডাউনলোড ও রিসোর্স */}
-          <div className="border border-white/5 rounded-2xl bg-[#12121c]/50 overflow-hidden transition-all duration-300">
+          <div className="border border-slate-200 rounded-2xl bg-slate-50 overflow-hidden transition-all duration-300">
             <button 
               type="button"
               onClick={() => setIsResourcesOpen(!isResourcesOpen)}
-              className="w-full flex items-center justify-between p-5 text-left transition-colors hover:bg-white/5 focus:outline-none"
+              className="w-full flex items-center justify-between p-5 text-left transition-colors hover:bg-slate-100 focus:outline-none"
             >
               <div className="flex items-center gap-4">
-                <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center text-amber-600">
+                <div className="w-10 h-10 rounded-xl bg-slate-100 border border-slate-200 flex items-center justify-center text-amber-600">
                   <FileText size={20} />
                 </div>
                 <div>
-                  <h3 className="font-bold text-white text-base">লিব্রেটো স্ক্রিপ্ট ও রিহার্সাল ট্র্যাকস</h3>
-                  <p className="text-xs text-gray-400">রক্তকরবী স্ক্রিপ্ট (PDF) ডাউনলোড এবং মহড়ার প্রয়োজনীয় অডিও প্লেলিস্ট</p>
+                  <h3 className="font-bold text-slate-900 text-base">লিব্রেটো স্ক্রিপ্ট ও রিহার্সাল ট্র্যাকস</h3>
+                  <p className="text-xs text-slate-500">রক্তকরবী স্ক্রিপ্ট (PDF) ডাউনলোড এবং মহড়ার প্রয়োজনীয় অডিও প্লেলিস্ট</p>
                 </div>
               </div>
               <span className={`transform transition-transform duration-300 text-gray-400 ${isResourcesOpen ? 'rotate-180' : ''}`}>
@@ -423,44 +423,44 @@ export default function HomePage() {
                 visibility: isResourcesOpen ? 'visible' : 'hidden'
               }}
             >
-              <div className="p-6 border-t border-white/5 bg-black/20">
+              <div className="p-6 border-t border-slate-200 bg-slate-50">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-left">
-                  <div className="glass-panel p-5 bg-gradient-to-r from-red-500/5 to-transparent flex items-center justify-between gap-4">
+                  <div className="p-5 border border-slate-200 rounded-2xl bg-slate-50 flex items-center justify-between gap-4">
                     <div className="flex items-center gap-4">
-                      <div className="w-12 h-12 rounded-xl bg-[#ff7979]/15 flex items-center justify-center text-amber-600">
+                      <div className="w-12 h-12 rounded-xl bg-red-50 flex items-center justify-center text-red-500 border border-red-200">
                         <FileText size={24} />
                       </div>
                       <div>
-                        <h4 className="font-bold text-white text-sm">রক্তকরবী লিব্রেটো (PDF Script)</h4>
-                        <p className="text-[10px] text-gray-400">বার্ষিক উৎসবের মূল স্ক্রিপ্ট ও লিব্রেটো ডাউনলোড করুন।</p>
+                        <h4 className="font-bold text-slate-900 text-sm">রক্তকরবী লিব্রেটো (PDF Script)</h4>
+                        <p className="text-[10px] text-slate-500">বার্ষিক উৎসবের মূল স্ক্রিপ্ট ও লিব্রেটো ডাউনলোড করুন।</p>
                       </div>
                     </div>
                     <a 
                       href="https://sanskritbooks.org/rabindranath-tagore-books-pdf/Rakta-Karabi-Rabindranath-Tagore.pdf" 
                       target="_blank" 
                       rel="noopener noreferrer" 
-                      className="btn-glass py-2 px-4 text-xs shrink-0 flex items-center gap-1"
+                      className="bg-slate-100 hover:bg-slate-200 text-slate-700 py-2 px-4 text-xs shrink-0 flex items-center gap-1 border border-slate-200 rounded-xl"
                     >
                       <Download size={12} />
                       <span>ডাউনলোড</span>
                     </a>
                   </div>
 
-                  <div className="glass-panel p-5 bg-gradient-to-r from-[#e056fd]/5 to-transparent flex items-center justify-between gap-4">
+                  <div className="p-5 border border-slate-200 rounded-2xl bg-slate-50 flex items-center justify-between gap-4">
                     <div className="flex items-center gap-4">
-                      <div className="w-12 h-12 rounded-xl bg-[#e056fd]/15 flex items-center justify-center text-[#e056fd]">
+                      <div className="w-12 h-12 rounded-xl bg-purple-50 flex items-center justify-center text-purple-600 border border-purple-200">
                         <Music size={24} />
                       </div>
                       <div>
-                        <h4 className="font-bold text-white text-sm">বিশু পাগলের গান (Rehearsal Tracks)</h4>
-                        <p className="text-[10px] text-gray-400">মহড়ায় ব্যবহৃত ব্যাকগ্রাউন্ড আবহসংগীত ও গান অনুশীলনের ফাইলসমূহ।</p>
+                        <h4 className="font-bold text-slate-900 text-sm">বিশু পাগলের গান (Rehearsal Tracks)</h4>
+                        <p className="text-[10px] text-slate-500">মহড়ায় ব্যবহৃত ব্যাকগ্রাউন্ড আবহসংগীত ও গান অনুশীলনের ফাইলসমূহ।</p>
                       </div>
                     </div>
                     <a 
                       href="https://www.youtube.com/results?search_query=raktakarabi+rabindrasangeet" 
                       target="_blank" 
                       rel="noopener noreferrer" 
-                      className="btn-glass py-2 px-4 text-xs shrink-0 flex items-center gap-1"
+                      className="bg-slate-100 hover:bg-slate-200 text-slate-700 py-2 px-4 text-xs shrink-0 flex items-center gap-1 border border-slate-200 rounded-xl"
                     >
                       <Music size={12} />
                       <span>প্লেলিস্ট</span>
@@ -477,7 +477,7 @@ export default function HomePage() {
       {/* -------------------------------------------------------------
          Cast & Crew List Section (কুশীলব ও কলাকুশলী)
          ------------------------------------------------------------- */}
-      <section className="section-wrapper bg-black/30">
+      <section className="section-wrapper bg-slate-50 border-t border-slate-200">
         <div className="content-container">
           <div className="section-header">
             <h2>সম্পূর্ণ কলাকুশলী দল (Class Roster)</h2>
@@ -492,8 +492,8 @@ export default function HomePage() {
           ) : (
             <div className="grid-4-col">
               {members.map((member) => (
-                <div key={member.id} className="glass-panel flex flex-col items-center text-center group">
-                  <div className="w-20 h-20 rounded-full overflow-hidden mb-4 border-2 border-white/5 group-hover:border-[#e056fd]/50 transition-all duration-300 shadow-md">
+                <div key={member.id} className="p-5 bg-white border border-slate-200 rounded-2xl flex flex-col items-center text-center group shadow-sm">
+                  <div className="w-20 h-20 rounded-full overflow-hidden mb-4 border-2 border-slate-100 group-hover:border-amber-500/50 transition-all duration-300 shadow-md">
                     <img 
                       src={member.avatar_url || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150&auto=format&fit=crop&q=80'} 
                       alt={member.name}
@@ -501,22 +501,22 @@ export default function HomePage() {
                     />
                   </div>
                   <span className="badge badge-role text-[8px] mb-2">{member.role}</span>
-                  <h4 className="font-bold text-white text-xs truncate max-w-full">{member.name}</h4>
-                  <p className="text-[9px] text-gray-500 mt-1 font-semibold">রোল: {member.roll}</p>
+                  <h4 className="font-bold text-slate-900 text-xs truncate max-w-full">{member.name}</h4>
+                  <p className="text-[9px] text-slate-500 mt-1 font-semibold">রোল: {member.roll}</p>
                 </div>
               ))}
             </div>
           )}
 
           {/* Rehearsal backstage teaser */}
-          <div className="glass-panel teaser-panel">
+          <div className="p-6 bg-slate-50 border border-slate-200 rounded-2xl flex flex-col md:flex-row justify-between items-center gap-6 mt-12 shadow-sm">
             <div className="flex items-center gap-4 text-center md:text-left flex-col md:flex-row">
-              <div className="w-12 h-12 rounded-xl bg-white/5 flex items-center justify-center border border-white/10 text-white shadow-inner shrink-0">
+              <div className="w-12 h-12 rounded-xl bg-slate-100 flex items-center justify-center border border-slate-200 text-slate-700 shadow-inner shrink-0">
                 <Users size={24} />
               </div>
               <div className="space-y-1">
-                <h4 className="font-bold text-white">মহড়ার গতিবিধি ও হাজিরা ট্র্যাকার</h4>
-                <p className="text-xs text-gray-400">সব কলাকুশলীদের হাজিরার লাইভ ডেটা ও পাংচুয়ালিটি লিডারবোর্ড দেখুন নির্দেশক পোর্টালে।</p>
+                <h4 className="font-bold text-slate-900">মহড়ার গতিবিধি ও হাজিরা ট্র্যাকার</h4>
+                <p className="text-xs text-slate-500">সব কলাকুশলীদের হাজিরার লাইভ ডেটা ও পাংচুয়ালিটি লিডারবোর্ড দেখুন নির্দেশক পোর্টালে।</p>
               </div>
             </div>
             <Link href="/dashboard" className="btn-primary text-xs shrink-0">
