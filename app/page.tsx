@@ -241,15 +241,19 @@ export default function HomePage() {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {notes.map(n => (
-                <div key={n.id} className="relative pl-8 pr-6 py-6 bg-slate-50 border border-slate-200/80 rounded-2xl shadow-sm hover:shadow-md hover:transform-none transition-all space-y-4 text-left overflow-hidden">
+                <div 
+                  key={n.id} 
+                  className="relative bg-slate-50 border border-slate-200/80 rounded-2xl shadow-sm hover:shadow-md hover:transform-none transition-all space-y-4 text-left overflow-hidden"
+                  style={{ paddingLeft: '2.5rem', paddingRight: '1.5rem', paddingTop: '1.5rem', paddingBottom: '1.5rem' }}
+                >
                   {/* Floating Crimson Accent Line with rounded ends */}
-                  <div className="absolute left-0 top-6 bottom-6 w-1 bg-[#851b2e] rounded-r-full"></div>
+                  <div className="absolute left-0 top-6 bottom-6 w-1.5 bg-[#851b2e] rounded-r-full"></div>
                   
                   <div className="flex justify-between items-center text-[10px] border-b border-slate-200 pb-2 text-slate-500">
-                    <span className="font-bold text-amber-600 uppercase">হালনাগাদ ফিডব্যাক</span>
+                    <span className="font-bold text-amber-600 uppercase">হালনাগাদ নোটিশ</span>
                     <span>{n.date}</span>
                   </div>
-                  <p className="text-sm text-slate-700 leading-relaxed pt-1 whitespace-pre-wrap">{n.content}</p>
+                  <p className="text-sm text-slate-700 leading-loose whitespace-pre-wrap">{n.content}</p>
                 </div>
               ))}
             </div>
