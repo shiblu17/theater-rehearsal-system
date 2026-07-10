@@ -136,20 +136,20 @@ export default function HomePage() {
       {/* -------------------------------------------------------------
          Hero Section (Banner)
          ------------------------------------------------------------- */}
-      <section className="section-wrapper min-h-[85vh] flex items-center justify-center overflow-hidden">
+      <section className="section-wrapper !pt-6 !pb-12 min-h-[65vh] flex items-center justify-center overflow-hidden">
 
         <div className="content-container hero-layout w-full relative z-10">
-          <div className="hero-text-block">
+          <div className="hero-text-block !gap-0">
             <img 
               src="/banner_52_nobg.jpg" 
               alt="৫২তম আবর্তন নাটক ও নাট্যতত্ত্ব বিভাগ" 
-              className="w-full max-w-[480px] h-auto object-contain select-none pointer-events-none"
+              className="w-full max-w-[420px] h-auto object-contain select-none pointer-events-none -mt-16 -mb-16"
             />
             <h1 className="sr-only">রক্তকরবী</h1>
             <img 
               src="/roktokorobi_title.jpg" 
               alt="রক্তকরবী" 
-              className="w-full max-w-[540px] h-auto object-contain select-none pointer-events-none -ml-6 mb-2"
+              className="w-full max-w-[480px] h-auto object-contain select-none pointer-events-none -ml-4 -mt-10 mb-4"
             />
             <p className="hero-subtitle">
               রবীন্দ্রনাথ ঠাকুরের কালজয়ী প্রতীকী নাটক
