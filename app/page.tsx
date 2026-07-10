@@ -199,9 +199,9 @@ export default function HomePage() {
                 />
                 
                 <div className="absolute bottom-6 left-6 right-6 z-20 space-y-2 text-left">
-                  <span className="text-[10px] font-bold tracking-widest text-amber-600 uppercase">প্রযোজনা</span>
-                  <h3 className="text-2xl font-black text-white leading-tight">রক্তকরবী</h3>
-                  <p className="text-[10px] text-slate-700">নাটক ও নাট্যতত্ত্ব বিভাগ, জাবি</p>
+                  <span className="text-[10px] font-bold tracking-widest text-amber-500 uppercase">প্রযোজনা</span>
+                  <h3 className="text-2xl font-black !text-white leading-tight">রক্তকরবী</h3>
+                  <p className="text-[10px] !text-slate-200">নাটক ও নাট্যতত্ত্ব বিভাগ, জাবি</p>
                 </div>
               </div>
             </div>
