@@ -27,7 +27,7 @@ export default function Navbar() {
               className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold transition-all ${
                 isActive
                   ? 'bg-gradient-to-r from-[#e056fd] to-[#be2edd] text-white shadow-md shadow-[#e056fd]/15'
-                  : 'text-gray-400 hover:text-white hover:bg-white/5'
+                  : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
               }`}
             >
               <Icon size={16} />

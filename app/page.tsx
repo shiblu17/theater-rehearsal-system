@@ -142,7 +142,7 @@ export default function HomePage() {
 
         <div className="content-container hero-layout w-full relative z-10">
           <div className="hero-text-block">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/5 border border-white/10 text-xs font-semibold text-[#ff7979]">
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-slate-100 border border-slate-200 text-xs font-semibold text-amber-600">
               <SparklesIcon className="w-3.5 h-3.5 animate-pulse" />
               ৫২তম আবর্তন • নাটক ও নাট্যতত্ত্ব বিভাগ
             </div>
@@ -187,7 +187,7 @@ export default function HomePage() {
 
           {/* Hero Poster Graphic */}
           <div className="flex justify-center w-full">
-            <div className="glass-panel w-full max-w-[360px] p-5 bg-opacity-40 overflow-hidden relative group">
+            <div className="glass-panel w-full max-w-[360px] p-5 bg-opacity-95 overflow-hidden relative group">
               <div className="absolute inset-0 bg-gradient-to-t from-[#06060c] via-transparent to-transparent opacity-90 z-10"></div>
               
               <div className="relative aspect-[3/4] w-full rounded-xl overflow-hidden bg-gray-900 shadow-inner">

@@ -14,7 +14,7 @@ export default function BottomNavigation() {
   ];
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-50 md:hidden bg-[#06060c]/80 backdrop-blur-xl border-t border-white/5 shadow-[0_-4px_30px_rgba(0,0,0,0.8)]">
+    <nav className="fixed bottom-0 left-0 right-0 z-50 md:hidden bg-white/95 backdrop-blur-xl border-t border-slate-200 shadow-[0_-4px_30px_rgba(0,0,0,0.05)]">
       <div className="flex justify-around items-center h-20 px-4 pb-1">
         {navItems.map((item) => {
           const Icon = item.icon;
@@ -39,7 +39,7 @@ export default function BottomNavigation() {
                 className={`p-2 rounded-xl transition-all duration-300 flex items-center justify-center ${
                   isActive 
                     ? 'text-white bg-gradient-to-tr from-[#ff7979]/20 to-[#e056fd]/20 scale-110' 
-                    : 'text-gray-500 group-hover:text-gray-300'
+                    : 'text-slate-500 group-hover:text-slate-800'
                 }`}
               >
                 <Icon size={20} className={isActive ? 'stroke-[2.5px]' : 'stroke-[2px]'} />
