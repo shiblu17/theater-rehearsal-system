@@ -234,14 +234,14 @@ export default function HomePage() {
                 <AlertCircle size={20} />
               </div>
               <div className="text-left">
-                <h3 className="text-lg font-bold text-slate-900">নির্দেশক শিবলু ভাইয়ের মহড়া ডায়েরি 📝</h3>
+                <h3 className="text-lg font-bold text-slate-900">নির্দেশক নোটিশ</h3>
                 <p className="text-xs text-slate-500">সর্বশেষ মহড়ার ফিডব্যাক ও বিশেষ নোটিশ</p>
               </div>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {notes.map(n => (
-                <div key={n.id} className="glass-panel p-5 bg-slate-50 border-slate-200 border rounded-xl space-y-2 text-left">
+                <div key={n.id} className="p-6 bg-slate-50 border-l-4 border-l-[#851b2e] border-y border-r border-slate-200/80 rounded-r-2xl rounded-l-md shadow-sm hover:shadow-md transition-all space-y-3 text-left">
                   <div className="flex justify-between items-center text-[10px] border-b border-slate-200 pb-2 text-slate-500">
                     <span className="font-bold text-amber-600 uppercase">হালনাগাদ ফিডব্যাক</span>
                     <span>{n.date}</span>
