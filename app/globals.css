@@ -8,10 +8,10 @@
   --font-display: 'Outfit', 'Inter', system-ui, -apple-system, sans-serif;
   --font-body: 'Inter', system-ui, -apple-system, sans-serif;
   
-  --bg-main: #ffffff; /* Color 1 (Deep Dark Slate-Navy) */
+  --bg-main: #fbf9f4; /* Color 1 (Deep Dark Slate-Navy) */
   --bg-gradient: none;
-  --bg-card: #f8fafc;
-  --bg-card-hover: #f1f5f9;
+  --bg-card: #f4f0e6;
+  --bg-card-hover: #ebe5d7;
   
   --color-primary: #851b2e; /* Maroon/Deep Red - Color 6 */
   --color-primary-glow: rgba(133, 27, 46, 0.25);
@@ -21,10 +21,10 @@
   --color-forest: #2f594d; /* Forest Green - Color 2 */
   --color-sage: #6f886f; /* Sage/Olive Green - Color 3 */
   
-  --text-main: #0f172a;
-  --text-muted: #475569;
+  --text-main: #2a1f1a;
+  --text-muted: #6b5c54;
   
-  --border-glass: #e2e8f0;
+  --border-glass: #e3dbcc;
   --border-glass-active: rgba(200, 81, 34, 0.35); /* Rust Orange */
   
   --spacing-xs: 0.5rem;
@@ -121,7 +121,7 @@ h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-display);
   font-weight: 700;
   letter-spacing: -0.02em;
-  color: #0f172a;
+  color: #2a1f1a;
   line-height: 1.3;
 }
 
@@ -264,7 +264,7 @@ h1, h2, h3, h4, h5, h6 {
 .meta-box-value {
   font-size: 0.9rem;
   font-weight: 700;
-  color: #0f172a;
+  color: #2a1f1a;
 }
 
 /* -------------------------------------------------------------
