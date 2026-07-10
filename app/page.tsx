@@ -161,7 +161,7 @@ export default function HomePage() {
             {/* Quick Meta Details */}
             <div className="meta-grid pt-2">
               <div className="glass-panel meta-box">
-                <Calendar className="text-[#ff7979]" size={20} />
+                <Calendar className="text-amber-600" size={20} />
                 <span className="meta-box-label">তারিখ</span>
                 <span className="meta-box-value">৩০ জুন ২০২৬</span>
               </div>
@@ -198,7 +198,7 @@ export default function HomePage() {
                 />
                 
                 <div className="absolute bottom-6 left-6 right-6 z-20 space-y-2 text-left">
-                  <span className="text-[10px] font-bold tracking-widest text-[#ff7979] uppercase">প্রযোজনা</span>
+                  <span className="text-[10px] font-bold tracking-widest text-amber-600 uppercase">প্রযোজনা</span>
                   <h3 className="text-2xl font-black text-white leading-tight">রক্তকরবী</h3>
                   <p className="text-[10px] text-gray-300">নাটক ও নাট্যতত্ত্ব বিভাগ, জাবি</p>
                 </div>
@@ -229,7 +229,7 @@ export default function HomePage() {
         <section className="section-wrapper bg-gradient-to-r from-[#ff7979]/5 to-transparent border-y border-white/5 py-12">
           <div className="content-container">
             <div className="flex items-center gap-3 mb-6">
-              <div className="w-10 h-10 rounded-xl bg-[#ff7979]/15 flex items-center justify-center text-[#ff7979]">
+              <div className="w-10 h-10 rounded-xl bg-[#ff7979]/15 flex items-center justify-center text-amber-600">
                 <AlertCircle size={20} />
               </div>
               <div className="text-left">
@@ -242,7 +242,7 @@ export default function HomePage() {
               {notes.map(n => (
                 <div key={n.id} className="glass-panel p-5 bg-black/40 border-white/5 rounded-xl space-y-2 text-left">
                   <div className="flex justify-between items-center text-[10px] border-b border-white/5 pb-2 text-gray-400">
-                    <span className="font-bold text-[#ff7979] uppercase">হালনাগাদ ফিডব্যাক</span>
+                    <span className="font-bold text-amber-600 uppercase">হালনাগাদ ফিডব্যাক</span>
                     <span>{n.date}</span>
                   </div>
                   <p className="text-xs text-gray-300 leading-relaxed pt-1 whitespace-pre-wrap">{n.content}</p>
@@ -267,7 +267,7 @@ export default function HomePage() {
               className="w-full flex items-center justify-between p-5 text-left transition-colors hover:bg-white/5 focus:outline-none"
             >
               <div className="flex items-center gap-4">
-                <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center text-[#ff7979]">
+                <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center text-amber-600">
                   <BookOpen size={20} />
                 </div>
                 <div>
@@ -375,7 +375,7 @@ export default function HomePage() {
                         
                         <div className="border-t border-white/5 mt-5 pt-4 space-y-2 text-xs">
                           <div className="flex items-center gap-2 text-gray-300">
-                            <Calendar size={12} className="text-[#ff7979]" />
+                            <Calendar size={12} className="text-amber-600" />
                             <span>তারিখ: {r.date}</span>
                           </div>
                           <div className="flex items-center gap-2 text-gray-300">
@@ -403,7 +403,7 @@ export default function HomePage() {
               className="w-full flex items-center justify-between p-5 text-left transition-colors hover:bg-white/5 focus:outline-none"
             >
               <div className="flex items-center gap-4">
-                <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center text-[#ff7979]">
+                <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center text-amber-600">
                   <FileText size={20} />
                 </div>
                 <div>
@@ -427,7 +427,7 @@ export default function HomePage() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-left">
                   <div className="glass-panel p-5 bg-gradient-to-r from-red-500/5 to-transparent flex items-center justify-between gap-4">
                     <div className="flex items-center gap-4">
-                      <div className="w-12 h-12 rounded-xl bg-[#ff7979]/15 flex items-center justify-center text-[#ff7979]">
+                      <div className="w-12 h-12 rounded-xl bg-[#ff7979]/15 flex items-center justify-center text-amber-600">
                         <FileText size={24} />
                       </div>
                       <div>
