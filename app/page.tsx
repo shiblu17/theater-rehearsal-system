@@ -143,13 +143,13 @@ export default function HomePage() {
             <img 
               src="/banner_52_nobg.jpg" 
               alt="৫২তম আবর্তন নাটক ও নাট্যতত্ত্ব বিভাগ" 
-              className="w-full max-w-[420px] h-auto object-contain select-none pointer-events-none -mt-16 -mb-24"
+              className="w-full max-w-[420px] h-auto object-contain select-none pointer-events-none -mt-16 -mb-28"
             />
             <h1 className="sr-only">রক্তকরবী</h1>
             <img 
               src="/roktokorobi_title.jpg" 
               alt="রক্তকরবী" 
-              className="w-full max-w-[540px] h-auto object-contain select-none pointer-events-none -ml-4 -mt-20 mb-4"
+              className="w-full max-w-[600px] h-auto object-contain select-none pointer-events-none -ml-4 -mt-28 mb-4"
             />
             <p className="hero-subtitle">
               রবীন্দ্রনাথ ঠাকুরের কালজয়ী প্রতীকী নাটক
