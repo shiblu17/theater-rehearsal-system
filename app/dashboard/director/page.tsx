@@ -656,12 +656,12 @@ export default function DirectorDashboard() {
                     <p className="text-[10px] text-gray-400">সকাল ও দুপুরের সেশনভিত্তিক উপস্থিতি ট্র্যাকিং শিট</p>
                   </div>
                   
-                  <div className="flex flex-wrap items-center gap-3">
+                  <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 w-full md:w-auto">
                     <input 
                       type="date"
                       value={sheetDate}
                       onChange={e => setSheetDate(e.target.value)}
-                      className="form-input text-xs py-2 px-3 bg-zinc-950 text-gray-300 border border-white/10 rounded-xl"
+                      className="form-input text-xs py-2 px-3 bg-zinc-900 !text-white border border-white/10 rounded-xl outline-none"
                     />
                     
                     <div className="flex bg-white/5 border border-white/10 rounded-xl overflow-hidden p-0.5">
@@ -691,69 +691,133 @@ export default function DirectorDashboard() {
                   <div className="text-center py-10 text-gray-500">লোডিং হচ্ছে...</div>
                 ) : attendanceView === 'tabular' ? (
                   /* Tabular Grid representing both morning & afternoon */
-                  <div className="overflow-x-auto">
-                    <table className="w-full text-left text-xs border-collapse">
-                      <thead>
-                        <tr className="border-b border-white/10 text-gray-400 font-bold uppercase tracking-wider text-[10px]">
-                          <th className="pb-3">কুশীলব</th>
-                          <th className="pb-3 text-center">রোল</th>
-                          <th className="pb-3 text-center">সকালের সেশন ({morningLogs.length} জন)</th>
-                          <th className="pb-3 text-center">দুপুরের সেশন ({afternoonLogs.length} জন)</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {tabularData.map((row) => (
-                          <tr key={row.member.id} className="border-b border-white/5 text-gray-300 hover:bg-white/5 transition-all">
-                            <td className="py-3 flex items-center gap-3">
-                              <div className="w-8 h-8 rounded-full overflow-hidden border border-white/10 shrink-0">
-                                <img 
-                                  src={row.member.avatar_url || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150&auto=format&fit=crop&q=80'} 
-                                  alt={row.member.name} 
-                                  className="w-full h-full object-cover" 
-                                />
-                              </div>
-                              <div>
-                                <h4 className="font-semibold text-white">{row.member.name}</h4>
-                                <p className="text-[9px] text-gray-500">{row.member.role} • {row.member.character_name || 'নেপথ্য'}</p>
-                              </div>
-                            </td>
-                            <td className="py-3 text-center font-mono font-bold">{row.member.roll}</td>
-                            
-                            {/* Morning check-in status */}
-                            <td className="py-3 text-center">
+                  <div>
+                    {/* Desktop View: Traditional Table Layout */}
+                    <div className="hidden md:block overflow-x-auto">
+                      <table className="w-full text-left text-xs border-collapse">
+                        <thead>
+                          <tr className="border-b border-white/10 text-gray-400 font-bold uppercase tracking-wider text-[10px]">
+                            <th className="pb-3">কুশীলব</th>
+                            <th className="pb-3 text-center">রোল</th>
+                            <th className="pb-3 text-center">সকালের সেশন ({morningLogs.length} জন)</th>
+                            <th className="pb-3 text-center">দুপুরের সেশন ({afternoonLogs.length} জন)</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {tabularData.map((row) => (
+                            <tr key={row.member.id} className="border-b border-white/5 text-gray-300 hover:bg-white/5 transition-all">
+                              <td className="py-3 flex items-center gap-3">
+                                <div className="w-8 h-8 rounded-full overflow-hidden border border-white/10 shrink-0">
+                                  <img 
+                                    src={row.member.avatar_url || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150&auto=format&fit=crop&q=80'} 
+                                    alt={row.member.name} 
+                                    className="w-full h-full object-cover" 
+                                  />
+                                </div>
+                                <div>
+                                  <h4 className="font-semibold text-white">{row.member.name}</h4>
+                                  <p className="text-[9px] text-gray-500">{row.member.role} • {row.member.character_name || 'নেপথ্য'}</p>
+                                </div>
+                              </td>
+                              <td className="py-3 text-center font-mono font-bold">{row.member.roll}</td>
+                              
+                              {/* Morning check-in status */}
+                              <td className="py-3 text-center">
+                                {row.morning ? (
+                                  <div className="inline-flex flex-col items-center">
+                                    <span className="font-bold text-white text-[10px]">
+                                      {new Date(row.morning.check_in_time).toLocaleTimeString('bn-BD', { hour: '2-digit', minute: '2-digit' })}
+                                    </span>
+                                    <span className={`text-[8px] font-bold px-1.5 py-0.5 rounded mt-0.5 ${row.morning.is_late ? 'bg-yellow-500/10 text-yellow-500 border border-yellow-500/20' : 'bg-green-500/10 text-green-400 border border-green-500/20'}`}>
+                                      {row.morning.is_late ? 'বিলম্বিত' : 'সময়মতো'}
+                                    </span>
+                                  </div>
+                                ) : (
+                                  <span className="text-[10px] text-gray-650 font-semibold uppercase tracking-wider">অনুপস্থিত</span>
+                                )}
+                              </td>
+
+                              {/* Afternoon check-in status */}
+                              <td className="py-3 text-center">
+                                {row.afternoon ? (
+                                  <div className="inline-flex flex-col items-center">
+                                    <span className="font-bold text-white text-[10px]">
+                                      {new Date(row.afternoon.check_in_time).toLocaleTimeString('bn-BD', { hour: '2-digit', minute: '2-digit' })}
+                                    </span>
+                                    <span className={`text-[8px] font-bold px-1.5 py-0.5 rounded mt-0.5 ${row.afternoon.is_late ? 'bg-yellow-500/10 text-yellow-500 border border-yellow-500/20' : 'bg-green-500/10 text-green-400 border border-green-500/20'}`}>
+                                      {row.afternoon.is_late ? 'বিলম্বিত' : 'সময়মতো'}
+                                    </span>
+                                  </div>
+                                ) : (
+                                  <span className="text-[10px] text-gray-650 font-semibold uppercase tracking-wider">অনুপস্থিত</span>
+                                )}
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+
+                    {/* Mobile View: List of Cards Layout */}
+                    <div className="block md:hidden space-y-4">
+                      {tabularData.map((row) => (
+                        <div key={row.member.id} className="p-4 bg-white/5 border border-white/5 rounded-2xl space-y-3 text-left">
+                          {/* Top: Avatar, Name, Roll */}
+                          <div className="flex items-center gap-3">
+                            <div className="w-10 h-10 rounded-full overflow-hidden border border-white/10 shrink-0">
+                              <img 
+                                src={row.member.avatar_url || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150&auto=format&fit=crop&q=80'} 
+                                alt={row.member.name} 
+                                className="w-full h-full object-cover" 
+                              />
+                            </div>
+                            <div className="min-w-0 flex-1">
+                              <h4 className="font-bold text-white text-sm truncate">{row.member.name}</h4>
+                              <p className="text-[10px] text-gray-400 truncate">
+                                রোল: <span className="font-mono text-gray-200 font-bold">{row.member.roll}</span> • {row.member.role}
+                              </p>
+                            </div>
+                          </div>
+
+                          {/* Bottom: Shift Attendance Statuses */}
+                          <div className="grid grid-cols-2 gap-3 pt-2 border-t border-white/5">
+                            {/* Morning Shift */}
+                            <div className="bg-white/5 p-2 rounded-xl border border-white/5 flex flex-col justify-center items-center text-center">
+                              <span className="text-[9px] text-gray-450 font-bold mb-1">সকাল</span>
                               {row.morning ? (
-                                <div className="inline-flex flex-col items-center">
-                                  <span className="font-bold text-white text-[10px]">
+                                <div className="flex flex-col items-center">
+                                  <span className="font-mono font-bold text-white text-[10px]">
                                     {new Date(row.morning.check_in_time).toLocaleTimeString('bn-BD', { hour: '2-digit', minute: '2-digit' })}
                                   </span>
-                                  <span className={`text-[8px] font-bold px-1.5 py-0.5 rounded mt-0.5 ${row.morning.is_late ? 'bg-yellow-500/10 text-yellow-500 border border-yellow-500/20' : 'bg-green-500/10 text-green-400 border border-green-500/20'}`}>
+                                  <span className={`text-[8px] font-bold px-1.5 py-0.5 rounded mt-1 ${row.morning.is_late ? 'bg-yellow-500/10 text-yellow-500 border border-yellow-500/20' : 'bg-green-500/10 text-green-400 border border-green-500/20'}`}>
                                     {row.morning.is_late ? 'বিলম্বিত' : 'সময়মতো'}
                                   </span>
                                 </div>
                               ) : (
-                                <span className="text-[10px] text-gray-600 font-semibold uppercase tracking-wider">অনুপস্থিত</span>
+                                <span className="text-[9px] bg-red-500/10 text-red-400 border border-red-500/20 px-2 py-0.5 rounded font-bold uppercase tracking-wider mt-1">অনুপস্থিত</span>
                               )}
-                            </td>
+                            </div>
 
-                            {/* Afternoon check-in status */}
-                            <td className="py-3 text-center">
+                            {/* Afternoon Shift */}
+                            <div className="bg-white/5 p-2 rounded-xl border border-white/5 flex flex-col justify-center items-center text-center">
+                              <span className="text-[9px] text-gray-455 font-bold mb-1">দুপুর</span>
                               {row.afternoon ? (
-                                <div className="inline-flex flex-col items-center">
-                                  <span className="font-bold text-white text-[10px]">
+                                <div className="flex flex-col items-center">
+                                  <span className="font-mono font-bold text-white text-[10px]">
                                     {new Date(row.afternoon.check_in_time).toLocaleTimeString('bn-BD', { hour: '2-digit', minute: '2-digit' })}
                                   </span>
-                                  <span className={`text-[8px] font-bold px-1.5 py-0.5 rounded mt-0.5 ${row.afternoon.is_late ? 'bg-yellow-500/10 text-yellow-500 border border-yellow-500/20' : 'bg-green-500/10 text-green-400 border border-green-500/20'}`}>
+                                  <span className={`text-[8px] font-bold px-1.5 py-0.5 rounded mt-1 ${row.afternoon.is_late ? 'bg-yellow-500/10 text-yellow-500 border border-yellow-500/20' : 'bg-green-500/10 text-green-400 border border-green-500/20'}`}>
                                     {row.afternoon.is_late ? 'বিলম্বিত' : 'সময়মতো'}
                                   </span>
                                 </div>
                               ) : (
-                                <span className="text-[10px] text-gray-600 font-semibold uppercase tracking-wider">অনুপস্থিত</span>
+                                <span className="text-[9px] bg-red-500/10 text-red-400 border border-red-500/20 px-2 py-0.5 rounded font-bold uppercase tracking-wider mt-1">অনুপস্থিত</span>
                               )}
-                            </td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
                   </div>
                 ) : (
                   /* Morning or Afternoon list feed */
