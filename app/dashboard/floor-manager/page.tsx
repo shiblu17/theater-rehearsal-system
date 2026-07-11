@@ -71,10 +71,10 @@ export default function FloorManagerDashboard() {
   const fetchData = async () => {
     try {
       const [membersRes, attendanceRes, settingsRes, leaderboardRes] = await Promise.all([
-        fetch('/api/members'),
-        fetch('/api/attendance'),
-        fetch('/api/settings'),
-        fetch('/api/leaderboard')
+        fetch('/api/members', { cache: 'no-store' }),
+        fetch('/api/attendance', { cache: 'no-store' }),
+        fetch('/api/settings', { cache: 'no-store' }),
+        fetch('/api/leaderboard', { cache: 'no-store' })
       ]);
       const membersData = await membersRes.json();
       const attendanceData = await attendanceRes.json();

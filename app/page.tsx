@@ -30,11 +30,11 @@ export default function HomePage() {
   const loadData = async () => {
     try {
       const [membersRes, rehearsalsRes, notesRes, leaderboardRes, settingsRes] = await Promise.all([
-        fetch('/api/members'),
-        fetch('/api/rehearsals'),
-        fetch('/api/rehearsal-notes'),
-        fetch('/api/leaderboard'),
-        fetch('/api/settings')
+        fetch('/api/members', { cache: 'no-store' }),
+        fetch('/api/rehearsals', { cache: 'no-store' }),
+        fetch('/api/rehearsal-notes', { cache: 'no-store' }),
+        fetch('/api/leaderboard', { cache: 'no-store' }),
+        fetch('/api/settings', { cache: 'no-store' })
       ]);
 
       const membersData = await membersRes.json();

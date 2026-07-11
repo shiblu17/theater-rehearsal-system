@@ -96,13 +96,13 @@ export default function DirectorDashboard() {
   const fetchData = async () => {
     try {
       const [membersRes, logsRes, leaderboardRes, rehearsalsRes, notesRes, ticketsRes, statsRes] = await Promise.all([
-        fetch('/api/members'),
-        fetch('/api/attendance'),
-        fetch('/api/leaderboard'),
-        fetch('/api/rehearsals'),
-        fetch('/api/rehearsal-notes'),
-        fetch('/api/tickets'),
-        fetch('/api/weekly-stats')
+        fetch('/api/members', { cache: 'no-store' }),
+        fetch('/api/attendance', { cache: 'no-store' }),
+        fetch('/api/leaderboard', { cache: 'no-store' }),
+        fetch('/api/rehearsals', { cache: 'no-store' }),
+        fetch('/api/rehearsal-notes', { cache: 'no-store' }),
+        fetch('/api/tickets', { cache: 'no-store' }),
+        fetch('/api/weekly-stats', { cache: 'no-store' })
       ]);
 
       const membersData = await membersRes.json();
@@ -139,7 +139,7 @@ export default function DirectorDashboard() {
 
   const fetchSettings = async () => {
     try {
-      const res = await fetch('/api/settings');
+      const res = await fetch('/api/settings', { cache: 'no-store' });
       const data = await res.json();
       if (data.morning_cutoff) setMorningCutoff(data.morning_cutoff);
       if (data.afternoon_cutoff) setAfternoonCutoff(data.afternoon_cutoff);
