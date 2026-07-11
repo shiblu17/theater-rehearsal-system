@@ -355,7 +355,13 @@ export default function HomePage() {
           <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
             
             {/* Active Schedule panel (Left) */}
-            <div className="md:col-span-5 p-6 bg-gradient-to-br from-[#fbf9f4] to-[#f4f0e6] border-l-4 border-l-[#851b2e] border-y border-r border-[#e3dbcc] rounded-r-2xl rounded-l-md shadow-md space-y-4 text-left">
+            <div 
+              className="md:col-span-5 relative bg-gradient-to-br from-[#fbf9f4] to-[#f4f0e6] border border-[#e3dbcc] rounded-2xl shadow-md space-y-4 text-left overflow-hidden"
+              style={{ paddingLeft: '2.5rem', paddingRight: '1.5rem', paddingTop: '1.5rem', paddingBottom: '1.5rem' }}
+            >
+              {/* Floating Crimson Accent Line with rounded ends */}
+              <div className="absolute left-0 top-6 bottom-6 w-1.5 bg-[#851b2e] rounded-r-full"></div>
+              
               <h4 className="font-extrabold text-[#2a1f1a] border-b border-[#e3dbcc] pb-2 flex items-center gap-2">
                 <Clock className="text-amber-600 w-4 h-4" />
                 <span>সক্রিয় কল টাইম শিডিউল</span>
@@ -371,9 +377,6 @@ export default function HomePage() {
                   <span className="text-sm font-black text-[#2a1f1a]">{settings?.afternoon_cutoff || '১৫:০০'} টা (কল টাইম)</span>
                 </div>
               </div>
-              <p className="text-[10px] text-[#6b5c54]/80 font-bold italic text-center pt-2">
-                * ফ্লোর ম্যানেজার ড্যাশবোর্ড থেকে কল টাইম পরিবর্তন করলে এখানে লাইভ আপডেট হবে।
-              </p>
             </div>
 
             {/* Countdown Clock (Right) */}
