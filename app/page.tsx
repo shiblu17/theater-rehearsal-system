@@ -355,35 +355,35 @@ export default function HomePage() {
           <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
             
             {/* Active Schedule panel (Left) */}
-            <div className="md:col-span-5 p-6 bg-white border border-slate-200 rounded-2xl shadow-sm space-y-4 text-left">
-              <h4 className="font-bold text-slate-900 border-b border-slate-100 pb-2 flex items-center gap-2">
+            <div className="md:col-span-5 p-6 bg-gradient-to-br from-[#fbf9f4] to-[#f4f0e6] border-l-4 border-l-[#851b2e] border-y border-r border-[#e3dbcc] rounded-r-2xl rounded-l-md shadow-md space-y-4 text-left">
+              <h4 className="font-extrabold text-[#2a1f1a] border-b border-[#e3dbcc] pb-2 flex items-center gap-2">
                 <Clock className="text-amber-600 w-4 h-4" />
                 <span>সক্রিয় কল টাইম শিডিউল</span>
               </h4>
               
               <div className="space-y-3">
-                <div className="flex justify-between items-center bg-slate-50 p-3 rounded-xl border border-slate-100">
-                  <span className="text-xs text-slate-500 font-semibold">সকালের শিফট:</span>
-                  <span className="text-sm font-bold text-slate-900">{settings?.morning_cutoff || '১১:৩০'} টা (কল টাইম)</span>
+                <div className="flex justify-between items-center bg-white/80 p-3.5 rounded-xl border border-[#e3dbcc] shadow-sm">
+                  <span className="text-xs text-[#6b5c54] font-bold">সকালের শিফট:</span>
+                  <span className="text-sm font-black text-[#2a1f1a]">{settings?.morning_cutoff || '১১:৩০'} টা (কল টাইম)</span>
                 </div>
-                <div className="flex justify-between items-center bg-slate-50 p-3 rounded-xl border border-slate-100">
-                  <span className="text-xs text-slate-500 font-semibold">দুপুরের শিফট:</span>
-                  <span className="text-sm font-bold text-slate-900">{settings?.afternoon_cutoff || '১৫:০০'} টা (কল টাইম)</span>
+                <div className="flex justify-between items-center bg-white/80 p-3.5 rounded-xl border border-[#e3dbcc] shadow-sm">
+                  <span className="text-xs text-[#6b5c54] font-bold">দুপুরের শিফট:</span>
+                  <span className="text-sm font-black text-[#2a1f1a]">{settings?.afternoon_cutoff || '১৫:০০'} টা (কল টাইম)</span>
                 </div>
               </div>
-              <p className="text-[10px] text-slate-400 font-semibold italic text-center pt-2">
+              <p className="text-[10px] text-[#6b5c54]/80 font-bold italic text-center pt-2">
                 * ফ্লোর ম্যানেজার ড্যাশবোর্ড থেকে কল টাইম পরিবর্তন করলে এখানে লাইভ আপডেট হবে।
               </p>
             </div>
 
             {/* Countdown Clock (Right) */}
-            <div className="md:col-span-7 p-8 bg-white border border-slate-200 rounded-2xl shadow-sm flex flex-col justify-center items-center space-y-6">
+            <div className="md:col-span-7 p-8 bg-gradient-to-br from-[#fbf9f4] to-[#f4f0e6] border border-[#e3dbcc] rounded-2xl shadow-md flex flex-col justify-center items-center space-y-6">
               <div className="space-y-1 text-center">
                 <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-red-50 text-[10px] font-bold text-red-600 border border-red-100 animate-pulse">
                   ● রানিং কাউন্টডাউন
                 </span>
-                <h4 className="text-sm font-extrabold text-slate-800 pt-1">{callTimeCountdown.label}</h4>
-                <p className="text-xs text-slate-500 font-semibold">টার্গেট টাইম: <span className="text-amber-600 font-bold">{callTimeCountdown.targetTimeStr}</span> টা</p>
+                <h4 className="text-sm font-extrabold text-[#2a1f1a] pt-1">{callTimeCountdown.label}</h4>
+                <p className="text-xs text-[#6b5c54] font-semibold">টার্গেট টাইম: <span className="text-amber-600 font-bold">{callTimeCountdown.targetTimeStr}</span> টা</p>
               </div>
 
               {callTimeCountdown.isPassed ? (
@@ -391,33 +391,33 @@ export default function HomePage() {
                   🚀 কল টাইম অতিক্রান্ত হয়েছে! দ্রুত মহড়া কক্ষে রিপোর্ট করুন।
                 </div>
               ) : (
-                <div className="flex items-center gap-4">
+                <div className="flex items-center gap-3 md:gap-4">
                   {/* Hours */}
                   <div className="flex flex-col items-center">
-                    <div className="w-16 h-16 md:w-20 md:h-20 bg-slate-50 border border-slate-200 rounded-2xl shadow-inner flex items-center justify-center text-2xl md:text-3xl font-black text-[#851b2e] font-mono">
+                    <div className="w-16 h-16 md:w-20 md:h-20 bg-[#2a1f1a] border border-[#3e2e26] rounded-2xl shadow-lg flex items-center justify-center text-3xl md:text-4xl font-extrabold text-[#f59e0b] font-mono tracking-tighter">
                       {callTimeCountdown.hours}
                     </div>
-                    <span className="text-[10px] font-bold text-slate-500 mt-2">ঘণ্টা</span>
+                    <span className="text-[10px] font-bold text-[#6b5c54] mt-2">ঘণ্টা</span>
                   </div>
 
                   <span className="text-2xl font-black text-slate-400 -mt-6">:</span>
 
                   {/* Minutes */}
                   <div className="flex flex-col items-center">
-                    <div className="w-16 h-16 md:w-20 md:h-20 bg-slate-50 border border-slate-200 rounded-2xl shadow-inner flex items-center justify-center text-2xl md:text-3xl font-black text-[#851b2e] font-mono">
+                    <div className="w-16 h-16 md:w-20 md:h-20 bg-[#2a1f1a] border border-[#3e2e26] rounded-2xl shadow-lg flex items-center justify-center text-3xl md:text-4xl font-extrabold text-[#f59e0b] font-mono tracking-tighter">
                       {callTimeCountdown.minutes}
                     </div>
-                    <span className="text-[10px] font-bold text-slate-500 mt-2">মিনিট</span>
+                    <span className="text-[10px] font-bold text-[#6b5c54] mt-2">মিনিট</span>
                   </div>
 
                   <span className="text-2xl font-black text-slate-400 -mt-6">:</span>
 
                   {/* Seconds */}
                   <div className="flex flex-col items-center">
-                    <div className="w-16 h-16 md:w-20 md:h-20 bg-slate-50 border border-slate-200 rounded-2xl shadow-inner flex items-center justify-center text-2xl md:text-3xl font-black text-amber-600 font-mono">
+                    <div className="w-16 h-16 md:w-20 md:h-20 bg-[#2a1f1a] border border-[#3e2e26] rounded-2xl shadow-lg flex items-center justify-center text-3xl md:text-4xl font-extrabold text-[#f59e0b] font-mono tracking-tighter">
                       {callTimeCountdown.seconds}
                     </div>
-                    <span className="text-[10px] font-bold text-slate-500 mt-2">সেকেন্ড</span>
+                    <span className="text-[10px] font-bold text-[#6b5c54] mt-2">সেকেন্ড</span>
                   </div>
                 </div>
               )}
