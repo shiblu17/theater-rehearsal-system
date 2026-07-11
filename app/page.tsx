@@ -356,23 +356,32 @@ export default function HomePage() {
             
             {/* Active Schedule panel (Left) */}
             <div 
-              className="md:col-span-5 relative bg-gradient-to-br from-[#fbf9f4] to-[#f4f0e6] border border-[#e3dbcc] rounded-2xl shadow-md space-y-4 text-left overflow-hidden"
-              style={{ paddingLeft: '2.5rem', paddingRight: '1.5rem', paddingTop: '1.5rem', paddingBottom: '1.5rem' }}
+              className="md:col-span-5 relative bg-gradient-to-br from-[#fbf9f4] to-[#f4f0e6] border border-[#e3dbcc] rounded-2xl shadow-md text-left overflow-hidden"
+              style={{ paddingLeft: '2.75rem', paddingRight: '1.5rem', paddingTop: '1.75rem', paddingBottom: '1.75rem' }}
             >
               {/* Floating Crimson Accent Line with rounded ends */}
               <div className="absolute left-0 top-6 bottom-6 w-1.5 bg-[#851b2e] rounded-r-full"></div>
               
-              <h4 className="font-extrabold text-[#2a1f1a] border-b border-[#e3dbcc] pb-2 flex items-center gap-2">
+              <h4 
+                className="font-extrabold text-[#2a1f1a] border-b border-[#e3dbcc] pb-2 flex items-center gap-2"
+                style={{ marginBottom: '1.5rem' }}
+              >
                 <Clock className="text-amber-600 w-4 h-4" />
                 <span>সক্রিয় কল টাইম শিডিউল</span>
               </h4>
               
-              <div className="space-y-3">
-                <div className="flex justify-between items-center bg-white/80 p-3.5 rounded-xl border border-[#e3dbcc] shadow-sm">
+              <div className="flex flex-col">
+                <div 
+                  className="flex justify-between items-center bg-white/80 rounded-xl border border-[#e3dbcc] shadow-sm"
+                  style={{ padding: '1.1rem 1.25rem', marginBottom: '1.25rem' }}
+                >
                   <span className="text-xs text-[#6b5c54] font-bold">সকালের শিফট:</span>
                   <span className="text-sm font-black text-[#2a1f1a]">{settings?.morning_cutoff || '১১:৩০'} টা (কল টাইম)</span>
                 </div>
-                <div className="flex justify-between items-center bg-white/80 p-3.5 rounded-xl border border-[#e3dbcc] shadow-sm">
+                <div 
+                  className="flex justify-between items-center bg-white/80 rounded-xl border border-[#e3dbcc] shadow-sm"
+                  style={{ padding: '1.1rem 1.25rem' }}
+                >
                   <span className="text-xs text-[#6b5c54] font-bold">দুপুরের শিফট:</span>
                   <span className="text-sm font-black text-[#2a1f1a]">{settings?.afternoon_cutoff || '১৫:০০'} টা (কল টাইম)</span>
                 </div>
