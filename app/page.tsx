@@ -229,7 +229,7 @@ export default function HomePage() {
       {notes.length > 0 && (
         <section className="section-wrapper bg-gradient-to-r from-[#ff7979]/5 to-transparent border-y border-slate-200 py-12">
           <div className="content-container">
-            <div className="flex items-center gap-3 mb-6">
+            <div className="flex items-center gap-3" style={{ marginBottom: '2.25rem' }}>
               <div className="w-10 h-10 rounded-xl bg-red-50 flex items-center justify-center text-red-500 border border-red-200">
                 <AlertCircle size={20} />
               </div>
