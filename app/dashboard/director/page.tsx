@@ -518,8 +518,8 @@ export default function DirectorDashboard() {
         {/* Workspace Dual Layout */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
           
-          {/* LEFT COLUMN: Controls & Forms */}
-          <div className="lg:col-span-8 space-y-6">
+          {/* MAIN COLUMN: Controls & Forms */}
+          <div className="lg:col-span-12 space-y-6">
             
             {/* Dashboard Tabs Selector */}
             <div className="flex border-b border-white/5 overflow-x-auto gap-2">
@@ -1161,51 +1161,7 @@ export default function DirectorDashboard() {
 
           </div>
 
-          {/* RIGHT COLUMN: Quick Manual Check-In Panel */}
-          <div className="lg:col-span-4 space-y-6">
-            <div className="glass-panel">
-              <div className="flex items-center gap-3 mb-4 text-left">
-                <div className="w-10 h-10 rounded-xl bg-[#ff7979]/10 border border-[#ff7979]/20 flex items-center justify-center text-[#ff7979]">
-                  <CheckCircle size={20} />
-                </div>
-                <div>
-                  <h3 className="font-bold text-sm text-white">কুইক চেক-ইন প্যানেল</h3>
-                  <p className="text-[10px] text-gray-400">ডিরেক্টর পোর্টাল থেকে দ্রুত হাজিরা এন্ট্রি</p>
-                </div>
-              </div>
 
-              <form onSubmit={handleQuickCheckIn} className="space-y-4 text-left">
-                <div className="form-group mb-0">
-                  <label className="form-label text-[10px]">কুশীলবের নাম সিলেক্ট করুন</label>
-                  <select 
-                    value={selectedMemberId}
-                    onChange={e => setSelectedMemberId(e.target.value)}
-                    className="form-input text-xs bg-zinc-950 text-gray-300 outline-none"
-                    required
-                  >
-                    <option value="" disabled>কুশীলবের নাম...</option>
-                    {members.map(m => (
-                      <option key={m.id} value={m.id}>[{m.roll}] {m.name} ({m.role})</option>
-                    ))}
-                  </select>
-                </div>
-                <button type="submit" disabled={isSubmitting || !selectedMemberId} className="btn-secondary w-full justify-center text-xs py-2.5">
-                  <span>চেক-ইন এন্ট্রি দিন</span>
-                </button>
-              </form>
-            </div>
-
-            <div className="glass-panel p-5 bg-gradient-to-br from-[#e056fd]/5 to-transparent border-white/5 space-y-3 text-left">
-              <h4 className="font-bold text-xs text-[#e056fd] uppercase tracking-wider flex items-center gap-1">
-                <AlertCircle size={12} /> নির্দেশক টিপস
-              </h4>
-              <ul className="text-[10px] text-gray-400 space-y-2 list-disc pl-4 leading-relaxed">
-                <li>কুশীলবদের নামের পাশে থাকা কালারড বক্সের সারিটি তাদের গত ১৪ দিনের উপস্থিতির হার (হিটম্যাপ) নির্দেশ করে।</li>
-                <li>পাংচুয়ালিটি ৮০%-এর ওপরে থাকলে শিক্ষার্থীরা রানিং **'রঞ্জন' 🌟** গোল্ড মেডেল ব্যাজ পাবে।</li>
-                <li>সাপ্তাহিক হাজিরার রেকর্ড গ্রাফিকাল বারে চেক করে ডেসক্রিপ্টিভ পারফরম্যান্স ট্র্যাক করতে পারবেন।</li>
-              </ul>
-            </div>
-          </div>
 
         </div>
 
