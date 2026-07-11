@@ -664,22 +664,22 @@ export default function DirectorDashboard() {
                       className="form-input text-xs py-2 px-3 bg-zinc-900 !text-white border border-white/10 rounded-xl outline-none"
                     />
                     
-                    <div className="flex bg-white/5 border border-white/10 rounded-xl overflow-hidden p-0.5">
+                    <div className="flex bg-zinc-900 border border-white/10 rounded-xl overflow-hidden p-0.5 w-full sm:w-auto">
                       <button
                         onClick={() => setAttendanceView('tabular')}
-                        className={`px-3 py-1.5 text-[10px] font-bold rounded-lg transition-all ${attendanceView === 'tabular' ? 'bg-[#ff7979] text-white' : 'text-gray-400 hover:text-white'}`}
+                        className={`flex-1 sm:flex-none text-center px-2 py-2 text-[10px] font-bold rounded-lg transition-all ${attendanceView === 'tabular' ? 'bg-[#ff7979] text-white' : 'text-gray-400 hover:text-white'}`}
                       >
                         সমন্বিত শিট
                       </button>
                       <button
                         onClick={() => setAttendanceView('morning')}
-                        className={`px-3 py-1.5 text-[10px] font-bold rounded-lg transition-all ${attendanceView === 'morning' ? 'bg-[#ff7979] text-white' : 'text-gray-400 hover:text-white'}`}
+                        className={`flex-1 sm:flex-none text-center px-2 py-2 text-[10px] font-bold rounded-lg transition-all ${attendanceView === 'morning' ? 'bg-[#ff7979] text-white' : 'text-gray-400 hover:text-white'}`}
                       >
                         সকাল ({morningLogs.length})
                       </button>
                       <button
                         onClick={() => setAttendanceView('afternoon')}
-                        className={`px-3 py-1.5 text-[10px] font-bold rounded-lg transition-all ${attendanceView === 'afternoon' ? 'bg-[#ff7979] text-white' : 'text-gray-400 hover:text-white'}`}
+                        className={`flex-1 sm:flex-none text-center px-2 py-2 text-[10px] font-bold rounded-lg transition-all ${attendanceView === 'afternoon' ? 'bg-[#ff7979] text-white' : 'text-gray-400 hover:text-white'}`}
                       >
                         দুপুর ({afternoonLogs.length})
                       </button>
@@ -759,12 +759,16 @@ export default function DirectorDashboard() {
                     </div>
 
                     {/* Mobile View: List of Cards Layout */}
-                    <div className="block md:hidden space-y-4">
+                    <div className="block md:hidden flex flex-col" style={{ gap: '1.25rem' }}>
                       {tabularData.map((row) => (
-                        <div key={row.member.id} className="p-4 bg-white/5 border border-white/5 rounded-2xl space-y-3 text-left">
-                          {/* Top: Avatar, Name, Roll */}
-                          <div className="flex items-center gap-3">
-                            <div className="w-10 h-10 rounded-full overflow-hidden border border-white/10 shrink-0">
+                        <div 
+                          key={row.member.id} 
+                          className="bg-white border border-[#e3dbcc] rounded-2xl shadow-sm text-left overflow-hidden"
+                          style={{ padding: '1.25rem' }}
+                        >
+                          {/* Top: Avatar, Name (No Roll, Role) */}
+                          <div className="flex items-center gap-3" style={{ marginBottom: '1rem' }}>
+                            <div className="w-10 h-10 rounded-full overflow-hidden border border-[#e3dbcc] shrink-0 shadow-sm">
                               <img 
                                 src={row.member.avatar_url || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150&auto=format&fit=crop&q=80'} 
                                 alt={row.member.name} 
@@ -772,46 +776,43 @@ export default function DirectorDashboard() {
                               />
                             </div>
                             <div className="min-w-0 flex-1">
-                              <h4 className="font-bold text-white text-sm truncate">{row.member.name}</h4>
-                              <p className="text-[10px] text-gray-400 truncate">
-                                রোল: <span className="font-mono text-gray-200 font-bold">{row.member.roll}</span> • {row.member.role}
-                              </p>
+                              <h4 className="font-extrabold text-[#2a1f1a] text-sm truncate">{row.member.name}</h4>
                             </div>
                           </div>
 
-                          {/* Bottom: Shift Attendance Statuses */}
-                          <div className="grid grid-cols-2 gap-3 pt-2 border-t border-white/5">
+                          {/* Bottom: Shift Attendance Statuses with clean light theme styling */}
+                          <div className="grid grid-cols-2 gap-3 pt-3 border-t border-[#e3dbcc]/60">
                             {/* Morning Shift */}
-                            <div className="bg-white/5 p-2 rounded-xl border border-white/5 flex flex-col justify-center items-center text-center">
-                              <span className="text-[9px] text-gray-450 font-bold mb-1">সকাল</span>
+                            <div className="bg-[#fbf9f4] p-3 rounded-xl border border-[#e3dbcc]/80 flex flex-col justify-center items-center text-center">
+                              <span className="text-[10px] text-[#6b5c54] font-bold mb-1">সকাল</span>
                               {row.morning ? (
                                 <div className="flex flex-col items-center">
-                                  <span className="font-mono font-bold text-white text-[10px]">
+                                  <span className="font-mono font-bold text-[#2a1f1a] text-[10px]">
                                     {new Date(row.morning.check_in_time).toLocaleTimeString('bn-BD', { hour: '2-digit', minute: '2-digit' })}
                                   </span>
-                                  <span className={`text-[8px] font-bold px-1.5 py-0.5 rounded mt-1 ${row.morning.is_late ? 'bg-yellow-500/10 text-yellow-500 border border-yellow-500/20' : 'bg-green-500/10 text-green-400 border border-green-500/20'}`}>
+                                  <span className={`text-[8px] font-bold px-2 py-0.5 rounded-full mt-1.5 ${row.morning.is_late ? 'bg-yellow-50 text-yellow-750 border border-yellow-200' : 'bg-emerald-55 text-emerald-800 border border-emerald-200'}`}>
                                     {row.morning.is_late ? 'বিলম্বিত' : 'সময়মতো'}
                                   </span>
                                 </div>
                               ) : (
-                                <span className="text-[9px] bg-red-500/10 text-red-400 border border-red-500/20 px-2 py-0.5 rounded font-bold uppercase tracking-wider mt-1">অনুপস্থিত</span>
+                                <span className="text-[9px] bg-red-50 text-red-700 border border-red-200 px-3 py-0.5 rounded-full font-extrabold mt-1.5">অনুপস্থিত</span>
                               )}
                             </div>
 
                             {/* Afternoon Shift */}
-                            <div className="bg-white/5 p-2 rounded-xl border border-white/5 flex flex-col justify-center items-center text-center">
-                              <span className="text-[9px] text-gray-455 font-bold mb-1">দুপুর</span>
+                            <div className="bg-[#fbf9f4] p-3 rounded-xl border border-[#e3dbcc]/80 flex flex-col justify-center items-center text-center">
+                              <span className="text-[10px] text-[#6b5c54] font-bold mb-1">দুপুর</span>
                               {row.afternoon ? (
                                 <div className="flex flex-col items-center">
-                                  <span className="font-mono font-bold text-white text-[10px]">
+                                  <span className="font-mono font-bold text-[#2a1f1a] text-[10px]">
                                     {new Date(row.afternoon.check_in_time).toLocaleTimeString('bn-BD', { hour: '2-digit', minute: '2-digit' })}
                                   </span>
-                                  <span className={`text-[8px] font-bold px-1.5 py-0.5 rounded mt-1 ${row.afternoon.is_late ? 'bg-yellow-500/10 text-yellow-500 border border-yellow-500/20' : 'bg-green-500/10 text-green-400 border border-green-500/20'}`}>
+                                  <span className={`text-[8px] font-bold px-2 py-0.5 rounded-full mt-1.5 ${row.afternoon.is_late ? 'bg-yellow-55 text-yellow-750 border border-yellow-200' : 'bg-emerald-55 text-emerald-800 border border-emerald-200'}`}>
                                     {row.afternoon.is_late ? 'বিলম্বিত' : 'সময়মতো'}
                                   </span>
                                 </div>
                               ) : (
-                                <span className="text-[9px] bg-red-500/10 text-red-400 border border-red-500/20 px-2 py-0.5 rounded font-bold uppercase tracking-wider mt-1">অনুপস্থিত</span>
+                                <span className="text-[9px] bg-red-50 text-red-700 border border-red-200 px-3 py-0.5 rounded-full font-extrabold mt-1.5">অনুপস্থিত</span>
                               )}
                             </div>
                           </div>
