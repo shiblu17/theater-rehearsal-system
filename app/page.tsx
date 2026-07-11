@@ -15,30 +15,38 @@ export default function HomePage() {
   const [nextRehearsal, setNextRehearsal] = useState<Rehearsal | null>(null);
   const [countdownText, setCountdownText] = useState<string>('');
   const [isRehearsalPassed, setIsRehearsalPassed] = useState<boolean>(false);
-  const [isSynopsisOpen, setIsSynopsisOpen] = useState(false);
-  const [isAnalysisOpen, setIsAnalysisOpen] = useState(false);
-  const [isScheduleOpen, setIsScheduleOpen] = useState(false);
-  const [isResourcesOpen, setIsResourcesOpen] = useState(false);
+  const [settings, setSettings] = useState<any>(null);
+  const [callTimeCountdown, setCallTimeCountdown] = useState<{
+    label: string;
+    targetTimeStr: string;
+    hours: string;
+    minutes: string;
+    seconds: string;
+    isPassed: boolean;
+  }>({ label: 'হিসাব করা হচ্ছে...', targetTimeStr: '', hours: '00', minutes: '00', seconds: '00', isPassed: false });
 
   const timerRef = useRef<NodeJS.Timeout | null>(null);
 
   const loadData = async () => {
     try {
-      const [membersRes, rehearsalsRes, notesRes, leaderboardRes] = await Promise.all([
+      const [membersRes, rehearsalsRes, notesRes, leaderboardRes, settingsRes] = await Promise.all([
         fetch('/api/members'),
         fetch('/api/rehearsals'),
         fetch('/api/rehearsal-notes'),
-        fetch('/api/leaderboard')
+        fetch('/api/leaderboard'),
+        fetch('/api/settings')
       ]);
 
       const membersData = await membersRes.json();
       const rehearsalsData = await rehearsalsRes.json();
       const notesData = await notesRes.json();
       const leaderboardData = await leaderboardRes.json();
+      const settingsData = await settingsRes.json();
 
       if (Array.isArray(membersData)) setMembers(membersData);
       if (Array.isArray(notesData)) setNotes(notesData.slice(0, 2));
       if (Array.isArray(leaderboardData)) setLeaderboard(leaderboardData);
+      if (settingsData) setSettings(settingsData);
       
       if (Array.isArray(rehearsalsData)) {
         setRehearsals(rehearsalsData.slice(0, 3));
@@ -106,6 +114,77 @@ export default function HomePage() {
     timerRef.current = interval;
     return () => clearInterval(interval);
   }, [nextRehearsal]);
+
+  // Call Time Live Countdown Tick Effect
+  useEffect(() => {
+    if (!settings) return;
+
+    const tick = () => {
+      const now = new Date();
+      const nowMs = now.getTime();
+
+      // Parse morning cutoff (e.g. "11:30")
+      const [mH, mM] = settings.morning_cutoff.split(':').map(Number);
+      // Parse afternoon cutoff (e.g. "15:00")
+      const [aH, aM] = settings.afternoon_cutoff.split(':').map(Number);
+
+      const morningToday = new Date(now);
+      morningToday.setHours(mH, mM, 0, 0);
+
+      const afternoonToday = new Date(now);
+      afternoonToday.setHours(aH, aM, 0, 0);
+
+      let targetDate = new Date();
+      let label = '';
+      let targetTimeStr = '';
+
+      if (nowMs < morningToday.getTime()) {
+        targetDate = morningToday;
+        label = 'আজকের সকালের শিফট কল টাইম';
+        targetTimeStr = settings.morning_cutoff;
+      } else if (nowMs < afternoonToday.getTime()) {
+        targetDate = afternoonToday;
+        label = 'আজকের দুপুরের শিফট কল টাইম';
+        targetTimeStr = settings.afternoon_cutoff;
+      } else {
+        const morningTomorrow = new Date(now);
+        morningTomorrow.setDate(morningTomorrow.getDate() + 1);
+        morningTomorrow.setHours(mH, mM, 0, 0);
+        targetDate = morningTomorrow;
+        label = 'আগামীকালের সকালের শিফট কল টাইম';
+        targetTimeStr = settings.morning_cutoff;
+      }
+
+      const diff = targetDate.getTime() - nowMs;
+      if (diff <= 0) {
+        setCallTimeCountdown({
+          label,
+          targetTimeStr,
+          hours: '00',
+          minutes: '00',
+          seconds: '00',
+          isPassed: true
+        });
+      } else {
+        const hours = Math.floor(diff / 3600000);
+        const minutes = Math.floor((diff % 3600000) / 60000);
+        const seconds = Math.floor((diff % 60000) / 1000);
+
+        setCallTimeCountdown({
+          label,
+          targetTimeStr,
+          hours: String(hours).padStart(2, '0'),
+          minutes: String(minutes).padStart(2, '0'),
+          seconds: String(seconds).padStart(2, '0'),
+          isPassed: false
+        });
+      }
+    };
+
+    tick();
+    const interval = setInterval(tick, 1000);
+    return () => clearInterval(interval);
+  }, [settings]);
 
   const getCastingActor = (charName: string) => {
     return leaderboard.find(m => m.character_name === charName);
@@ -261,222 +340,89 @@ export default function HomePage() {
         </section>
       )}
 
-      {/* -------------------------------------------------------------
-         Accordion Section (কাহিনী সংক্ষেপ, রূপক তত্ত্ব, মহড়া সময়সূচী)
+            {/* -------------------------------------------------------------
+         Live Call Time Countdown Section (ফ্লোর ম্যানেজার কল টাইম কাউন্টডাউন)
          ------------------------------------------------------------- */}
-      <section className="section-wrapper bg-black/10 py-10 border-t border-white/5">
-        <div className="content-container max-w-4xl space-y-4">
+      <section className="section-wrapper bg-slate-50 border-t border-slate-200 py-16">
+        <div className="content-container max-w-4xl text-center space-y-8">
           
-          {/* Accordion 1: কাহিনী সংক্ষেপ */}
-          <div className="border border-slate-200 rounded-2xl bg-slate-50 overflow-hidden transition-all duration-300">
-            <button 
-              type="button"
-              onClick={() => setIsSynopsisOpen(!isSynopsisOpen)}
-              className="w-full flex items-center justify-between p-5 text-left transition-colors hover:bg-slate-100 focus:outline-none"
-            >
-              <div className="flex items-center gap-4">
-                <div className="w-10 h-10 rounded-xl bg-slate-100 border border-slate-200 flex items-center justify-center text-amber-600">
-                  <BookOpen size={20} />
-                </div>
-                <div>
-                  <h3 className="font-bold text-slate-900 text-base">কাহিনী সংক্ষেপ</h3>
-                  <p className="text-xs text-slate-500">যক্ষপুরের জটিল খনি ও নন্দিনীর আগমনের মূল গল্প</p>
-                </div>
-              </div>
-              <span className={`transform transition-transform duration-300 text-gray-400 ${isSynopsisOpen ? 'rotate-180' : ''}`}>
-                <ChevronDown size={20} />
-              </span>
-            </button>
-            <div 
-              className="transition-all duration-300 ease-in-out overflow-hidden"
-              style={{ 
-                maxHeight: isSynopsisOpen ? '1000px' : '0px', 
-                opacity: isSynopsisOpen ? 1 : 0,
-                visibility: isSynopsisOpen ? 'visible' : 'hidden'
-              }}
-            >
-              <div className="p-6 border-t border-slate-200 bg-slate-50 text-sm text-slate-700 leading-relaxed">
-                রক্তকরবী নাটকের মূলে রয়েছে যক্ষপুরী নামক একটি যান্ত্রিক খনি শহর। এখানে মানুষ সোনার লোভে অন্ধ হয়ে খনির গর্ভে মাটির নিচে প্রাণহীন পাথর খুঁড়ছে। রাজা স্বয়ং নিজেকে এক জটিল জালের আড়ালে বন্দি করে রেখেছেন এবং মানুষকে শুধু উৎপাদনের যন্ত্রে পরিণত করেছেন। এই শ্বাসরুদ্ধকর পরিবেশের মাঝে রক্তকরবী ফুলের মতো রাঙা রূপ আর অফুরন্ত প্রাণশক্তি নিয়ে হাজির হয় নন্দিনী। তার উপস্থিতি খনির শ্রমিকদের অসাড় চেতনায় মুক্তির কম্পন জাগায় এবং শেষ পর্যন্ত অত্যাচারী ও জটিল শাসন ব্যবস্থার ভিত কাঁপিয়ে দেয়।
-              </div>
-            </div>
+          <div className="section-header">
+            <h2>⏱️ লাইভ কল টাইম কাউন্টডাউন</h2>
+            <p>ফ্লোর ম্যানেজার কর্তৃক নির্ধারিত সকাল ও দুপুরের রিহার্সাল কল টাইমের রিয়েল-টাইম কাউন্টডাউন</p>
+            <TraditionalDivider />
           </div>
 
-          {/* Accordion 2: রূপক তত্ত্ব ও বিশ্লেষণ */}
-          <div className="border border-slate-200 rounded-2xl bg-slate-50 overflow-hidden transition-all duration-300">
-            <button 
-              type="button"
-              onClick={() => setIsAnalysisOpen(!isAnalysisOpen)}
-              className="w-full flex items-center justify-between p-5 text-left transition-colors hover:bg-slate-100 focus:outline-none"
-            >
-              <div className="flex items-center gap-4">
-                <div className="w-10 h-10 rounded-xl bg-slate-100 border border-slate-200 flex items-center justify-center text-[#e056fd]">
-                  <SparklesIcon className="w-5 h-5" />
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
+            
+            {/* Active Schedule panel (Left) */}
+            <div className="md:col-span-5 p-6 bg-white border border-slate-200 rounded-2xl shadow-sm space-y-4 text-left">
+              <h4 className="font-bold text-slate-900 border-b border-slate-100 pb-2 flex items-center gap-2">
+                <Clock className="text-amber-600 w-4 h-4" />
+                <span>সক্রিয় কল টাইম শিডিউল</span>
+              </h4>
+              
+              <div className="space-y-3">
+                <div className="flex justify-between items-center bg-slate-50 p-3 rounded-xl border border-slate-100">
+                  <span className="text-xs text-slate-500 font-semibold">সকালের শিফট:</span>
+                  <span className="text-sm font-bold text-slate-900">{settings?.morning_cutoff || '১১:৩০'} টা (কল টাইম)</span>
                 </div>
-                <div>
-                  <h3 className="font-bold text-slate-900 text-base">রূপক তত্ত্ব ও বিশ্লেষণ</h3>
-                  <p className="text-xs text-slate-500">প্রতীকীবাদ, রক্তকরবী ফুল ও রূপকের গূঢ় অর্থ</p>
+                <div className="flex justify-between items-center bg-slate-50 p-3 rounded-xl border border-slate-100">
+                  <span className="text-xs text-slate-500 font-semibold">দুপুরের শিফট:</span>
+                  <span className="text-sm font-bold text-slate-900">{settings?.afternoon_cutoff || '১৫:০০'} টা (কল টাইম)</span>
                 </div>
               </div>
-              <span className={`transform transition-transform duration-300 text-gray-400 ${isAnalysisOpen ? 'rotate-180' : ''}`}>
-                <ChevronDown size={20} />
-              </span>
-            </button>
-            <div 
-              className="transition-all duration-300 ease-in-out overflow-hidden"
-              style={{ 
-                maxHeight: isAnalysisOpen ? '1000px' : '0px', 
-                opacity: isAnalysisOpen ? 1 : 0,
-                visibility: isAnalysisOpen ? 'visible' : 'hidden'
-              }}
-            >
-              <div className="p-6 border-t border-slate-200 bg-slate-50 text-sm text-slate-700 leading-relaxed">
-                রক্তকরবী রবীন্দ্রনাথের অন্যতম শ্রেষ্ঠ রূপক ও প্রতীকী নাটক (Symbolic Drama)। এখানে প্রতিটি চরিত্র ও অনুষঙ্গ এক একটি দর্শনের প্রতিনিধিত্ব করে। যেমন- 'নন্দিনী' হলো অকৃত্রিম প্রকৃতি ও সৌন্দর্যের প্রতীক; 'রাজা' হলো অন্ধ পুঁজিবাদ, শোষণ ও একাকিত্বের প্রতীক; 'রক্তকরবী ফুল' হলো ওজস্বী যৌবনের জাগরণ এবং আত্মদানের প্রতীক। ৫২তম আবর্তনের এই মঞ্চায়নে আধুনিক আলোকসম্পাত, শক্তিশালী আবহসংগীত এবং গ্লাসমরফিক কোরিওগ্রাফির মাধ্যমে চিরায়ত রূপক নাটকের সাথে রিয়ালিজমের এক চমৎকার যুগলবন্দী ফুটিয়ে তোলা হয়েছে।
-              </div>
+              <p className="text-[10px] text-slate-400 font-semibold italic text-center pt-2">
+                * ফ্লোর ম্যানেজার ড্যাশবোর্ড থেকে কল টাইম পরিবর্তন করলে এখানে লাইভ আপডেট হবে।
+              </p>
             </div>
-          </div>
 
-          {/* Accordion 3: মহড়ার সময়সূচী */}
-          <div className="border border-slate-200 rounded-2xl bg-slate-50 overflow-hidden transition-all duration-300">
-            <button 
-              type="button"
-              onClick={() => setIsScheduleOpen(!isScheduleOpen)}
-              className="w-full flex items-center justify-between p-5 text-left transition-colors hover:bg-slate-100 focus:outline-none"
-            >
-              <div className="flex items-center gap-4">
-                <div className="w-10 h-10 rounded-xl bg-slate-100 border border-slate-200 flex items-center justify-center text-[#22a6b3]">
-                  <Calendar size={20} />
-                </div>
-                <div>
-                  <h3 className="font-bold text-slate-900 text-base">মহড়ার সময়সূচী</h3>
-                  <p className="text-xs text-slate-500">আসন্ন মহড়া ক্যালেন্ডার ও প্রয়োজনীয় কাস্টের বিবরণ</p>
-                </div>
+            {/* Countdown Clock (Right) */}
+            <div className="md:col-span-7 p-8 bg-white border border-slate-200 rounded-2xl shadow-sm flex flex-col justify-center items-center space-y-6">
+              <div className="space-y-1 text-center">
+                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-red-50 text-[10px] font-bold text-red-600 border border-red-100 animate-pulse">
+                  ● রানিং কাউন্টডাউন
+                </span>
+                <h4 className="text-sm font-extrabold text-slate-800 pt-1">{callTimeCountdown.label}</h4>
+                <p className="text-xs text-slate-500 font-semibold">টার্গেট টাইম: <span className="text-amber-600 font-bold">{callTimeCountdown.targetTimeStr}</span> টা</p>
               </div>
-              <span className={`transform transition-transform duration-300 text-gray-400 ${isScheduleOpen ? 'rotate-180' : ''}`}>
-                <ChevronDown size={20} />
-              </span>
-            </button>
-            <div 
-              className="transition-all duration-300 ease-in-out overflow-hidden"
-              style={{ 
-                maxHeight: isScheduleOpen ? '1500px' : '0px', 
-                opacity: isScheduleOpen ? 1 : 0,
-                visibility: isScheduleOpen ? 'visible' : 'hidden'
-              }}
-            >
-              <div className="p-6 border-t border-slate-200 bg-slate-50">
-                {rehearsals.length === 0 ? (
-                  <div className="p-8 text-center text-sm text-gray-500 max-w-xl mx-auto">
-                    সময়সূচী এখনও প্রকাশিত হয়নি
-                  </div>
-                ) : (
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    {rehearsals.map(r => (
-                      <div key={r.id} className="border border-slate-200 p-5 bg-white rounded-xl shadow-sm flex flex-col justify-between text-left hover:border-[#e056fd]/30 transition-all">
-                        <div className="space-y-3">
-                          <div className="flex justify-between items-center text-[9px] text-[#e056fd] font-bold tracking-widest uppercase">
-                            <span>রিহার্সাল অ্যালার্ট</span>
-                            <span className="bg-[#e056fd]/10 py-0.5 px-2 rounded-full border border-[#e056fd]/25">UPCOMING</span>
-                          </div>
-                          <h3 className="text-base font-bold text-slate-900">{r.title}</h3>
-                          {r.description && <p className="text-xs text-slate-600 leading-relaxed">{r.description}</p>}
-                        </div>
-                        
-                        <div className="border-t border-slate-100 mt-5 pt-4 space-y-2 text-xs">
-                          <div className="flex items-center gap-2 text-slate-700">
-                            <Calendar size={12} className="text-amber-600" />
-                            <span>তারিখ: {r.date}</span>
-                          </div>
-                          <div className="flex items-center gap-2 text-slate-700">
-                            <Clock size={12} className="text-[#e056fd]" />
-                            <span>সময়: {r.time}</span>
-                          </div>
-                          <div className="flex items-center gap-2 text-slate-700">
-                            <Users size={12} className="text-[#22a6b3]" />
-                            <span>চরিত্র: <span className="font-semibold text-white">{r.required_cast}</span></span>
-                          </div>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </div>
-            </div>
-          </div>
 
-          {/* Accordion 4: গুরুত্বপূর্ণ ডাউনলোড ও রিসোর্স */}
-          <div className="border border-slate-200 rounded-2xl bg-slate-50 overflow-hidden transition-all duration-300">
-            <button 
-              type="button"
-              onClick={() => setIsResourcesOpen(!isResourcesOpen)}
-              className="w-full flex items-center justify-between p-5 text-left transition-colors hover:bg-slate-100 focus:outline-none"
-            >
-              <div className="flex items-center gap-4">
-                <div className="w-10 h-10 rounded-xl bg-slate-100 border border-slate-200 flex items-center justify-center text-amber-600">
-                  <FileText size={20} />
+              {callTimeCountdown.isPassed ? (
+                <div className="p-4 bg-emerald-50 text-emerald-700 rounded-2xl border border-emerald-100 text-sm font-bold animate-bounce text-center">
+                  🚀 কল টাইম অতিক্রান্ত হয়েছে! দ্রুত মহড়া কক্ষে রিপোর্ট করুন।
                 </div>
-                <div>
-                  <h3 className="font-bold text-slate-900 text-base">লিব্রেটো স্ক্রিপ্ট ও রিহার্সাল ট্র্যাকস</h3>
-                  <p className="text-xs text-slate-500">রক্তকরবী স্ক্রিপ্ট (PDF) ডাউনলোড এবং মহড়ার প্রয়োজনীয় অডিও প্লেলিস্ট</p>
-                </div>
-              </div>
-              <span className={`transform transition-transform duration-300 text-gray-400 ${isResourcesOpen ? 'rotate-180' : ''}`}>
-                <ChevronDown size={20} />
-              </span>
-            </button>
-            <div 
-              className="transition-all duration-300 ease-in-out overflow-hidden"
-              style={{ 
-                maxHeight: isResourcesOpen ? '500px' : '0px', 
-                opacity: isResourcesOpen ? 1 : 0,
-                visibility: isResourcesOpen ? 'visible' : 'hidden'
-              }}
-            >
-              <div className="p-6 border-t border-slate-200 bg-slate-50">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-left">
-                  <div className="p-5 border border-slate-200 rounded-2xl bg-slate-50 flex items-center justify-between gap-4">
-                    <div className="flex items-center gap-4">
-                      <div className="w-12 h-12 rounded-xl bg-red-50 flex items-center justify-center text-red-500 border border-red-200">
-                        <FileText size={24} />
-                      </div>
-                      <div>
-                        <h4 className="font-bold text-slate-900 text-sm">রক্তকরবী লিব্রেটো (PDF Script)</h4>
-                        <p className="text-[10px] text-slate-500">বার্ষিক উৎসবের মূল স্ক্রিপ্ট ও লিব্রেটো ডাউনলোড করুন।</p>
-                      </div>
+              ) : (
+                <div className="flex items-center gap-4">
+                  {/* Hours */}
+                  <div className="flex flex-col items-center">
+                    <div className="w-16 h-16 md:w-20 md:h-20 bg-slate-50 border border-slate-200 rounded-2xl shadow-inner flex items-center justify-center text-2xl md:text-3xl font-black text-[#851b2e] font-mono">
+                      {callTimeCountdown.hours}
                     </div>
-                    <a 
-                      href="https://sanskritbooks.org/rabindranath-tagore-books-pdf/Rakta-Karabi-Rabindranath-Tagore.pdf" 
-                      target="_blank" 
-                      rel="noopener noreferrer" 
-                      className="bg-slate-100 hover:bg-slate-200 text-slate-700 py-2 px-4 text-xs shrink-0 flex items-center gap-1 border border-slate-200 rounded-xl"
-                    >
-                      <Download size={12} />
-                      <span>ডাউনলোড</span>
-                    </a>
+                    <span className="text-[10px] font-bold text-slate-500 mt-2">ঘণ্টা</span>
                   </div>
 
-                  <div className="p-5 border border-slate-200 rounded-2xl bg-slate-50 flex items-center justify-between gap-4">
-                    <div className="flex items-center gap-4">
-                      <div className="w-12 h-12 rounded-xl bg-purple-50 flex items-center justify-center text-purple-600 border border-purple-200">
-                        <Music size={24} />
-                      </div>
-                      <div>
-                        <h4 className="font-bold text-slate-900 text-sm">বিশু পাগলের গান (Rehearsal Tracks)</h4>
-                        <p className="text-[10px] text-slate-500">মহড়ায় ব্যবহৃত ব্যাকগ্রাউন্ড আবহসংগীত ও গান অনুশীলনের ফাইলসমূহ।</p>
-                      </div>
+                  <span className="text-2xl font-black text-slate-400 -mt-6">:</span>
+
+                  {/* Minutes */}
+                  <div className="flex flex-col items-center">
+                    <div className="w-16 h-16 md:w-20 md:h-20 bg-slate-50 border border-slate-200 rounded-2xl shadow-inner flex items-center justify-center text-2xl md:text-3xl font-black text-[#851b2e] font-mono">
+                      {callTimeCountdown.minutes}
                     </div>
-                    <a 
-                      href="https://www.youtube.com/results?search_query=raktakarabi+rabindrasangeet" 
-                      target="_blank" 
-                      rel="noopener noreferrer" 
-                      className="bg-slate-100 hover:bg-slate-200 text-slate-700 py-2 px-4 text-xs shrink-0 flex items-center gap-1 border border-slate-200 rounded-xl"
-                    >
-                      <Music size={12} />
-                      <span>প্লেলিস্ট</span>
-                    </a>
+                    <span className="text-[10px] font-bold text-slate-500 mt-2">মিনিট</span>
+                  </div>
+
+                  <span className="text-2xl font-black text-slate-400 -mt-6">:</span>
+
+                  {/* Seconds */}
+                  <div className="flex flex-col items-center">
+                    <div className="w-16 h-16 md:w-20 md:h-20 bg-slate-50 border border-slate-200 rounded-2xl shadow-inner flex items-center justify-center text-2xl md:text-3xl font-black text-amber-600 font-mono">
+                      {callTimeCountdown.seconds}
+                    </div>
+                    <span className="text-[10px] font-bold text-slate-500 mt-2">সেকেন্ড</span>
                   </div>
                 </div>
-              </div>
+              )}
             </div>
+
           </div>
 
         </div>
