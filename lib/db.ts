@@ -252,13 +252,15 @@ export async function getSystemSettings(): Promise<SystemSettings> {
 export async function updateSystemSettings(settings: SystemSettings): Promise<SystemSettings> {
   if (isSupabaseConfigured && supabase) {
     try {
-      // Upsert settings keys
-      await supabase.from('system_settings').upsert({ key: 'morning_cutoff', value: settings.morning_cutoff });
-      await supabase.from('system_settings').upsert({ key: 'afternoon_cutoff', value: settings.afternoon_cutoff });
-      await supabase.from('system_settings').upsert({ key: 'session_transition', value: settings.session_transition });
-      return settings;
-    } catch (err) {
-      console.warn('⚠️ Supabase settings upsert failed. Falling back.');
+      // Upsert settings keys and check for RLS or query errors
+      const res1 = await supabase.from('system_settings').upsert({ key: 'morning_cutoff', value: settings.morning_cutoff });
+      if (res1.error) throw res1.error;
+      const res2 = await supabase.from('system_settings').upsert({ key: 'afternoon_cutoff', value: settings.afternoon_cutoff });
+      if (res2.error) throw res2.error;
+      const res3 = await supabase.from('system_settings').upsert({ key: 'session_transition', value: settings.session_transition });
+      if (res3.error) throw res3.error;
+    } catch (err: any) {
+      console.warn('⚠️ Supabase settings upsert failed. Falling back.', err.message || err);
     }
   }
 
