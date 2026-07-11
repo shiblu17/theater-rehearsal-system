@@ -676,6 +676,17 @@ export async function clearAllMockData(): Promise<void> {
   db.rehearsals = [];
   db.notes = [];
   writeMockDB(db);
+
+  if (isSupabaseConfigured && supabase) {
+    try {
+      await supabase.from('tickets').delete().neq('name', 'dummy_non_existent');
+      await supabase.from('rehearsals').delete().neq('title', 'dummy_non_existent');
+      await supabase.from('rehearsal_notes').delete().neq('content', 'dummy_non_existent');
+      await supabase.from('attendance').delete().neq('status', 'dummy_non_existent');
+    } catch (err) {
+      console.error('Supabase clear database error:', err);
+    }
+  }
 }
 
 export async function reseedDefaultMembers(): Promise<void> {
