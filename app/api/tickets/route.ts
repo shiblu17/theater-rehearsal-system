@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getTickets, bookTicket, updateTicket, deleteTicket } from '@/lib/db';
+import { sendTicketEmail } from '@/lib/email';
 
 export async function GET() {
   try {
@@ -24,6 +25,11 @@ export async function POST(req: NextRequest) {
       email,
       phone,
       seats: parseInt(seats, 10)
+    });
+
+    // Send confirmation email asynchronously (do not block the response)
+    sendTicketEmail(ticket).catch(err => {
+      console.error('Asynchronous ticket email error:', err);
     });
 
     return NextResponse.json({ success: true, ticket });

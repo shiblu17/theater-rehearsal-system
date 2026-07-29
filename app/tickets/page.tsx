@@ -1,9 +1,10 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Ticket, Users, Phone, Mail, Award, CheckCircle, ArrowRight, Download, QrCode, Sparkles } from 'lucide-react';
+import { Ticket, Users, Phone, Mail, Award, CheckCircle, ArrowRight, ArrowLeft, Download, QrCode, Sparkles } from 'lucide-react';
 
 export default function TicketsPage() {
+  const [checkoutStep, setCheckoutStep] = useState<1 | 2>(1);
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
@@ -12,6 +13,11 @@ export default function TicketsPage() {
   const [selectedSeats, setSelectedSeats] = useState<string[]>([]);
   const [bookedSeats, setBookedSeats] = useState<string[]>([]);
   
+  // Payment States
+  const [paymentMethod, setPaymentMethod] = useState<'bkash' | 'nagad'>('bkash');
+  const [senderNumber, setSenderNumber] = useState('');
+  const [trxId, setTrxId] = useState('');
+
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [successTicket, setSuccessTicket] = useState<any>(null);
@@ -19,6 +25,8 @@ export default function TicketsPage() {
   // Seat Grid Configuration (6 Rows, 8 Columns)
   const rows = ['A', 'B', 'C', 'D', 'E', 'F'];
   const cols = [1, 2, 3, 4, 5, 6, 7, 8];
+  
+  const TICKET_PRICE = 50; // 50 TK per seat
 
   // Fetch all currently booked seats on load
   const fetchBookedSeats = async () => {
@@ -66,11 +74,17 @@ export default function TicketsPage() {
       setError('অনুগ্রহ করে অন্তত ১টি আসন নির্বাচন করুন।');
       return;
     }
+    if (!senderNumber || !trxId) {
+      setError('অনুগ্রহ করে পেমেন্ট বিবরণ পূরণ করুন।');
+      return;
+    }
     setLoading(true);
     setError('');
 
     // Append selected seats to the name field to keep it backward-compatible
     const formattedName = `${name} (Seat: ${selectedSeats.join(', ')})`;
+    // Append payment details into the phone field
+    const formattedPhone = `${phone} (${paymentMethod.toUpperCase()} Sender: ${senderNumber}, TrxID: ${trxId})`;
 
     try {
       const res = await fetch('/api/tickets', {
@@ -81,7 +95,7 @@ export default function TicketsPage() {
         body: JSON.stringify({ 
           name: formattedName, 
           email, 
-          phone, 
+          phone: formattedPhone, 
           seats: selectedSeats.length 
         }),
       });
@@ -97,7 +111,10 @@ export default function TicketsPage() {
       setName('');
       setEmail('');
       setPhone('');
+      setSenderNumber('');
+      setTrxId('');
       setSelectedSeats([]);
+      setCheckoutStep(1);
       fetchBookedSeats(); // Refresh booked list
     } catch (err: any) {
       setError(err.message || 'নেটওয়ার্ক ত্রুটি। আবার চেষ্টা করুন।');
@@ -108,14 +125,20 @@ export default function TicketsPage() {
 
   // Helper to extract clean name and seats for successful ticket display
   const getTicketDisplayData = (ticket: any) => {
-    if (!ticket) return { cleanName: '', seatLabels: '' };
-    const match = ticket.name.match(/\((?:Seat|আসন):\s*([^)]+)\)/);
+    if (!ticket) return { cleanName: '', seatLabels: '', cleanPhone: '', paymentDetails: '' };
+    
+    const seatMatch = ticket.name.match(/\((?:Seat|আসন):\s*([^)]+)\)/);
     const cleanName = ticket.name.replace(/\s*\((?:Seat|আসন):\s*([^)]+)\)/, '');
-    const seatLabels = match ? match[1] : '';
-    return { cleanName, seatLabels };
+    const seatLabels = seatMatch ? seatMatch[1] : '';
+    
+    const payMatch = ticket.phone.match(/\(([^)]+)\)/);
+    const cleanPhone = ticket.phone.replace(/\s*\(([^)]+)\)/, '');
+    const paymentDetails = payMatch ? payMatch[1] : 'ফ্রি এন্ট্রি পাস';
+
+    return { cleanName, seatLabels, cleanPhone, paymentDetails };
   };
 
-  const { cleanName, seatLabels } = getTicketDisplayData(successTicket);
+  const { cleanName, seatLabels, cleanPhone, paymentDetails } = getTicketDisplayData(successTicket);
 
   return (
     <div className="flex-1 app-container flex items-center justify-center min-h-[85vh] py-8">
@@ -156,7 +179,7 @@ export default function TicketsPage() {
                   </div>
                   <div>
                     <span className="text-[9px] text-[#6b5c54] block font-bold uppercase tracking-wider">ফোন নম্বর</span>
-                    <span className="font-mono font-bold text-[#2a1f1a] text-sm">{successTicket.phone}</span>
+                    <span className="font-mono font-bold text-[#2a1f1a] text-sm">{cleanPhone}</span>
                   </div>
                   <div>
                     <span className="text-[9px] text-[#6b5c54] block font-bold uppercase tracking-wider">তারিখ ও সময়</span>
@@ -165,6 +188,10 @@ export default function TicketsPage() {
                   <div>
                     <span className="text-[9px] text-[#6b5c54] block font-bold uppercase tracking-wider">নির্ধারিত আসন (Seats)</span>
                     <span className="font-bold text-emerald-600 text-sm">{seatLabels || successTicket.seats} ({successTicket.seats} টি আসন)</span>
+                  </div>
+                  <div className="col-span-2 border-t border-[#e3dbcc]/60 pt-3">
+                    <span className="text-[9px] text-[#6b5c54] block font-bold uppercase tracking-wider">পেমেন্ট ও রেফারেন্স</span>
+                    <span className="font-bold text-[#2a1f1a] text-xs">{paymentDetails}</span>
                   </div>
                 </div>
 
@@ -208,14 +235,14 @@ export default function TicketsPage() {
             <div className="flex gap-4 max-w-xl mx-auto w-full">
               <button 
                 onClick={() => window.print()} 
-                className="btn-glass text-xs flex-1 justify-center py-3 border-[#e3dbcc] hover:bg-black/5 text-[#2a1f1a]"
+                className="btn-glass text-xs flex-1 justify-center py-3 border-[#e3dbcc] hover:bg-black/5 text-[#2a1f1a] cursor-pointer"
               >
                 <Download size={14} />
                 <span>প্রিন্ট করুন</span>
               </button>
               <button 
                 onClick={() => setSuccessTicket(null)} 
-                className="btn-primary text-xs flex-1 justify-center py-3 bg-gradient-to-r from-amber-500 to-amber-600 border-0"
+                className="btn-primary text-xs flex-1 justify-center py-3 bg-gradient-to-r from-amber-500 to-amber-600 border-0 cursor-pointer"
               >
                 <span>নতুন টিকিট বুক করুন</span>
               </button>
@@ -235,92 +262,194 @@ export default function TicketsPage() {
                 </span>
                 <h2 className="text-3xl font-extrabold text-[#2a1f1a] leading-tight">ডিজিটাল টিকিট পোর্টাল</h2>
                 <p className="text-xs text-[#6b5c54] font-semibold">
-                  নাটক ও নাট্যতত্ত্ব বিভাগ কর্তৃক আয়োজিত "রক্তকরবী" নাটকের প্রবেশ টিকিট সংগ্রহ করুন। ডানপাশের ইন্টারেক্টিভ সিট প্ল্যান থেকে আপনার পছন্দের আসনগুলো বেছে নিন।
+                  নাটক ও নাট্যতত্ত্ব বিভাগ কর্তৃক আয়োজিত "রক্তকরবী" নাটকের প্রবেশ টিকিট সংগ্রহ করুন। ডানপাশের ইন্টারেক্টিভ সিট প্ল্যান থেকে আসন নির্বাচন ও ফি প্রদান সম্পন্ন করুন।
                 </p>
               </div>
 
               {/* Form Input Section */}
               <div className="p-6 border border-[#e3dbcc] bg-[#fbf9f4] rounded-3xl shadow-sm space-y-4 text-left">
-                <h3 className="text-sm font-bold text-[#2a1f1a] mb-2 flex items-center gap-2">
-                  <Users size={16} className="text-[#ff7979]" />
-                  <span>দর্শকের বিবরণ</span>
-                </h3>
+                {checkoutStep === 1 ? (
+                  // STEP 1 DETAILS
+                  <div className="space-y-4">
+                    <h3 className="text-sm font-bold text-[#2a1f1a] flex items-center gap-2">
+                      <Users size={16} className="text-amber-600" />
+                      <span>ধাপ ১: আসন সংখ্যা ও কাউন্টার</span>
+                    </h3>
+                    <p className="text-[11px] text-[#6b5c54] leading-relaxed">
+                      ডানপাশের আসন বিন্যাস থেকে আপনার পছন্দের আসনগুলো সিলেক্ট করুন। সবুজ চিহ্নিত আসনগুলো আপনার জন্য রিজার্ভ করা হবে।
+                    </p>
 
-                {error && (
-                  <div className="p-3.5 rounded-xl bg-red-50 text-red-700 border border-red-200 text-xs font-bold">
-                    {error}
+                    <div className="bg-white p-3 rounded-xl border border-[#e3dbcc] flex justify-between items-center text-xs">
+                      <span className="text-[#6b5c54] font-bold">নির্বাচিত আসন:</span>
+                      <span className="font-extrabold text-[#2a1f1a]">{selectedSeats.length > 0 ? selectedSeats.join(', ') : 'কোনোটি নয়'}</span>
+                    </div>
+
+                    <div className="bg-white p-3 rounded-xl border border-[#e3dbcc] flex justify-between items-center text-xs">
+                      <span className="text-[#6b5c54] font-bold">টিকিট মূল্য (৳৫০ × {selectedSeats.length}):</span>
+                      <span className="font-black text-amber-600 text-sm">৳{selectedSeats.length * TICKET_PRICE}</span>
+                    </div>
+
+                    <button
+                      type="button"
+                      onClick={() => setCheckoutStep(2)}
+                      disabled={selectedSeats.length === 0}
+                      className="btn-primary w-full justify-center py-3.5 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white font-extrabold text-sm border-0 disabled:opacity-40 disabled:pointer-events-none transition-all shadow-md shadow-amber-500/10 cursor-pointer"
+                    >
+                      <span>পরবর্তী ধাপে যান (পেমেন্ট)</span>
+                      <ArrowRight size={16} />
+                    </button>
+                  </div>
+                ) : (
+                  // STEP 2 DETAILS (Payment details & inputs)
+                  <div className="space-y-4">
+                    <div className="flex items-center justify-between">
+                      <h3 className="text-sm font-bold text-[#2a1f1a] flex items-center gap-2">
+                        <Users size={16} className="text-emerald-600" />
+                        <span>ধাপ ২: পেমেন্ট ও বুকিং তথ্য</span>
+                      </h3>
+                      <button
+                        onClick={() => setCheckoutStep(1)}
+                        className="text-[10px] font-black text-amber-600 hover:text-amber-700 flex items-center gap-0.5 bg-transparent border-0 cursor-pointer"
+                      >
+                        <ArrowLeft size={12} />
+                        <span>সিট পরিবর্তন</span>
+                      </button>
+                    </div>
+
+                    {error && (
+                      <div className="p-3 rounded-xl bg-red-50 text-red-700 border border-red-200 text-xs font-bold">
+                        {error}
+                      </div>
+                    )}
+
+                    {/* bKash/Nagad Send Money numbers */}
+                    <div className="bg-amber-500/5 p-4 rounded-xl border border-amber-500/10 space-y-2">
+                      <p className="text-[11px] text-[#2a1f1a] font-extrabold text-center">
+                        বিকাশ বা নগদে মোট <span className="text-[#c0392b] text-xs">৳{selectedSeats.length * TICKET_PRICE}</span> টাকা 'Send Money' করুন:
+                      </p>
+                      <div className="grid grid-cols-2 gap-3 text-center text-xs pt-1">
+                        <div className="bg-white p-2.5 rounded-lg border border-[#e3dbcc] shadow-sm">
+                          <span className="block text-[9px] text-[#ff7979] font-black">bKash (Personal)</span>
+                          <span className="font-mono font-bold text-[#2a1f1a]">01712345678</span>
+                        </div>
+                        <div className="bg-white p-2.5 rounded-lg border border-[#e3dbcc] shadow-sm">
+                          <span className="block text-[9px] text-orange-600 font-black">Nagad (Personal)</span>
+                          <span className="font-mono font-bold text-[#2a1f1a]">01712345678</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <form onSubmit={handleSubmit} className="space-y-3.5">
+                      <div className="form-group">
+                        <label className="form-label flex items-center gap-1 text-[11px] font-bold text-[#6b5c54]">
+                          <span>দর্শকের নাম</span>
+                          <span className="text-[#ff7979]">*</span>
+                        </label>
+                        <input
+                          type="text"
+                          required
+                          placeholder="আপনার নাম লিখুন"
+                          value={name}
+                          onChange={(e) => setName(e.target.value)}
+                          className="form-input text-xs py-2.5 px-3 bg-white border border-[#e3dbcc] rounded-xl outline-none w-full !text-[#2a1f1a] font-semibold"
+                        />
+                      </div>
+
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <div className="form-group">
+                          <label className="form-label flex items-center gap-1 text-[11px] font-bold text-[#6b5c54]">
+                            <span>মোবাইল নম্বর</span>
+                            <span className="text-[#ff7979]">*</span>
+                          </label>
+                          <input
+                            type="tel"
+                            required
+                            placeholder="০১XXXXXXXXX"
+                            value={phone}
+                            onChange={(e) => setPhone(e.target.value)}
+                            className="form-input text-xs py-2.5 px-3 bg-white border border-[#e3dbcc] rounded-xl outline-none w-full !text-[#2a1f1a] font-semibold"
+                          />
+                        </div>
+
+                        <div className="form-group">
+                          <label className="form-label flex items-center gap-1 text-[11px] font-bold text-[#6b5c54]">
+                            <span>ইমেইল এড্রেস</span>
+                            <span className="text-[#ff7979]">*</span>
+                          </label>
+                          <input
+                            type="email"
+                            required
+                            placeholder="name@example.com"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            className="form-input text-xs py-2.5 px-3 bg-white border border-[#e3dbcc] rounded-xl outline-none w-full !text-[#2a1f1a] font-semibold"
+                          />
+                        </div>
+                      </div>
+
+                      {/* Payment Inputs */}
+                      <div className="bg-white p-4 rounded-xl border border-[#e3dbcc] space-y-3">
+                        <span className="block text-[10px] font-black text-[#6b5c54] uppercase tracking-wider border-b border-[#e3dbcc]/50 pb-1.5">পেমেন্ট ভেরিফিকেশন</span>
+                        
+                        <div className="flex gap-2">
+                          <button
+                            type="button"
+                            onClick={() => setPaymentMethod('bkash')}
+                            className={`flex-1 text-center py-2 text-xs font-black rounded-lg border transition-all cursor-pointer ${paymentMethod === 'bkash' ? 'bg-[#ff7979]/10 text-[#ff7979] border-[#ff7979]' : 'bg-transparent text-gray-400 border-[#e3dbcc]'}`}
+                          >
+                            bKash (বিকাশ)
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => setPaymentMethod('nagad')}
+                            className={`flex-1 text-center py-2 text-xs font-black rounded-lg border transition-all cursor-pointer ${paymentMethod === 'nagad' ? 'bg-orange-50 text-orange-600 border-orange-500' : 'bg-transparent text-gray-400 border-[#e3dbcc]'}`}
+                          >
+                            Nagad (নগদ)
+                          </button>
+                        </div>
+
+                        <div className="form-group">
+                          <label className="form-label text-[10px] font-bold text-[#6b5c54]">যে নম্বর থেকে টাকা পাঠিয়েছেন</label>
+                          <input
+                            type="tel"
+                            required
+                            placeholder="০১XXXXXXXXX"
+                            value={senderNumber}
+                            onChange={(e) => setSenderNumber(e.target.value)}
+                            className="form-input text-xs py-2.5 px-3 bg-white border border-[#e3dbcc] rounded-xl w-full outline-none font-semibold !text-[#2a1f1a]"
+                          />
+                        </div>
+
+                        <div className="form-group">
+                          <label className="form-label text-[10px] font-bold text-[#6b5c54]">Transaction ID (TrxID)</label>
+                          <input
+                            type="text"
+                            required
+                            placeholder="TrxID (যেমন: BK29X8Z10)"
+                            value={trxId}
+                            onChange={(e) => setTrxId(e.target.value)}
+                            className="form-input text-xs py-2.5 px-3 bg-white border border-[#e3dbcc] rounded-xl w-full outline-none font-mono font-bold uppercase !text-[#2a1f1a]"
+                          />
+                        </div>
+                      </div>
+
+                      <button
+                        type="submit"
+                        disabled={loading}
+                        className="btn-primary w-full justify-center py-3.5 mt-2 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white font-extrabold text-sm border-0 disabled:opacity-40 disabled:pointer-events-none transition-all shadow-md shadow-amber-500/10 cursor-pointer"
+                      >
+                        {loading ? (
+                          <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                        ) : (
+                          <>
+                            <span>টিকিট বুকিং সম্পন্ন করুন</span>
+                            <ArrowRight size={16} />
+                          </>
+                        )}
+                      </button>
+                    </form>
                   </div>
                 )}
-
-                <form onSubmit={handleSubmit} className="space-y-4">
-                  <div className="form-group">
-                    <label className="form-label flex items-center gap-1 text-xs font-bold text-[#6b5c54]">
-                      <span>দর্শকের নাম</span>
-                      <span className="text-[#ff7979]">*</span>
-                    </label>
-                    <input
-                      type="text"
-                      required
-                      placeholder="আপনার নাম লিখুন"
-                      value={name}
-                      onChange={(e) => setName(e.target.value)}
-                      className="form-input text-xs py-3 px-4 bg-white border border-[#e3dbcc] rounded-xl outline-none w-full !text-[#2a1f1a] font-semibold"
-                    />
-                  </div>
-
-                  <div className="form-group">
-                    <label className="form-label flex items-center gap-1 text-xs font-bold text-[#6b5c54]">
-                      <span>মোবাইল নম্বর</span>
-                      <span className="text-[#ff7979]">*</span>
-                    </label>
-                    <input
-                      type="tel"
-                      required
-                      placeholder="০১XXXXXXXXX"
-                      value={phone}
-                      onChange={(e) => setPhone(e.target.value)}
-                      className="form-input text-xs py-3 px-4 bg-white border border-[#e3dbcc] rounded-xl outline-none w-full !text-[#2a1f1a] font-semibold"
-                    />
-                  </div>
-
-                  <div className="form-group">
-                    <label className="form-label flex items-center gap-1 text-xs font-bold text-[#6b5c54]">
-                      <span>ইমেইল এড্রেস</span>
-                      <span className="text-[#ff7979]">*</span>
-                    </label>
-                    <input
-                      type="email"
-                      required
-                      placeholder="name@example.com"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      className="form-input text-xs py-3 px-4 bg-white border border-[#e3dbcc] rounded-xl outline-none w-full !text-[#2a1f1a] font-semibold"
-                    />
-                  </div>
-
-                  {/* Dynamic Seat Counter badge */}
-                  <div className="bg-white p-3 rounded-xl border border-[#e3dbcc] flex justify-between items-center text-xs">
-                    <span className="text-[#6b5c54] font-bold">নির্বাচিত আসন সংখ্যা:</span>
-                    <span className={`px-3 py-1 rounded-full text-[10px] font-black ${selectedSeats.length > 0 ? 'bg-emerald-50 text-emerald-800 border border-emerald-200' : 'bg-amber-50 text-amber-800 border border-amber-200'}`}>
-                      {selectedSeats.length} / ৫ টি
-                    </span>
-                  </div>
-
-                  <button
-                    type="submit"
-                    disabled={loading || selectedSeats.length === 0}
-                    className="btn-primary w-full justify-center py-3.5 mt-2 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white font-extrabold text-sm border-0 disabled:opacity-40 disabled:pointer-events-none transition-all shadow-md shadow-amber-500/10 cursor-pointer"
-                  >
-                    {loading ? (
-                      <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
-                    ) : (
-                      <>
-                        <span>টিকিট বুকিং নিশ্চিত করুন</span>
-                        <ArrowRight size={16} />
-                      </>
-                    )}
-                  </button>
-                </form>
               </div>
 
               {/* Promo Rules Banner */}
@@ -330,7 +459,7 @@ export default function TicketsPage() {
                     <Award size={16} />
                   </div>
                   <div>
-                    <h4 className="text-xs font-bold text-[#2a1f1a]">ফ্রি ডিজিটাল প্রবেশ পাস</h4>
+                    <h4 className="text-xs font-bold text-[#2a1f1a]">ডিজিটাল প্রবেশ পাস</h4>
                     <p className="text-[10px] text-[#6b5c54] mt-0.5">সবাইর জন্য আসন সীমিত। অনুগ্রহ করে বুকিং নিশ্চিত করার পর কিউআর কোডটি ফোনে স্ক্রিনশট বা ডাউনলোড করে হল গেটে প্রদর্শন করবেন।</p>
                   </div>
                 </div>
@@ -373,7 +502,7 @@ export default function TicketsPage() {
                             <div key={col} className="flex items-center">
                               <button
                                 type="button"
-                                disabled={isBooked}
+                                disabled={isBooked || checkoutStep === 2}
                                 onClick={() => handleSeatClick(seatId)}
                                 className={`w-7 h-7 md:w-8 md:h-8 rounded-lg border text-[10px] font-bold font-mono flex items-center justify-center transition-all ${seatClass}`}
                                 title={isBooked ? `Seat ${seatId} is Booked` : `Seat ${seatId}`}
