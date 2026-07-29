@@ -1,22 +1,76 @@
 'use client';
 
-import { useState } from 'react';
-import { Ticket, Users, Phone, Mail, Award, CheckCircle, ArrowRight, Download, QrCode } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { Ticket, Users, Phone, Mail, Award, CheckCircle, ArrowRight, Download, QrCode, Sparkles } from 'lucide-react';
 
 export default function TicketsPage() {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
-  const [seats, setSeats] = useState(1);
+  
+  // Seat Picker States
+  const [selectedSeats, setSelectedSeats] = useState<string[]>([]);
+  const [bookedSeats, setBookedSeats] = useState<string[]>([]);
   
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [successTicket, setSuccessTicket] = useState<any>(null);
 
+  // Seat Grid Configuration (6 Rows, 8 Columns)
+  const rows = ['A', 'B', 'C', 'D', 'E', 'F'];
+  const cols = [1, 2, 3, 4, 5, 6, 7, 8];
+
+  // Fetch all currently booked seats on load
+  const fetchBookedSeats = async () => {
+    try {
+      const res = await fetch('/api/tickets', { cache: 'no-store' });
+      if (res.ok) {
+        const tickets: any[] = await res.json();
+        const booked: string[] = [];
+        tickets.forEach(ticket => {
+          // Parse seat labels from name string formatted as "Name (Seat: A1, A2)"
+          const match = ticket.name.match(/\((?:Seat|আসন):\s*([^)]+)\)/);
+          if (match) {
+            const seatsList = match[1].split(',').map((s: string) => s.trim());
+            booked.push(...seatsList);
+          }
+        });
+        setBookedSeats(booked);
+      }
+    } catch (err) {
+      console.error('Error fetching booked seats:', err);
+    }
+  };
+
+  useEffect(() => {
+    fetchBookedSeats();
+  }, []);
+
+  const handleSeatClick = (seatId: string) => {
+    if (bookedSeats.includes(seatId)) return; // Already occupied
+
+    if (selectedSeats.includes(seatId)) {
+      setSelectedSeats(selectedSeats.filter(s => s !== seatId));
+    } else {
+      if (selectedSeats.length >= 5) {
+        alert('দুঃখিত, আপনি একসাথে সর্বোচ্চ ৫টি আসন নির্বাচন করতে পারবেন।');
+        return;
+      }
+      setSelectedSeats([...selectedSeats, seatId]);
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (selectedSeats.length === 0) {
+      setError('অনুগ্রহ করে অন্তত ১টি আসন নির্বাচন করুন।');
+      return;
+    }
     setLoading(true);
     setError('');
+
+    // Append selected seats to the name field to keep it backward-compatible
+    const formattedName = `${name} (Seat: ${selectedSeats.join(', ')})`;
 
     try {
       const res = await fetch('/api/tickets', {
@@ -24,7 +78,12 @@ export default function TicketsPage() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ name, email, phone, seats }),
+        body: JSON.stringify({ 
+          name: formattedName, 
+          email, 
+          phone, 
+          seats: selectedSeats.length 
+        }),
       });
 
       const data = await res.json();
@@ -34,11 +93,12 @@ export default function TicketsPage() {
       }
 
       setSuccessTicket(data.ticket);
-      // Reset form
+      // Reset form & selections
       setName('');
       setEmail('');
       setPhone('');
-      setSeats(1);
+      setSelectedSeats([]);
+      fetchBookedSeats(); // Refresh booked list
     } catch (err: any) {
       setError(err.message || 'নেটওয়ার্ক ত্রুটি। আবার চেষ্টা করুন।');
     } finally {
@@ -46,86 +106,91 @@ export default function TicketsPage() {
     }
   };
 
-  return (
-    <div className="flex-1 app-container flex items-center justify-center min-h-[80vh]">
-      {/* Background glow decorations */}
-      <div className="absolute top-1/3 left-1/2 w-80 h-80 bg-[#e056fd]/10 rounded-full filter blur-[100px] pointer-events-none transform -translate-x-1/2"></div>
+  // Helper to extract clean name and seats for successful ticket display
+  const getTicketDisplayData = (ticket: any) => {
+    if (!ticket) return { cleanName: '', seatLabels: '' };
+    const match = ticket.name.match(/\((?:Seat|আসন):\s*([^)]+)\)/);
+    const cleanName = ticket.name.replace(/\s*\((?:Seat|আসন):\s*([^)]+)\)/, '');
+    const seatLabels = match ? match[1] : '';
+    return { cleanName, seatLabels };
+  };
 
-      <div className="w-full max-w-4xl grid grid-cols-1 md:grid-cols-12 gap-8 relative z-10">
+  const { cleanName, seatLabels } = getTicketDisplayData(successTicket);
+
+  return (
+    <div className="flex-1 app-container flex items-center justify-center min-h-[85vh] py-8">
+      {/* Background glow decorations */}
+      <div className="absolute top-1/4 left-1/2 w-96 h-96 bg-[#e056fd]/5 rounded-full filter blur-[120px] pointer-events-none transform -translate-x-1/2"></div>
+
+      <div className="w-full max-w-6xl relative z-10">
         
-        {/* Success Modal / Display */}
+        {/* Success Display */}
         {successTicket ? (
-          <div className="md:col-span-12 p-8 text-center space-y-6 max-w-lg mx-auto w-full border border-slate-200 bg-slate-50 rounded-2xl shadow-sm">
-            <div className="w-16 h-16 rounded-full bg-[#6ab04c]/10 text-[#6ab04c] flex items-center justify-center mx-auto border border-[#6ab04c]/30 animate-bounce">
+          <div className="p-8 text-center space-y-6 max-w-xl mx-auto w-full border border-[#e3dbcc] bg-[#fbf9f4] rounded-3xl shadow-lg">
+            <div className="w-16 h-16 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center mx-auto border border-emerald-200 animate-bounce">
               <CheckCircle size={36} />
             </div>
 
             <div className="space-y-2">
-              <h2 className="text-2xl font-black text-slate-900">টিকিট বুকিং সফল হয়েছে!</h2>
-              <p className="text-xs text-slate-500">আপনার ডিজিটাল এন্ট্রি পাসটি নিচে তৈরি করা হয়েছে। একই সাথে আপনার ইমেইল ও মোবাইল নম্বরে (SMS) কিউআর কোডসহ টিকিট পাঠানো হয়েছে।</p>
+              <h2 className="text-2xl font-black text-[#2a1f1a]">টিকিট বুকিং সফল হয়েছে!</h2>
+              <p className="text-xs text-[#6b5c54]">আপনার ডিজিটাল এন্ট্রি পাসটি নিচে তৈরি করা হয়েছে। একই সাথে আপনার ইমেইল ও মোবাইল নম্বরে কিউআর কোডসহ টিকিট পাঠানো হয়েছে।</p>
             </div>
 
             {/* Ticket Card visual representation */}
-            <div className="border border-slate-200 rounded-2xl bg-white overflow-hidden relative text-left shadow-sm">
-              {/* Top accent border */}
-              <div className="h-1.5 bg-gradient-to-r from-[#ff7979] to-[#e056fd]"></div>
+            <div className="border border-[#e3dbcc] rounded-2xl bg-white overflow-hidden relative text-left shadow-sm">
+              <div className="h-2 bg-gradient-to-r from-amber-500 via-[#e056fd] to-amber-500"></div>
               
-              {/* Ticket Details */}
-              <div className="p-6 space-y-4">
-                <div className="flex justify-between items-start border-b border-white/5 pb-3">
+              <div className="p-6 space-y-5">
+                <div className="flex justify-between items-start border-b border-[#e3dbcc]/60 pb-3">
                   <div>
-                    <h3 className="font-bold text-slate-900 text-base">রক্তকরবী (রবীন্দ্র নাট্যোৎসব)</h3>
-                    <p className="text-[10px] text-slate-500 mt-0.5">৫২তম আবর্তন • নাটক ও নাট্যতত্ত্ব বিভাগ</p>
+                    <h3 className="font-extrabold text-[#2a1f1a] text-base">রক্তকরবী (রবীন্দ্র নাট্যোৎসব)</h3>
+                    <p className="text-[10px] text-[#6b5c54] mt-0.5">৫২তম আবর্তন • নাটক ও নাট্যতত্ত্ব বিভাগ</p>
                   </div>
-                  <span className="badge badge-role text-[9px]">১ম শ্রেণীর টিকিট</span>
+                  <span className="bg-amber-500/10 text-amber-800 border border-amber-500/20 px-2 py-0.5 rounded-full text-[8px] font-black uppercase tracking-wider">১ম শ্রেণীর টিকিট</span>
                 </div>
 
-                <div className="grid grid-cols-2 gap-4 text-xs">
+                <div className="grid grid-cols-2 gap-y-4 gap-x-6 text-xs">
                   <div>
-                    <span className="text-[10px] text-slate-400 block">দর্শকের নাম</span>
-                    <span className="font-bold text-slate-800">{successTicket.name}</span>
+                    <span className="text-[9px] text-[#6b5c54] block font-bold uppercase tracking-wider">দর্শকের নাম</span>
+                    <span className="font-extrabold text-[#2a1f1a] text-sm">{cleanName}</span>
                   </div>
                   <div>
-                    <span className="text-[10px] text-slate-400 block">ফোন নম্বর</span>
-                    <span className="font-bold text-slate-800">{successTicket.phone}</span>
+                    <span className="text-[9px] text-[#6b5c54] block font-bold uppercase tracking-wider">ফোন নম্বর</span>
+                    <span className="font-mono font-bold text-[#2a1f1a] text-sm">{successTicket.phone}</span>
                   </div>
                   <div>
-                    <span className="text-[10px] text-slate-400 block">তারিখ ও সময়</span>
-                    <span className="font-bold text-[#ff7979]">৩০ জুন ২০২৬, সকাল ১১:৩০</span>
+                    <span className="text-[9px] text-[#6b5c54] block font-bold uppercase tracking-wider">তারিখ ও সময়</span>
+                    <span className="font-bold text-amber-600 text-sm">৩০ জুন ২০২৬, সকাল ১১:৩০</span>
                   </div>
                   <div>
-                    <span className="text-[10px] text-slate-400 block">আসন সংখ্যা (Seats)</span>
-                    <span className="font-bold text-[#e056fd]">{successTicket.seats} টি আসন</span>
+                    <span className="text-[9px] text-[#6b5c54] block font-bold uppercase tracking-wider">নির্ধারিত আসন (Seats)</span>
+                    <span className="font-bold text-emerald-600 text-sm">{seatLabels || successTicket.seats} ({successTicket.seats} টি আসন)</span>
                   </div>
                 </div>
 
                 {/* Decorative cutouts */}
-                <div className="flex items-center gap-2 my-4">
-                  <div className="w-4 h-4 rounded-full bg-white -ml-8 border-r border-slate-200"></div>
-                  <div className="flex-1 border-t border-dashed border-slate-200"></div>
-                  <div className="w-4 h-4 rounded-full bg-white -mr-8 border-l border-slate-200"></div>
+                <div className="flex items-center gap-2 my-2">
+                  <div className="w-5 h-5 rounded-full bg-[#fbf9f4] -ml-9 border-r border-[#e3dbcc]"></div>
+                  <div className="flex-1 border-t border-dashed border-[#e3dbcc]"></div>
+                  <div className="w-5 h-5 rounded-full bg-[#fbf9f4] -mr-9 border-l border-[#e3dbcc]"></div>
                 </div>
 
                 {/* QR Code section */}
-                <div className="flex items-center justify-between bg-slate-50 p-4 rounded-xl border border-slate-200">
+                <div className="flex items-center justify-between bg-[#fbf9f4] p-4 rounded-xl border border-[#e3dbcc]">
                   <div>
-                    <span className="text-[9px] text-slate-500 block">ডিজিটাল টিকিট আইডি</span>
-                    <code className="text-[10px] font-mono text-slate-800">{successTicket.id}</code>
-                    <p className="text-[9px] text-yellow-500/70 mt-1">* হল প্রবেশের সময় এই কিউআর দেখান।</p>
+                    <span className="text-[9px] text-[#6b5c54] block font-bold">ডিজিটাল টিকিট আইডি</span>
+                    <code className="text-[10px] font-mono font-bold text-slate-800">{successTicket.id}</code>
+                    <p className="text-[9px] text-amber-600 font-bold mt-1.5">* হল প্রবেশের সময় এই কিউআর দেখান।</p>
                   </div>
                   
-                  {/* Decorative QR Code SVG */}
-                  <div className="w-16 h-16 bg-white p-1 rounded-lg flex items-center justify-center shadow-md">
+                  <div className="w-16 h-16 bg-white p-1 rounded-lg flex items-center justify-center shadow-md border border-[#e3dbcc]">
                     <svg className="w-full h-full text-black" viewBox="0 0 100 100">
-                      {/* Stylized custom QR representation */}
                       <rect x="5" y="5" width="25" height="25" fill="currentColor"/>
                       <rect x="10" y="10" width="15" height="15" fill="white"/>
                       <rect x="5" y="70" width="25" height="25" fill="currentColor"/>
                       <rect x="10" y="75" width="15" height="15" fill="white"/>
                       <rect x="70" y="5" width="25" height="25" fill="currentColor"/>
                       <rect x="75" y="10" width="15" height="15" fill="white"/>
-                      
-                      {/* Dots/Bits pattern */}
                       <rect x="40" y="15" width="10" height="10" fill="currentColor"/>
                       <rect x="55" y="5" width="10" height="15" fill="currentColor"/>
                       <rect x="45" y="45" width="20" height="20" fill="currentColor"/>
@@ -140,176 +205,231 @@ export default function TicketsPage() {
               </div>
             </div>
 
-            <div className="flex gap-4">
+            <div className="flex gap-4 max-w-xl mx-auto w-full">
               <button 
                 onClick={() => window.print()} 
-                className="btn-glass text-xs flex-1 justify-center"
+                className="btn-glass text-xs flex-1 justify-center py-3 border-[#e3dbcc] hover:bg-black/5 text-[#2a1f1a]"
               >
                 <Download size={14} />
                 <span>প্রিন্ট করুন</span>
               </button>
               <button 
                 onClick={() => setSuccessTicket(null)} 
-                className="btn-primary text-xs flex-1 justify-center"
+                className="btn-primary text-xs flex-1 justify-center py-3 bg-gradient-to-r from-amber-500 to-amber-600 border-0"
               >
                 <span>নতুন টিকিট বুক করুন</span>
               </button>
             </div>
           </div>
         ) : (
-          <>
-            {/* Left Info Panel */}
-            <div className="md:col-span-5 flex flex-col justify-center space-y-6">
-              <div className="space-y-2">
-                <span className="text-xs font-bold text-[#ff7979] tracking-wider uppercase">টিকিট রিজার্ভেশন</span>
-                <h2 className="text-3xl md:text-4xl font-extrabold text-slate-900 leading-tight">ডিজিটাল টিকিট পোর্টাল</h2>
-                <p className="text-sm text-slate-600">
-                  নাটক ও নাট্যতত্ত্ব বিভাগ কর্তৃক আয়োজিত "রক্তকরবী" নাটকের প্রবেশ টিকিট সংগ্রহ করুন।
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
+            
+            {/* Left/Middle Column: Form & Info */}
+            <div className="lg:col-span-5 flex flex-col justify-between space-y-6">
+              
+              {/* Header Info */}
+              <div className="space-y-3 text-left">
+                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-50 text-[10px] font-bold text-amber-800 border border-amber-200">
+                  <Sparkles size={12} className="animate-spin text-amber-600" />
+                  <span>টিকিট রিজার্ভেশন</span>
+                </span>
+                <h2 className="text-3xl font-extrabold text-[#2a1f1a] leading-tight">ডিজিটাল টিকিট পোর্টাল</h2>
+                <p className="text-xs text-[#6b5c54] font-semibold">
+                  নাটক ও নাট্যতত্ত্ব বিভাগ কর্তৃক আয়োজিত "রক্তকরবী" নাটকের প্রবেশ টিকিট সংগ্রহ করুন। ডানপাশের ইন্টারেক্টিভ সিট প্ল্যান থেকে আপনার পছন্দের আসনগুলো বেছে নিন।
                 </p>
               </div>
 
-              <div className="space-y-4">
-                <div className="flex items-start gap-4">
-                  <div className="w-10 h-10 rounded-xl bg-red-50 border border-slate-200 flex items-center justify-center text-[#ff7979] shrink-0">
-                    <Award size={20} />
-                  </div>
-                  <div>
-                    <h4 className="text-sm font-bold text-slate-900">ফ্রি এন্ট্রি পাস</h4>
-                    <p className="text-xs text-slate-500 mt-0.5">বিশ্ববিদ্যালয়ের শিক্ষক-শিক্ষার্থী এবং থিয়েটারপ্রেমীদের জন্য কোনো ফি ছাড়াই আসন সংখ্যা লিমিটেড বুকিং করা যাচ্ছে।</p>
-                  </div>
-                </div>
-
-                <div className="flex items-start gap-4">
-                  <div className="w-10 h-10 rounded-xl bg-purple-50 border border-slate-200 flex items-center justify-center text-[#e056fd] shrink-0">
-                    <QrCode size={20} />
-                  </div>
-                  <div>
-                    <h4 className="text-sm font-bold text-slate-900">ডিজিটাল প্রবেশাধিকার</h4>
-                    <p className="text-xs text-slate-500 mt-0.5">বুকিং শেষে তাত্ক্ষণিকভাবে একটি ডিজিটাল কিউআর কোডসহ টিকিট পাবেন। এটি আপনার ফোনে সংরক্ষণ করে হল গেটে দেখাবেন।</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Right Form Panel */}
-            <div className="md:col-span-7">
-              <div className="p-8 border border-slate-200 bg-slate-50 rounded-2xl shadow-sm">
-                <h3 className="text-lg font-bold text-slate-900 mb-6 flex items-center gap-2">
-                  <Ticket size={20} className="text-[#ff7979]" />
-                  <span>টিকিট বুকিং ফর্ম</span>
+              {/* Form Input Section */}
+              <div className="p-6 border border-[#e3dbcc] bg-[#fbf9f4] rounded-3xl shadow-sm space-y-4 text-left">
+                <h3 className="text-sm font-bold text-[#2a1f1a] mb-2 flex items-center gap-2">
+                  <Users size={16} className="text-[#ff7979]" />
+                  <span>দর্শকের বিবরণ</span>
                 </h3>
 
                 {error && (
-                  <div className="mb-6 p-4 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 text-xs font-semibold">
+                  <div className="p-3.5 rounded-xl bg-red-50 text-red-700 border border-red-200 text-xs font-bold">
                     {error}
                   </div>
                 )}
 
                 <form onSubmit={handleSubmit} className="space-y-4">
                   <div className="form-group">
-                    <label className="form-label flex items-center gap-1.5">
+                    <label className="form-label flex items-center gap-1 text-xs font-bold text-[#6b5c54]">
                       <span>দর্শকের নাম</span>
                       <span className="text-[#ff7979]">*</span>
                     </label>
-                    <div className="relative">
-                      <input
-                        type="text"
-                        required
-                        placeholder="আপনার নাম লিখুন"
-                        value={name}
-                        onChange={(e) => setName(e.target.value)}
-                        className="form-input"
-                      />
-                    </div>
-                  </div>
-
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div className="form-group">
-                      <label className="form-label flex items-center gap-1.5">
-                        <span>মোবাইল নম্বর</span>
-                        <span className="text-[#ff7979]">*</span>
-                      </label>
-                      <div className="relative">
-                        <input
-                          type="tel"
-                          required
-                          placeholder="০১XXXXXXXXX"
-                          value={phone}
-                          onChange={(e) => setPhone(e.target.value)}
-                          className="form-input"
-                        />
-                      </div>
-                    </div>
-
-                    <div className="form-group">
-                      <label className="form-label flex items-center gap-1.5">
-                        <span>ইমেইল এড্রেস</span>
-                        <span className="text-[#ff7979]">*</span>
-                      </label>
-                      <div className="relative">
-                        <input
-                          type="email"
-                          required
-                          placeholder="name@example.com"
-                          value={email}
-                          onChange={(e) => setEmail(e.target.value)}
-                          className="form-input"
-                        />
-                      </div>
-                    </div>
+                    <input
+                      type="text"
+                      required
+                      placeholder="আপনার নাম লিখুন"
+                      value={name}
+                      onChange={(e) => setName(e.target.value)}
+                      className="form-input text-xs py-3 px-4 bg-white border border-[#e3dbcc] rounded-xl outline-none w-full !text-[#2a1f1a] font-semibold"
+                    />
                   </div>
 
                   <div className="form-group">
-                    <label className="form-label flex items-center gap-1.5">
-                      <span>আসন সংখ্যা (Seats)</span>
+                    <label className="form-label flex items-center gap-1 text-xs font-bold text-[#6b5c54]">
+                      <span>মোবাইল নম্বর</span>
                       <span className="text-[#ff7979]">*</span>
                     </label>
-                    <div className="flex items-center gap-4">
-                      <div className="flex items-center border border-white/10 rounded-xl overflow-hidden bg-black/30">
-                        <button
-                          type="button"
-                          disabled={seats <= 1}
-                          onClick={() => setSeats(seats - 1)}
-                          className="px-4 py-2.5 hover:bg-white/5 text-lg font-bold text-gray-400 disabled:opacity-30 disabled:pointer-events-none transition-colors"
-                        >
-                          -
-                        </button>
-                        <span className="px-6 py-2.5 font-bold text-white text-base min-w-[50px] text-center">
-                          {seats}
-                        </span>
-                        <button
-                          type="button"
-                          disabled={seats >= 5}
-                          onClick={() => setSeats(seats + 1)}
-                          className="px-4 py-2.5 hover:bg-white/5 text-lg font-bold text-gray-400 disabled:opacity-30 disabled:pointer-events-none transition-colors"
-                        >
-                          +
-                        </button>
-                      </div>
-                      <span className="text-xs text-slate-500">
-                        * সর্বোচ্চ ৫টি আসন একসাথে বুক করা যাবে। (বুকিং নিশ্চিত হওয়ার পর আপনার ইমেইল ও মোবাইলে (SMS) কিউআর কোড পাঠানো হবে)
-                      </span>
-                    </div>
+                    <input
+                      type="tel"
+                      required
+                      placeholder="০১XXXXXXXXX"
+                      value={phone}
+                      onChange={(e) => setPhone(e.target.value)}
+                      className="form-input text-xs py-3 px-4 bg-white border border-[#e3dbcc] rounded-xl outline-none w-full !text-[#2a1f1a] font-semibold"
+                    />
+                  </div>
+
+                  <div className="form-group">
+                    <label className="form-label flex items-center gap-1 text-xs font-bold text-[#6b5c54]">
+                      <span>ইমেইল এড্রেস</span>
+                      <span className="text-[#ff7979]">*</span>
+                    </label>
+                    <input
+                      type="email"
+                      required
+                      placeholder="name@example.com"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      className="form-input text-xs py-3 px-4 bg-white border border-[#e3dbcc] rounded-xl outline-none w-full !text-[#2a1f1a] font-semibold"
+                    />
+                  </div>
+
+                  {/* Dynamic Seat Counter badge */}
+                  <div className="bg-white p-3 rounded-xl border border-[#e3dbcc] flex justify-between items-center text-xs">
+                    <span className="text-[#6b5c54] font-bold">নির্বাচিত আসন সংখ্যা:</span>
+                    <span className={`px-3 py-1 rounded-full text-[10px] font-black ${selectedSeats.length > 0 ? 'bg-emerald-50 text-emerald-800 border border-emerald-200' : 'bg-amber-50 text-amber-800 border border-amber-200'}`}>
+                      {selectedSeats.length} / ৫ টি
+                    </span>
                   </div>
 
                   <button
                     type="submit"
-                    disabled={loading}
-                    className="btn-primary w-full justify-center py-3.5 mt-4"
+                    disabled={loading || selectedSeats.length === 0}
+                    className="btn-primary w-full justify-center py-3.5 mt-2 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white font-extrabold text-sm border-0 disabled:opacity-40 disabled:pointer-events-none transition-all shadow-md shadow-amber-500/10 cursor-pointer"
                   >
                     {loading ? (
                       <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
                     ) : (
                       <>
-                        <span>টিকিট কনফার্ম করুন</span>
+                        <span>টিকিট বুকিং নিশ্চিত করুন</span>
                         <ArrowRight size={16} />
                       </>
                     )}
                   </button>
                 </form>
               </div>
+
+              {/* Promo Rules Banner */}
+              <div className="hidden lg:block space-y-3 bg-[#fbf9f4] p-5 rounded-2xl border border-[#e3dbcc]">
+                <div className="flex gap-3 text-left">
+                  <div className="w-8 h-8 rounded-lg bg-amber-50 border border-amber-100 flex items-center justify-center text-amber-600 shrink-0">
+                    <Award size={16} />
+                  </div>
+                  <div>
+                    <h4 className="text-xs font-bold text-[#2a1f1a]">ফ্রি ডিজিটাল প্রবেশ পাস</h4>
+                    <p className="text-[10px] text-[#6b5c54] mt-0.5">সবাইর জন্য আসন সীমিত। অনুগ্রহ করে বুকিং নিশ্চিত করার পর কিউআর কোডটি ফোনে স্ক্রিনশট বা ডাউনলোড করে হল গেটে প্রদর্শন করবেন।</p>
+                  </div>
+                </div>
+              </div>
+
             </div>
-          </>
+
+            {/* Right Column: Cinema-style Seat Selection Screen */}
+            <div className="lg:col-span-7 flex flex-col justify-center">
+              <div className="p-6 md:p-8 border border-[#e3dbcc] bg-[#fbf9f4] rounded-3xl shadow-sm text-center space-y-6">
+                
+                {/* Stage Design */}
+                <div className="w-full flex flex-col items-center">
+                  <div className="w-4/5 h-2.5 bg-gradient-to-r from-amber-500 via-[#e056fd] to-amber-500 rounded-full blur-[0.8px] shadow-[0_4px_12px_rgba(224,86,253,0.3)]"></div>
+                  <span className="text-[9px] text-[#6b5c54] font-black uppercase tracking-widest mt-2">মঞ্চ / STAGE</span>
+                </div>
+
+                {/* Seat Selector Grid Container */}
+                <div className="overflow-x-auto py-4">
+                  <div className="min-w-[340px] space-y-3 flex flex-col items-center">
+                    {rows.map(row => (
+                      <div key={row} className="flex items-center gap-1.5 md:gap-2">
+                        {/* Row Identifier */}
+                        <span className="w-5 text-right font-black text-xs text-[#6b5c54] font-mono mr-2">{row}</span>
+                        
+                        {/* Seat Row Grid */}
+                        {cols.map(col => {
+                          const seatId = `${row}${col}`;
+                          const isBooked = bookedSeats.includes(seatId);
+                          const isSelected = selectedSeats.includes(seatId);
+
+                          let seatClass = 'bg-white border-[#e3dbcc] hover:border-amber-500 text-[#6b5c54] cursor-pointer';
+                          if (isBooked) {
+                            seatClass = 'bg-zinc-200 border-zinc-300 text-zinc-400 cursor-not-allowed';
+                          } else if (isSelected) {
+                            seatClass = 'bg-gradient-to-br from-emerald-500 to-emerald-600 border-emerald-500 text-white font-extrabold scale-105 shadow-[0_0_10px_rgba(16,185,129,0.3)] cursor-pointer';
+                          }
+
+                          return (
+                            <div key={col} className="flex items-center">
+                              <button
+                                type="button"
+                                disabled={isBooked}
+                                onClick={() => handleSeatClick(seatId)}
+                                className={`w-7 h-7 md:w-8 md:h-8 rounded-lg border text-[10px] font-bold font-mono flex items-center justify-center transition-all ${seatClass}`}
+                                title={isBooked ? `Seat ${seatId} is Booked` : `Seat ${seatId}`}
+                              >
+                                {col}
+                              </button>
+
+                              {/* Aisle Break (between seat 4 and 5) */}
+                              {col === 4 && (
+                                <div className="w-5 md:w-8 h-8 flex items-center justify-center pointer-events-none">
+                                  <span className="text-[8px] text-gray-300 font-bold uppercase tracking-widest font-mono"></span>
+                                </div>
+                              )}
+                            </div>
+                          );
+                        })}
+
+                        {/* Row Identifier Right */}
+                        <span className="w-5 text-left font-black text-xs text-[#6b5c54] font-mono ml-2">{row}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Seat Selector Legend */}
+                <div className="flex flex-wrap justify-center gap-4 border-t border-[#e3dbcc] pt-4 text-[10px] font-bold text-[#6b5c54]">
+                  <div className="flex items-center gap-1.5">
+                    <span className="w-4 h-4 rounded-md bg-white border border-[#e3dbcc]"></span>
+                    <span>ফাঁকা আসন</span>
+                  </div>
+                  <div className="flex items-center gap-1.5">
+                    <span className="w-4 h-4 rounded-md bg-gradient-to-br from-emerald-500 to-emerald-600 border border-emerald-500"></span>
+                    <span>আপনার পছন্দ</span>
+                  </div>
+                  <div className="flex items-center gap-1.5">
+                    <span className="w-4 h-4 rounded-md bg-zinc-200 border border-zinc-300"></span>
+                    <span>বুকড আসন</span>
+                  </div>
+                </div>
+
+                {/* Selection Details text display */}
+                {selectedSeats.length > 0 && (
+                  <div className="bg-white/80 p-3 rounded-2xl border border-[#e3dbcc] text-xs space-y-1">
+                    <p className="text-[#6b5c54] font-bold">
+                      নির্বাচিত আসনসমূহ: <span className="text-[#2a1f1a] font-extrabold">{selectedSeats.join(', ')}</span>
+                    </p>
+                    <p className="text-[10px] text-[#6b5c54]">
+                      * অনুগ্রহ করে সিটের নম্বরগুলো টিকিট বুকিংয়ের পর হল গেটে টিকিট দেখাতে সংরক্ষণ করে রাখবেন।
+                    </p>
+                  </div>
+                )}
+
+              </div>
+            </div>
+
+          </div>
         )}
       </div>
     </div>
