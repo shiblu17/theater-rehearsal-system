@@ -64,6 +64,8 @@ export default function FloorManagerDashboard() {
   // Dynamic Settings states
   const [morningCutoff, setMorningCutoff] = useState('11:30');
   const [afternoonCutoff, setAfternoonCutoff] = useState('15:00');
+  const [totalRows, setTotalRows] = useState('F');
+  const [totalCols, setTotalCols] = useState('8');
   const [sessionTransition, setSessionTransition] = useState('13:30');
   const [isEditingSettings, setIsEditingSettings] = useState(false);
   const [isSavingSettings, setIsSavingSettings] = useState(false);
@@ -88,6 +90,8 @@ export default function FloorManagerDashboard() {
         if (settingsData.morning_cutoff) setMorningCutoff(settingsData.morning_cutoff);
         if (settingsData.afternoon_cutoff) setAfternoonCutoff(settingsData.afternoon_cutoff);
         if (settingsData.session_transition) setSessionTransition(settingsData.session_transition);
+        if (settingsData.total_rows) setTotalRows(settingsData.total_rows);
+        if (settingsData.total_cols) setTotalCols(settingsData.total_cols);
       }
     } catch (e) {
       console.error('Error loading floor manager data:', e);
@@ -190,7 +194,9 @@ export default function FloorManagerDashboard() {
         body: JSON.stringify({ 
           morning_cutoff: morningCutoff, 
           afternoon_cutoff: afternoonCutoff, 
-          session_transition: sessionTransition 
+          session_transition: sessionTransition,
+          total_rows: totalRows,
+          total_cols: totalCols 
         }),
       });
       if (res.ok) {
@@ -370,6 +376,7 @@ export default function FloorManagerDashboard() {
                   <li>দুপুর <strong className="font-bold text-white">{sessionTransition}</strong> বা তারপরে হাজিরা দিলে সেটি <strong className="font-bold text-[#3498db]">লাঞ্চ পরবর্তী সেশন</strong> হিসেবে সেভ হবে।</li>
                   <li>কোনো কুশীলব একই সেশনে দিনে একবারের বেশি হাজিরা এন্ট্রি করতে পারবেন না।</li>
                   <li>সকালের লেট কাট-অফ: <strong className="font-bold text-white">{morningCutoff} AM</strong> | দুপুরের লেট কাট-অফ: <strong className="font-bold text-white">{afternoonCutoff} PM</strong></li>
+                  <li>সক্রিয় আসন বিন্যাস: <strong className="font-bold text-white">A থেকে {totalRows}</strong> রো ({totalRows.charCodeAt(0) - 64}টি রো) | প্রতি রো-তে <strong className="font-bold text-white">{totalCols}টি</strong> আসন</li>
                 </ul>
               </div>
             ) : (
@@ -410,6 +417,33 @@ export default function FloorManagerDashboard() {
                           className="form-input py-2 text-xs w-full bg-zinc-950 border border-white/10 rounded-xl px-3 text-gray-300"
                           required
                         />
+                      </div>
+                    </div>
+                    
+                    <div className="grid grid-cols-2 gap-3 pt-2">
+                      <div className="form-group mb-0">
+                        <label className="form-label text-[9px] font-bold text-gray-300">আসন লেআউট রো সংখ্যা (Rows A-X)</label>
+                        <select
+                          value={totalRows}
+                          onChange={e => setTotalRows(e.target.value)}
+                          className="form-input py-2 text-xs w-full bg-zinc-950 border border-white/10 rounded-xl px-2 text-gray-300 outline-none"
+                        >
+                          {['D', 'E', 'F', 'G', 'H', 'I', 'J'].map(r => (
+                            <option key={r} value={r}>A থেকে {r} পর্যন্ত রো ({r.charCodeAt(0) - 64}টি রো)</option>
+                          ))}
+                        </select>
+                      </div>
+                      <div className="form-group mb-0">
+                        <label className="form-label text-[9px] font-bold text-gray-300">রো প্রতি আসন সংখ্যা (Seats per Row)</label>
+                        <select
+                          value={totalCols}
+                          onChange={e => setTotalCols(e.target.value)}
+                          className="form-input py-2 text-xs w-full bg-zinc-950 border border-white/10 rounded-xl px-2 text-gray-300 outline-none"
+                        >
+                          {['6', '7', '8', '9', '10', '11', '12'].map(c => (
+                            <option key={c} value={c}>{c} টি সিট প্রতি রো</option>
+                          ))}
+                        </select>
                       </div>
                     </div>
                   </div>

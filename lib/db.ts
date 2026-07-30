@@ -99,6 +99,8 @@ export interface SystemSettings {
   morning_cutoff: string; // e.g. "11:30"
   afternoon_cutoff: string; // e.g. "15:00"
   session_transition: string; // e.g. "13:30"
+  total_rows?: string;
+  total_cols?: string;
 }
 
 interface MockDB {
@@ -237,7 +239,9 @@ export async function getSystemSettings(): Promise<SystemSettings> {
         return {
           morning_cutoff: settingsMap['morning_cutoff'] || '11:30',
           afternoon_cutoff: settingsMap['afternoon_cutoff'] || '15:00',
-          session_transition: settingsMap['session_transition'] || '13:30'
+          session_transition: settingsMap['session_transition'] || '13:30',
+          total_rows: settingsMap['total_rows'] || 'F',
+          total_cols: settingsMap['total_cols'] || '8'
         };
       }
     } catch (err) {
@@ -259,6 +263,10 @@ export async function updateSystemSettings(settings: SystemSettings): Promise<Sy
       if (res2.error) throw res2.error;
       const res3 = await supabase.from('system_settings').upsert({ key: 'session_transition', value: settings.session_transition });
       if (res3.error) throw res3.error;
+      const res4 = await supabase.from('system_settings').upsert({ key: 'total_rows', value: settings.total_rows || 'F' });
+      if (res4.error) throw res4.error;
+      const res5 = await supabase.from('system_settings').upsert({ key: 'total_cols', value: settings.total_cols || '8' });
+      if (res5.error) throw res5.error;
     } catch (err: any) {
       console.warn('⚠️ Supabase settings upsert failed. Falling back.', err.message || err);
     }

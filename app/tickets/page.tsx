@@ -18,25 +18,59 @@ export default function TicketsPage() {
   const [senderNumber, setSenderNumber] = useState('');
   const [trxId, setTrxId] = useState('');
 
+  // Dynamic Hall Config loaded from DB settings
+  const [totalRows, setTotalRows] = useState('F');
+  const [totalCols, setTotalCols] = useState(8);
+
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [successTicket, setSuccessTicket] = useState<any>(null);
 
-  // Seat Grid Configuration (6 Rows, 8 Columns)
-  const rows = ['A', 'B', 'C', 'D', 'E', 'F'];
-  const cols = [1, 2, 3, 4, 5, 6, 7, 8];
-  
   const TICKET_PRICE = 50; // 50 TK per seat
 
-  // Fetch all currently booked seats on load
-  const fetchBookedSeats = async () => {
+  // Generate dynamic rows based on settings (e.g. A to F)
+  const getRowsList = () => {
+    const rowsList = [];
+    const maxRowChar = totalRows.toUpperCase();
+    const limit = maxRowChar.charCodeAt(0);
+    // Boundary check (A-Z)
+    for (let i = 65; i <= Math.min(limit, 90); i++) {
+      rowsList.push(String.fromCharCode(i));
+    }
+    return rowsList;
+  };
+
+  // Generate dynamic columns list (e.g. 1 to 8)
+  const getColsList = () => {
+    const colsList = [];
+    for (let i = 1; i <= totalCols; i++) {
+      colsList.push(i);
+    }
+    return colsList;
+  };
+
+  const rowsList = getRowsList();
+  const colsList = getColsList();
+  // Find aisle break in the middle
+  const aisleCol = Math.floor(colsList.length / 2);
+
+  // Fetch settings & booked seats
+  const fetchSettingsAndSeats = async () => {
     try {
+      // 1. Fetch system settings
+      const settingsRes = await fetch('/api/settings', { cache: 'no-store' });
+      if (settingsRes.ok) {
+        const settings = await settingsRes.json();
+        if (settings.total_rows) setTotalRows(settings.total_rows);
+        if (settings.total_cols) setTotalCols(parseInt(settings.total_cols, 10));
+      }
+
+      // 2. Fetch booked tickets
       const res = await fetch('/api/tickets', { cache: 'no-store' });
       if (res.ok) {
         const tickets: any[] = await res.json();
         const booked: string[] = [];
         tickets.forEach(ticket => {
-          // Parse seat labels from name string formatted as "Name (Seat: A1, A2)"
           const match = ticket.name.match(/\((?:Seat|আসন):\s*([^)]+)\)/);
           if (match) {
             const seatsList = match[1].split(',').map((s: string) => s.trim());
@@ -46,12 +80,12 @@ export default function TicketsPage() {
         setBookedSeats(booked);
       }
     } catch (err) {
-      console.error('Error fetching booked seats:', err);
+      console.error('Error loading page config:', err);
     }
   };
 
   useEffect(() => {
-    fetchBookedSeats();
+    fetchSettingsAndSeats();
   }, []);
 
   const handleSeatClick = (seatId: string) => {
@@ -81,9 +115,7 @@ export default function TicketsPage() {
     setLoading(true);
     setError('');
 
-    // Append selected seats to the name field to keep it backward-compatible
     const formattedName = `${name} (Seat: ${selectedSeats.join(', ')})`;
-    // Append payment details into the phone field
     const formattedPhone = `${phone} (${paymentMethod.toUpperCase()} Sender: ${senderNumber}, TrxID: ${trxId})`;
 
     try {
@@ -107,7 +139,6 @@ export default function TicketsPage() {
       }
 
       setSuccessTicket(data.ticket);
-      // Reset form & selections
       setName('');
       setEmail('');
       setPhone('');
@@ -115,7 +146,7 @@ export default function TicketsPage() {
       setTrxId('');
       setSelectedSeats([]);
       setCheckoutStep(1);
-      fetchBookedSeats(); // Refresh booked list
+      fetchSettingsAndSeats(); // Refresh config & seats
     } catch (err: any) {
       setError(err.message || 'নেটওয়ার্ক ত্রুটি। আবার চেষ্টা করুন।');
     } finally {
@@ -123,7 +154,6 @@ export default function TicketsPage() {
     }
   };
 
-  // Helper to extract clean name and seats for successful ticket display
   const getTicketDisplayData = (ticket: any) => {
     if (!ticket) return { cleanName: '', seatLabels: '', cleanPhone: '', paymentDetails: '' };
     
@@ -232,7 +262,7 @@ export default function TicketsPage() {
               </div>
             </div>
 
-            <div className="flex gap-4 max-w-xl mx-auto w-full">
+            <div className="flex gap-4 max-w-xl mx-auto w-full px-4">
               <button 
                 onClick={() => window.print()} 
                 className="btn-glass text-xs flex-1 justify-center py-3 border-[#e3dbcc] hover:bg-black/5 text-[#2a1f1a] cursor-pointer"
@@ -249,7 +279,7 @@ export default function TicketsPage() {
             </div>
           </div>
         ) : (
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch px-4 md:px-0">
             
             {/* Left/Middle Column: Form & Info */}
             <div className="lg:col-span-5 flex flex-col justify-between space-y-6">
@@ -279,13 +309,13 @@ export default function TicketsPage() {
                       ডানপাশের আসন বিন্যাস থেকে আপনার পছন্দের আসনগুলো সিলেক্ট করুন। সবুজ চিহ্নিত আসনগুলো আপনার জন্য রিজার্ভ করা হবে।
                     </p>
 
-                    <div className="bg-white p-3 rounded-xl border border-[#e3dbcc] flex justify-between items-center text-xs">
+                    <div className="bg-white p-3.5 rounded-xl border border-[#e3dbcc] flex justify-between items-center text-xs shadow-sm">
                       <span className="text-[#6b5c54] font-bold">নির্বাচিত আসন:</span>
-                      <span className="font-extrabold text-[#2a1f1a]">{selectedSeats.length > 0 ? selectedSeats.join(', ') : 'কোনোটি নয়'}</span>
+                      <span className="font-extrabold text-[#2a1f1a] bg-zinc-50 border border-zinc-150 px-2 py-0.5 rounded text-[10px]">{selectedSeats.length > 0 ? selectedSeats.join(', ') : 'কোনোটি নয়'}</span>
                     </div>
 
-                    <div className="bg-white p-3 rounded-xl border border-[#e3dbcc] flex justify-between items-center text-xs">
-                      <span className="text-[#6b5c54] font-bold">টিকিট মূল্য (৳৫০ × {selectedSeats.length}):</span>
+                    <div className="bg-white p-3.5 rounded-xl border border-[#e3dbcc] flex justify-between items-center text-xs shadow-sm">
+                      <span className="text-[#6b5c54] font-bold">টিকিট মূল্য (৳{TICKET_PRICE} × {selectedSeats.length}):</span>
                       <span className="font-black text-amber-600 text-sm">৳{selectedSeats.length * TICKET_PRICE}</span>
                     </div>
 
@@ -293,7 +323,7 @@ export default function TicketsPage() {
                       type="button"
                       onClick={() => setCheckoutStep(2)}
                       disabled={selectedSeats.length === 0}
-                      className="btn-primary w-full justify-center py-3.5 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white font-extrabold text-sm border-0 disabled:opacity-40 disabled:pointer-events-none transition-all shadow-md shadow-amber-500/10 cursor-pointer"
+                      className="btn-primary w-full justify-center py-3.5 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white font-extrabold text-sm border-0 disabled:opacity-40 disabled:pointer-events-none transition-all shadow-md shadow-amber-500/10 cursor-pointer flex items-center gap-1.5"
                     >
                       <span>পরবর্তী ধাপে যান (পেমেন্ট)</span>
                       <ArrowRight size={16} />
@@ -325,7 +355,7 @@ export default function TicketsPage() {
                     {/* bKash/Nagad Send Money numbers */}
                     <div className="bg-amber-500/5 p-4 rounded-xl border border-amber-500/10 space-y-2">
                       <p className="text-[11px] text-[#2a1f1a] font-extrabold text-center">
-                        বিকাশ বা নগদে মোট <span className="text-[#c0392b] text-xs">৳{selectedSeats.length * TICKET_PRICE}</span> টাকা 'Send Money' করুন:
+                        বিকাশ বা নগদে মোট <span className="text-[#c0392b] text-xs font-black">৳{selectedSeats.length * TICKET_PRICE}</span> টাকা 'Send Money' করুন:
                       </p>
                       <div className="grid grid-cols-2 gap-3 text-center text-xs pt-1">
                         <div className="bg-white p-2.5 rounded-lg border border-[#e3dbcc] shadow-sm">
@@ -480,18 +510,18 @@ export default function TicketsPage() {
                 {/* Seat Selector Grid Container */}
                 <div className="overflow-x-auto py-4">
                   <div className="min-w-[340px] space-y-3 flex flex-col items-center">
-                    {rows.map(row => (
+                    {rowsList.map(row => (
                       <div key={row} className="flex items-center gap-1.5 md:gap-2">
-                        {/* Row Identifier */}
+                        {/* Row Identifier Left */}
                         <span className="w-5 text-right font-black text-xs text-[#6b5c54] font-mono mr-2">{row}</span>
                         
                         {/* Seat Row Grid */}
-                        {cols.map(col => {
+                        {colsList.map(col => {
                           const seatId = `${row}${col}`;
                           const isBooked = bookedSeats.includes(seatId);
                           const isSelected = selectedSeats.includes(seatId);
 
-                          let seatClass = 'bg-white border-[#e3dbcc] hover:border-amber-500 text-[#6b5c54] cursor-pointer';
+                          let seatClass = 'bg-white border-[#e3dbcc] hover:border-amber-500 hover:text-amber-600 text-[#6b5c54] cursor-pointer shadow-sm';
                           if (isBooked) {
                             seatClass = 'bg-zinc-200 border-zinc-300 text-zinc-400 cursor-not-allowed';
                           } else if (isSelected) {
@@ -510,8 +540,8 @@ export default function TicketsPage() {
                                 {col}
                               </button>
 
-                              {/* Aisle Break (between seat 4 and 5) */}
-                              {col === 4 && (
+                              {/* Aisle Break in the exact middle */}
+                              {col === aisleCol && (
                                 <div className="w-5 md:w-8 h-8 flex items-center justify-center pointer-events-none">
                                   <span className="text-[8px] text-gray-300 font-bold uppercase tracking-widest font-mono"></span>
                                 </div>
@@ -530,11 +560,11 @@ export default function TicketsPage() {
                 {/* Seat Selector Legend */}
                 <div className="flex flex-wrap justify-center gap-4 border-t border-[#e3dbcc] pt-4 text-[10px] font-bold text-[#6b5c54]">
                   <div className="flex items-center gap-1.5">
-                    <span className="w-4 h-4 rounded-md bg-white border border-[#e3dbcc]"></span>
+                    <span className="w-4 h-4 rounded-md bg-white border border-[#e3dbcc] shadow-sm"></span>
                     <span>ফাঁকা আসন</span>
                   </div>
                   <div className="flex items-center gap-1.5">
-                    <span className="w-4 h-4 rounded-md bg-gradient-to-br from-emerald-500 to-emerald-600 border border-emerald-500"></span>
+                    <span className="w-4 h-4 rounded-md bg-gradient-to-br from-emerald-500 to-emerald-600 border border-emerald-500 shadow-[0_0_6px_rgba(16,185,129,0.2)]"></span>
                     <span>আপনার পছন্দ</span>
                   </div>
                   <div className="flex items-center gap-1.5">

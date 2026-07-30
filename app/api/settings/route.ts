@@ -14,13 +14,19 @@ export async function GET() {
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const { morning_cutoff, afternoon_cutoff, session_transition } = body;
+    const { morning_cutoff, afternoon_cutoff, session_transition, total_rows, total_cols } = body;
 
     if (!morning_cutoff || !afternoon_cutoff || !session_transition) {
       return NextResponse.json({ error: 'প্রয়োজনীয় ফিল্ডগুলো পূরণ করুন।' }, { status: 400 });
     }
 
-    const settings = await updateSystemSettings({ morning_cutoff, afternoon_cutoff, session_transition });
+    const settings = await updateSystemSettings({ 
+      morning_cutoff, 
+      afternoon_cutoff, 
+      session_transition,
+      total_rows: total_rows || 'F',
+      total_cols: total_cols || '8'
+    });
     return NextResponse.json(settings);
   } catch (error) {
     return NextResponse.json({ error: 'সেটিংস আপডেট করতে সমস্যা হয়েছে।' }, { status: 500 });
