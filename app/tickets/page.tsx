@@ -247,9 +247,9 @@ export default function TicketsPage() {
           setSelectedBlockId(block.id);
           setSelectedSeats([]);
         }}
-        className={`relative p-4 rounded-2xl border text-center transition-all cursor-pointer flex flex-col justify-between items-center shadow-md overflow-hidden h-auto py-4 outline-none group ${
+        className={`relative p-2 sm:p-4 rounded-2xl border text-center transition-all cursor-pointer flex flex-col justify-between items-center shadow-md overflow-hidden h-auto py-3 sm:py-4 outline-none group ${
           isSelected 
-            ? 'bg-[#851b2e] text-white border-[#d4af37] ring-4 ring-[#d4af37]/25 scale-[1.03] z-10' 
+            ? 'bg-[#851b2e] text-white border-[#d4af37] ring-4 ring-[#d4af37]/25 scale-[1.02] z-10' 
             : 'bg-white border-[#e3dbcc] text-[#2a1f1a] hover:border-[#851b2e]/60'
         }`}
       >
@@ -258,14 +258,14 @@ export default function TicketsPage() {
           <div className="absolute top-0 left-0 right-0 h-1 bg-[#d4af37]"></div>
         )}
 
-        <div className="w-full flex justify-between items-center text-[8px] font-bold gap-1 pb-1.5 border-b border-current/10">
+        <div className="w-full flex justify-between items-center text-[7px] sm:text-[8px] font-bold gap-1 pb-1 sm:pb-1.5 border-b border-current/10">
           <span className={`uppercase tracking-wider ${isSelected ? 'text-[#d4af37]' : 'text-[#851b2e]'}`}>ব্লক {block.id}</span>
-          <span className={`px-1.5 py-0.5 rounded text-[7px] font-extrabold truncate ${isSelected ? 'bg-white/15 text-white' : 'bg-[#851b2e]/10 text-[#851b2e]'}`}>{block.type}</span>
+          <span className={`px-1 py-0.5 rounded text-[6px] sm:text-[7px] font-extrabold truncate ${isSelected ? 'bg-white/15 text-white' : 'bg-[#851b2e]/10 text-[#851b2e]'}`}>{block.type}</span>
         </div>
 
-        <span className={`text-3xl font-black my-2.5 group-hover:scale-105 transition-transform font-display tracking-tight ${isSelected ? 'text-white' : 'text-[#2a1f1a]'}`}>{block.id}</span>
+        <span className={`text-2xl sm:text-3xl font-black my-2 group-hover:scale-105 transition-transform font-display tracking-tight ${isSelected ? 'text-white' : 'text-[#2a1f1a]'}`}>{block.id}</span>
 
-        <div className="w-full flex justify-between items-center text-[10px] font-extrabold border-t border-current/10 pt-2 mt-1">
+        <div className="w-full flex justify-between items-center text-[9px] sm:text-[10px] font-extrabold border-t border-current/10 pt-1.5 sm:pt-2 mt-1">
           <span className={isSelected ? 'text-[#d4af37]' : 'text-[#851b2e]'}>৳{block.price}</span>
           <span className={availableCount > 0 ? (isSelected ? 'text-emerald-300' : 'text-emerald-700') : 'text-red-500'}>
             {availableCount} ফাঁকা
@@ -509,15 +509,15 @@ export default function TicketsPage() {
                       <label className="text-[11px] font-black text-[#851b2e] uppercase tracking-wider block text-center">
                         🎭 হলের গ্যালারি ম্যাপ (জোন নির্বাচন করুন)
                       </label>
-                      <div className="border border-[#e3dbcc]/80 p-5 bg-[#fbf9f4] rounded-3xl space-y-4 shadow-inner">
+                      <div className="border border-[#e3dbcc]/80 p-3 sm:p-5 bg-[#fbf9f4] rounded-3xl space-y-3.5 sm:space-y-4 shadow-inner">
                         {/* Stage indicator */}
                         <div className="w-full flex flex-col items-center mb-1">
                           <div className="w-3/4 h-1.5 bg-gradient-to-r from-transparent via-[#d4af37]/50 to-transparent rounded-full blur-[0.5px]"></div>
                           <span className="text-[8px] text-[#851b2e] font-black tracking-widest mt-1">মঞ্চ / STAGE</span>
                         </div>
 
-                        {/* Interactive Blocks Layout - Expanded spacing gap-4 */}
-                        <div className="grid grid-cols-2 gap-4">
+                        {/* Interactive Blocks Layout - Expanded spacing gap-3 on mobile, gap-4 on desktop */}
+                        <div className="grid grid-cols-2 gap-3 sm:gap-4">
                           {/* Front Row (N & G) */}
                           {blocks.slice(0, 2).map(block => renderBlockCard(block))}
                           
