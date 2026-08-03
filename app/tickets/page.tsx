@@ -247,24 +247,24 @@ export default function TicketsPage() {
           setSelectedBlockId(block.id);
           setSelectedSeats([]);
         }}
-        className={`relative p-3.5 rounded-2xl border text-center transition-all cursor-pointer flex flex-col justify-between items-center shadow-sm overflow-hidden h-28 outline-none group ${isSelected ? 'bg-amber-500/5 border-amber-500 ring-2 ring-amber-500/10' : 'bg-white border-[#e3dbcc] hover:border-amber-500'}`}
+        className={`relative p-3.5 rounded-2xl border text-center transition-all cursor-pointer flex flex-col justify-between items-center shadow-sm overflow-hidden h-auto outline-none py-4 group ${isSelected ? 'bg-amber-500/5 border-amber-500 ring-2 ring-amber-500/10' : 'bg-white border-[#e3dbcc] hover:border-amber-500'}`}
       >
         {/* Selected top highlight */}
         {isSelected && (
           <div className="absolute top-0 left-0 right-0 h-1 bg-amber-500"></div>
         )}
 
-        <div className="w-full flex justify-between items-center text-[8px] font-bold text-gray-400">
-          <span className="uppercase">ব্লক {block.id}</span>
-          <span className="bg-zinc-100 px-1 rounded text-[7px]">{block.type}</span>
+        <div className="w-full flex justify-between items-center text-[8px] font-bold text-gray-400 gap-1">
+          <span className="uppercase shrink-0">ব্লক {block.id}</span>
+          <span className="bg-zinc-100 px-1 rounded text-[7px] truncate">{block.type}</span>
         </div>
 
-        <span className="text-xl font-black text-[#2a1f1a] group-hover:scale-105 transition-transform">{block.id}</span>
+        <span className="text-2xl font-black text-[#2a1f1a] my-2 group-hover:scale-105 transition-transform">{block.id}</span>
 
-        <div className="w-full flex justify-between items-center text-[9px] font-extrabold border-t border-[#e3dbcc]/40 pt-1.5 mt-1">
+        <div className="w-full flex justify-between items-center text-[9px] font-extrabold border-t border-[#e3dbcc]/40 pt-2 mt-1">
           <span className="text-[#c0392b]">৳{block.price}</span>
           <span className={availableCount > 0 ? 'text-emerald-600' : 'text-red-500'}>
-            {availableCount}টি ফাঁকা
+            {availableCount} ফাঁকা
           </span>
         </div>
       </button>
@@ -426,7 +426,7 @@ export default function TicketsPage() {
                                 type="button"
                                 disabled={isBooked || checkoutStep === 2}
                                 onClick={() => handleSeatClick(seatId)}
-                                className={`w-7 h-7 sm:w-8 sm:h-8 md:w-9 md:h-9 rounded-t-lg rounded-b-sm border-b-2 text-[9px] sm:text-xs font-bold font-mono flex items-center justify-center transition-all ${seatClass}`}
+                                className={`w-6 h-6 sm:w-8 sm:h-8 md:w-9 md:h-9 rounded-t-md rounded-b-sm border-b-2 text-[8px] sm:text-xs font-bold font-mono flex items-center justify-center transition-all ${seatClass}`}
                                 title={isBooked ? `Seat ${seatId} is Booked` : `Seat ${seatId}`}
                               >
                                 {displayLabel}
@@ -449,7 +449,7 @@ export default function TicketsPage() {
                     <span>ফাঁকা আসন</span>
                   </div>
                   <div className="flex items-center gap-1.5">
-                    <span className="w-4 h-4 rounded-md bg-gradient-to-br from-emerald-500 to-emerald-600 border border-emerald-500 shadow-[0_0_6px_rgba(16,185,129,0.2)]"></span>
+                    <span className="w-4 h-4 rounded-md bg-gradient-to-br from-emerald-500 to-emerald-600 border-emerald-500 shadow-[0_0_6px_rgba(16,185,129,0.2)]"></span>
                     <span>আপনার পছন্দ</span>
                   </div>
                   <div className="flex items-center gap-1.5">
@@ -503,9 +503,15 @@ export default function TicketsPage() {
                     {/* Visual Gallery Block Map */}
                     <div className="space-y-3">
                       <label className="text-[11px] font-black text-[#6b5c54] uppercase tracking-wider block text-center">
-                        🎭 হল গ্যালারি ম্যাপ (জোন নির্বাচন করুন)
+                        🎭 হলের গ্যালারি ম্যাপ (জোন নির্বাচন করুন)
                       </label>
-                      <div className="border border-[#e3dbcc] p-3 sm:p-4 bg-white/50 rounded-2xl space-y-3 shadow-sm">
+                      <div className="border border-[#e3dbcc] p-3 sm:p-4 bg-[#fcfbfa] rounded-2xl space-y-3 shadow-sm">
+                        {/* Stage indicator */}
+                        <div className="w-full flex flex-col items-center mb-1">
+                          <div className="w-3/4 h-1.5 bg-gradient-to-r from-amber-500/30 via-[#e056fd]/30 to-amber-500/30 rounded-full blur-[0.5px]"></div>
+                          <span className="text-[8px] text-[#6b5c54] font-black tracking-widest mt-1">মঞ্চ / STAGE</span>
+                        </div>
+
                         {/* Interactive Blocks Layout */}
                         <div className="grid grid-cols-2 gap-2 sm:gap-3">
                           {/* Front Row (N & G) */}
@@ -521,10 +527,10 @@ export default function TicketsPage() {
                     </div>
 
                     {/* Styled Summary Card (Instead of generic list) */}
-                    <div className="bg-white p-4 rounded-xl border border-[#e3dbcc] space-y-3 shadow-sm text-xs">
-                      <div className="flex justify-between items-center border-b border-zinc-100 pb-2">
-                        <span className="text-[#6b5c54] font-bold">নির্বাচিত আসন ({selectedBlockId} ব্লক):</span>
-                        <div className="flex flex-wrap gap-1 justify-end max-w-[60%]">
+                    <div className="bg-white p-4 rounded-xl border border-[#e3dbcc] space-y-3.5 shadow-sm text-xs">
+                      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-1 pb-2 border-b border-zinc-100">
+                        <span className="text-[#6b5c54] font-bold">নির্ধারিত আসন ({selectedBlockId} ব্লক):</span>
+                        <div className="flex flex-wrap gap-1 justify-start sm:justify-end">
                           {selectedSeats.length > 0 ? (
                             selectedSeats.map(seat => (
                               <span key={seat} className="bg-emerald-500 text-white font-extrabold px-2 py-0.5 rounded text-[10px] shadow-sm animate-fade-in">
