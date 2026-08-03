@@ -247,7 +247,7 @@ export default function TicketsPage() {
           setSelectedBlockId(block.id);
           setSelectedSeats([]);
         }}
-        className={`relative p-3.5 rounded-2xl border text-center transition-all cursor-pointer flex flex-col justify-between items-center shadow-md overflow-hidden h-auto py-4 outline-none group ${
+        className={`relative p-4 rounded-2xl border text-center transition-all cursor-pointer flex flex-col justify-between items-center shadow-md overflow-hidden h-auto py-4 outline-none group ${
           isSelected 
             ? 'bg-[#851b2e] text-white border-[#d4af37] ring-4 ring-[#d4af37]/25 scale-[1.03] z-10' 
             : 'bg-white border-[#e3dbcc] text-[#2a1f1a] hover:border-[#851b2e]/60'
@@ -276,11 +276,11 @@ export default function TicketsPage() {
   };
 
   return (
-    <div className="flex-1 app-container flex items-center justify-center min-h-[85vh] py-4 sm:py-8">
+    <div className="flex-1 app-container flex items-center justify-center min-h-[85vh] py-6 sm:py-10">
       {/* Background glow decorations */}
       <div className="absolute top-1/4 left-1/2 w-96 h-96 bg-[#851b2e]/5 rounded-full filter blur-[120px] pointer-events-none transform -translate-x-1/2"></div>
 
-      <div className="w-full max-w-6xl relative z-10 px-3 sm:px-4">
+      <div className="w-full max-w-6xl relative z-10 px-4 sm:px-6">
         
         {/* Success Display */}
         {successTicket ? (
@@ -384,7 +384,7 @@ export default function TicketsPage() {
             </div>
           </div>
         ) : (
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8 items-start">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
             
             {/* Right Column: Seat Plan Grid selector - Renders FIRST on mobile for better usability */}
             <div className="order-1 lg:order-2 lg:col-span-7 flex flex-col justify-center w-full">
@@ -509,15 +509,15 @@ export default function TicketsPage() {
                       <label className="text-[11px] font-black text-[#851b2e] uppercase tracking-wider block text-center">
                         🎭 হলের গ্যালারি ম্যাপ (জোন নির্বাচন করুন)
                       </label>
-                      <div className="border border-[#e3dbcc] p-3 sm:p-4 bg-[#fbf9f4] rounded-2xl space-y-3.5 shadow-inner">
+                      <div className="border border-[#e3dbcc]/80 p-5 bg-[#fbf9f4] rounded-3xl space-y-4 shadow-inner">
                         {/* Stage indicator */}
                         <div className="w-full flex flex-col items-center mb-1">
                           <div className="w-3/4 h-1.5 bg-gradient-to-r from-transparent via-[#d4af37]/50 to-transparent rounded-full blur-[0.5px]"></div>
                           <span className="text-[8px] text-[#851b2e] font-black tracking-widest mt-1">মঞ্চ / STAGE</span>
                         </div>
 
-                        {/* Interactive Blocks Layout */}
-                        <div className="grid grid-cols-2 gap-2 sm:gap-3">
+                        {/* Interactive Blocks Layout - Expanded spacing gap-4 */}
+                        <div className="grid grid-cols-2 gap-4">
                           {/* Front Row (N & G) */}
                           {blocks.slice(0, 2).map(block => renderBlockCard(block))}
                           
