@@ -3,6 +3,91 @@
 import { useState, useEffect } from 'react';
 import { Ticket, Users, Phone, Mail, Award, CheckCircle, ArrowRight, ArrowLeft, Download, QrCode, Sparkles } from 'lucide-react';
 
+interface BlockConfig {
+  id: string;
+  name: string;
+  totalSeats: number;
+  rows: {
+    rowName: string;
+    seats: string[];
+  }[];
+}
+
+const blocks: BlockConfig[] = [
+  {
+    id: 'C',
+    name: 'C ব্লক (সামনে-বাম)',
+    totalSeats: 15,
+    rows: [
+      { rowName: 'C1', seats: ['C1', 'C2', 'C3', 'C4', 'C5'] },
+      { rowName: 'C2', seats: ['C6', 'C7', 'C8', 'C9', 'C10'] },
+      { rowName: 'C3', seats: ['C11', 'C12', 'C13', 'C14', 'C15'] }
+    ]
+  },
+  {
+    id: 'D',
+    name: 'D ব্লক (সামনে-ডান)',
+    totalSeats: 16,
+    rows: [
+      { rowName: 'D1', seats: ['D1', 'D2', 'D3', 'D4', 'D5'] },
+      { rowName: 'D2', seats: ['D6', 'D7', 'D8', 'D9', 'D10'] },
+      { rowName: 'D3', seats: ['D11', 'D12', 'D13', 'D14', 'D15', 'D16'] }
+    ]
+  },
+  {
+    id: 'A',
+    name: 'A ব্লক (মাঝখানে-বাম)',
+    totalSeats: 51,
+    rows: [
+      { rowName: 'A1', seats: ['A1', 'A2', 'A3', 'A4', 'A5', 'A6', 'A7', 'A8', 'A9'] },
+      { rowName: 'A2', seats: ['A10', 'A11', 'A12', 'A13', 'A14', 'A15', 'A16', 'A17', 'A18'] },
+      { rowName: 'A3', seats: ['A19', 'A20', 'A21', 'A22', 'A23', 'A24', 'A25', 'A26', 'A27'] },
+      { rowName: 'A4', seats: ['A28', 'A29', 'A30', 'A31', 'A32', 'A33', 'A34', 'A35', 'A36'] },
+      { rowName: 'A5', seats: ['A37', 'A38', 'A39', 'A40', 'A41', 'A42', 'A43', 'A44', 'A45'] },
+      { rowName: 'A6', seats: ['A46', 'A47', 'A48', 'A49', 'A50', 'A51'] }
+    ]
+  },
+  {
+    id: 'B',
+    name: 'B ব্লক (মাঝখানে-ডান)',
+    totalSeats: 51,
+    rows: [
+      { rowName: 'B1', seats: ['B1', 'B2', 'B3', 'B4', 'B5', 'B6', 'B7', 'B8', 'B9'] },
+      { rowName: 'B2', seats: ['B10', 'B11', 'B12', 'B13', 'B14', 'B15', 'B16', 'B17', 'B18'] },
+      { rowName: 'B3', seats: ['B19', 'B20', 'B21', 'B22', 'B23', 'B24', 'B25', 'B26', 'B27'] },
+      { rowName: 'B4', seats: ['B28', 'B29', 'B30', 'B31', 'B32', 'B33', 'B34', 'B35', 'B36'] },
+      { rowName: 'B5', seats: ['B37', 'B38', 'B39', 'B40', 'B41', 'B42', 'B43', 'B44', 'B45'] },
+      { rowName: 'B6', seats: ['B46', 'B47', 'B48', 'B49', 'B50', 'B51'] }
+    ]
+  },
+  {
+    id: 'N',
+    name: 'N ব্লক (পেছনে-বাম)',
+    totalSeats: 60,
+    rows: [
+      { rowName: 'N1', seats: ['N1', 'N2', 'N3', 'N4', 'N5', 'N6', 'N7', 'N8', 'N9', 'N10'] },
+      { rowName: 'N2', seats: ['N11', 'N12', 'N13', 'N14', 'N15', 'N16', 'N17', 'N18', 'N19', 'N20'] },
+      { rowName: 'N3', seats: ['N21', 'N22', 'N23', 'N24', 'N25', 'N26', 'N27', 'N28', 'N29', 'N30'] },
+      { rowName: 'N4', seats: ['N31', 'N32', 'N33', 'N34', 'N35', 'N36', 'N37', 'N38', 'N39', 'N40'] },
+      { rowName: 'N5', seats: ['N41', 'N42', 'N43', 'N44', 'N45', 'N46', 'N47', 'N48', 'N49', 'N50'] },
+      { rowName: 'N6', seats: ['N51', 'N52', 'N53', 'N54', 'N55', 'N56', 'N57', 'N58', 'N59', 'N60'] }
+    ]
+  },
+  {
+    id: 'G',
+    name: 'G ব্লক (পেছনে-ডান)',
+    totalSeats: 60,
+    rows: [
+      { rowName: 'G1', seats: ['G1', 'G2', 'G3', 'G4', 'G5', 'G6', 'G7', 'G8', 'G9', 'G10'] },
+      { rowName: 'G2', seats: ['G11', 'G12', 'G13', 'G14', 'G15', 'G16', 'G17', 'G18', 'G19', 'G20'] },
+      { rowName: 'G3', seats: ['G21', 'G22', 'G23', 'G24', 'G25', 'G26', 'G27', 'G28', 'G29', 'G30'] },
+      { rowName: 'G4', seats: ['G31', 'G32', 'G33', 'G34', 'G35', 'G36', 'G37', 'G38', 'G39', 'G40'] },
+      { rowName: 'G5', seats: ['G41', 'G42', 'G43', 'G44', 'G45', 'G46', 'G47', 'G48', 'G49', 'G50'] },
+      { rowName: 'G6', seats: ['G51', 'G52', 'G53', 'G54', 'G55', 'G56', 'G57', 'G58', 'G59', 'G60'] }
+    ]
+  }
+];
+
 export default function TicketsPage() {
   const [checkoutStep, setCheckoutStep] = useState<1 | 2>(1);
   const [name, setName] = useState('');
@@ -10,6 +95,7 @@ export default function TicketsPage() {
   const [phone, setPhone] = useState('');
   
   // Seat Picker States
+  const [selectedBlockId, setSelectedBlockId] = useState<string>('C');
   const [selectedSeats, setSelectedSeats] = useState<string[]>([]);
   const [bookedSeats, setBookedSeats] = useState<string[]>([]);
   
@@ -18,54 +104,18 @@ export default function TicketsPage() {
   const [senderNumber, setSenderNumber] = useState('');
   const [trxId, setTrxId] = useState('');
 
-  // Dynamic Hall Config loaded from DB settings
-  const [totalRows, setTotalRows] = useState('F');
-  const [totalCols, setTotalCols] = useState(8);
-
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [successTicket, setSuccessTicket] = useState<any>(null);
 
   const TICKET_PRICE = 50; // 50 TK per seat
 
-  // Generate dynamic rows based on settings (e.g. A to F)
-  const getRowsList = () => {
-    const rowsList = [];
-    const maxRowChar = totalRows.toUpperCase();
-    const limit = maxRowChar.charCodeAt(0);
-    // Boundary check (A-Z)
-    for (let i = 65; i <= Math.min(limit, 90); i++) {
-      rowsList.push(String.fromCharCode(i));
-    }
-    return rowsList;
-  };
+  // Find currently selected block configuration
+  const currentBlock = blocks.find(b => b.id === selectedBlockId) || blocks[0];
 
-  // Generate dynamic columns list (e.g. 1 to 8)
-  const getColsList = () => {
-    const colsList = [];
-    for (let i = 1; i <= totalCols; i++) {
-      colsList.push(i);
-    }
-    return colsList;
-  };
-
-  const rowsList = getRowsList();
-  const colsList = getColsList();
-  // Find aisle break in the middle
-  const aisleCol = Math.floor(colsList.length / 2);
-
-  // Fetch settings & booked seats
-  const fetchSettingsAndSeats = async () => {
+  // Fetch all currently booked seats on load
+  const fetchBookedSeats = async () => {
     try {
-      // 1. Fetch system settings
-      const settingsRes = await fetch('/api/settings', { cache: 'no-store' });
-      if (settingsRes.ok) {
-        const settings = await settingsRes.json();
-        if (settings.total_rows) setTotalRows(settings.total_rows);
-        if (settings.total_cols) setTotalCols(parseInt(settings.total_cols, 10));
-      }
-
-      // 2. Fetch booked tickets
       const res = await fetch('/api/tickets', { cache: 'no-store' });
       if (res.ok) {
         const tickets: any[] = await res.json();
@@ -80,12 +130,12 @@ export default function TicketsPage() {
         setBookedSeats(booked);
       }
     } catch (err) {
-      console.error('Error loading page config:', err);
+      console.error('Error fetching booked seats:', err);
     }
   };
 
   useEffect(() => {
-    fetchSettingsAndSeats();
+    fetchBookedSeats();
   }, []);
 
   const handleSeatClick = (seatId: string) => {
@@ -115,6 +165,7 @@ export default function TicketsPage() {
     setLoading(true);
     setError('');
 
+    // Format seat selection with block ID: "Clean Name (Seat: C12, C13)"
     const formattedName = `${name} (Seat: ${selectedSeats.join(', ')})`;
     const formattedPhone = `${phone} (${paymentMethod.toUpperCase()} Sender: ${senderNumber}, TrxID: ${trxId})`;
 
@@ -146,7 +197,7 @@ export default function TicketsPage() {
       setTrxId('');
       setSelectedSeats([]);
       setCheckoutStep(1);
-      fetchSettingsAndSeats(); // Refresh config & seats
+      fetchBookedSeats(); // Refresh booked list
     } catch (err: any) {
       setError(err.message || 'নেটওয়ার্ক ত্রুটি। আবার চেষ্টা করুন।');
     } finally {
@@ -292,7 +343,7 @@ export default function TicketsPage() {
                 </span>
                 <h2 className="text-3xl font-extrabold text-[#2a1f1a] leading-tight">ডিজিটাল টিকিট পোর্টাল</h2>
                 <p className="text-xs text-[#6b5c54] font-semibold">
-                  নাটক ও নাট্যতত্ত্ব বিভাগ কর্তৃক আয়োজিত "রক্তকরবী" নাটকের প্রবেশ টিকিট সংগ্রহ করুন। ডানপাশের ইন্টারেক্টিভ সিট প্ল্যান থেকে আসন নির্বাচন ও ফি প্রদান সম্পন্ন করুন।
+                  নাটক ও নাট্যতত্ত্ব বিভাগ কর্তৃক আয়োজিত "রক্তকরবী" নাটকের প্রবেশ টিকিট সংগ্রহ করুন। ডানপাশের গ্যালারি লেআউট থেকে আপনার ব্লক ও আসন নির্বাচন সম্পন্ন করুন।
                 </p>
               </div>
 
@@ -305,12 +356,43 @@ export default function TicketsPage() {
                       <Users size={16} className="text-amber-600" />
                       <span>ধাপ ১: আসন সংখ্যা ও কাউন্টার</span>
                     </h3>
-                    <p className="text-[11px] text-[#6b5c54] leading-relaxed">
-                      ডানপাশের আসন বিন্যাস থেকে আপনার পছন্দের আসনগুলো সিলেক্ট করুন। সবুজ চিহ্নিত আসনগুলো আপনার জন্য রিজার্ভ করা হবে।
-                    </p>
+                    
+                    {/* Block Selection Sub-Panel */}
+                    <div className="space-y-2.5">
+                      <label className="text-[11px] font-black text-[#6b5c54] uppercase tracking-wider block">১. গ্যালারি ব্লক নির্বাচন করুন:</label>
+                      <div className="grid grid-cols-2 gap-3">
+                        {blocks.map(block => {
+                          const bookedCount = bookedSeats.filter(s => s.startsWith(block.id)).length;
+                          const availableCount = block.totalSeats - bookedCount;
+
+                          return (
+                            <button
+                              key={block.id}
+                              type="button"
+                              onClick={() => {
+                                setSelectedBlockId(block.id);
+                                setSelectedSeats([]); // Clear selections to enforce block-bound bookings
+                              }}
+                              className={`p-3 rounded-2xl border text-left transition-all hover:scale-[1.02] cursor-pointer flex flex-col justify-between min-h-[85px] outline-none ${selectedBlockId === block.id ? 'bg-amber-500/5 border-amber-500 shadow-sm' : 'bg-white border-[#e3dbcc] hover:border-amber-500'}`}
+                            >
+                              <div>
+                                <span className="text-[8px] font-black text-amber-600 block uppercase tracking-wider">ব্লক</span>
+                                <span className="font-extrabold text-[#2a1f1a] text-xs">{block.name}</span>
+                              </div>
+                              <div className="mt-2 flex justify-between items-center text-[9px] font-bold text-gray-500">
+                                <span>মোট: {block.totalSeats}</span>
+                                <span className={`px-1.5 py-0.5 rounded font-black ${availableCount > 0 ? 'bg-emerald-50 text-emerald-800' : 'bg-red-50 text-red-800'}`}>
+                                  {availableCount} ফাঁকা
+                                </span>
+                              </div>
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </div>
 
                     <div className="bg-white p-3.5 rounded-xl border border-[#e3dbcc] flex justify-between items-center text-xs shadow-sm">
-                      <span className="text-[#6b5c54] font-bold">নির্বাচিত আসন:</span>
+                      <span className="text-[#6b5c54] font-bold">নির্বাচিত আসন (ব্লক: {selectedBlockId}):</span>
                       <span className="font-extrabold text-[#2a1f1a] bg-zinc-50 border border-zinc-150 px-2 py-0.5 rounded text-[10px]">{selectedSeats.length > 0 ? selectedSeats.join(', ') : 'কোনোটি নয়'}</span>
                     </div>
 
@@ -472,7 +554,7 @@ export default function TicketsPage() {
                           <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
                         ) : (
                           <>
-                            <span>টিকিট বুকিং সম্পন্ন করুন</span>
+                            <span>টিকิต বুকিং সম্পন্ন করুন</span>
                             <ArrowRight size={16} />
                           </>
                         )}
@@ -497,7 +579,7 @@ export default function TicketsPage() {
 
             </div>
 
-            {/* Right Column: Cinema-style Seat Selection Screen */}
+            {/* Right Column: Cinema-style Block Seat Selector */}
             <div className="lg:col-span-7 flex flex-col justify-center">
               <div className="p-6 md:p-8 border border-[#e3dbcc] bg-[#fbf9f4] rounded-3xl shadow-sm text-center space-y-6">
                 
@@ -507,51 +589,52 @@ export default function TicketsPage() {
                   <span className="text-[9px] text-[#6b5c54] font-black uppercase tracking-widest mt-2">মঞ্চ / STAGE</span>
                 </div>
 
+                <div className="text-left border-b border-[#e3dbcc]/55 pb-3">
+                  <h3 className="text-xs font-black text-[#2a1f1a] uppercase tracking-wider">২. আসন লেআউট ({currentBlock.name})</h3>
+                  <p className="text-[9px] text-gray-500 mt-0.5">এই ব্লকের যেকোনো ফাঁকা চেয়ারে ক্লিক করে আপনার নির্দিষ্ট সিট রিজার্ভেশন নিশ্চিত করুন।</p>
+                </div>
+
                 {/* Seat Selector Grid Container */}
-                <div className="overflow-x-auto py-4">
-                  <div className="min-w-[340px] space-y-3 flex flex-col items-center">
-                    {rowsList.map(row => (
-                      <div key={row} className="flex items-center gap-1.5 md:gap-2">
+                <div className="overflow-x-auto py-2">
+                  <div className="min-w-[320px] space-y-3 flex flex-col items-center">
+                    {currentBlock.rows.map(row => (
+                      <div key={row.rowName} className="flex items-center gap-2">
                         {/* Row Identifier Left */}
-                        <span className="w-5 text-right font-black text-xs text-[#6b5c54] font-mono mr-2">{row}</span>
+                        <span className="w-6 text-right font-black text-xs text-[#6b5c54] font-mono mr-2">{row.rowName}</span>
                         
                         {/* Seat Row Grid */}
-                        {colsList.map(col => {
-                          const seatId = `${row}${col}`;
-                          const isBooked = bookedSeats.includes(seatId);
-                          const isSelected = selectedSeats.includes(seatId);
+                        <div className="flex items-center gap-1.5 md:gap-2">
+                          {row.seats.map((seatId, idx) => {
+                            const isBooked = bookedSeats.includes(seatId);
+                            const isSelected = selectedSeats.includes(seatId);
+                            
+                            // Extract just the number suffix for aesthetic display (e.g. C15 -> 15, A51 -> 51)
+                            const displayLabel = seatId.replace(/^[a-zA-Z]/, '');
 
-                          let seatClass = 'bg-white border-[#e3dbcc] hover:border-amber-500 hover:text-amber-600 text-[#6b5c54] cursor-pointer shadow-sm';
-                          if (isBooked) {
-                            seatClass = 'bg-zinc-200 border-zinc-300 text-zinc-400 cursor-not-allowed';
-                          } else if (isSelected) {
-                            seatClass = 'bg-gradient-to-br from-emerald-500 to-emerald-600 border-emerald-500 text-white font-extrabold scale-105 shadow-[0_0_10px_rgba(16,185,129,0.3)] cursor-pointer';
-                          }
+                            let seatClass = 'bg-white border-[#e3dbcc] hover:border-amber-500 hover:text-amber-600 text-[#6b5c54] cursor-pointer shadow-sm';
+                            if (isBooked) {
+                              seatClass = 'bg-zinc-200 border-zinc-300 text-zinc-400 cursor-not-allowed';
+                            } else if (isSelected) {
+                              seatClass = 'bg-gradient-to-br from-emerald-500 to-emerald-600 border-emerald-500 text-white font-extrabold scale-105 shadow-[0_0_10px_rgba(16,185,129,0.3)] cursor-pointer';
+                            }
 
-                          return (
-                            <div key={col} className="flex items-center">
+                            return (
                               <button
+                                key={seatId}
                                 type="button"
                                 disabled={isBooked || checkoutStep === 2}
                                 onClick={() => handleSeatClick(seatId)}
-                                className={`w-7 h-7 md:w-8 md:h-8 rounded-lg border text-[10px] font-bold font-mono flex items-center justify-center transition-all ${seatClass}`}
+                                className={`w-7.5 h-7.5 md:w-8 md:h-8 rounded-lg border text-[9px] font-bold font-mono flex items-center justify-center transition-all ${seatClass}`}
                                 title={isBooked ? `Seat ${seatId} is Booked` : `Seat ${seatId}`}
                               >
-                                {col}
+                                {displayLabel}
                               </button>
-
-                              {/* Aisle Break in the exact middle */}
-                              {col === aisleCol && (
-                                <div className="w-5 md:w-8 h-8 flex items-center justify-center pointer-events-none">
-                                  <span className="text-[8px] text-gray-300 font-bold uppercase tracking-widest font-mono"></span>
-                                </div>
-                              )}
-                            </div>
-                          );
-                        })}
+                            );
+                          })}
+                        </div>
 
                         {/* Row Identifier Right */}
-                        <span className="w-5 text-left font-black text-xs text-[#6b5c54] font-mono ml-2">{row}</span>
+                        <span className="w-6 text-left font-black text-xs text-[#6b5c54] font-mono ml-2">{row.rowName}</span>
                       </div>
                     ))}
                   </div>
@@ -577,7 +660,7 @@ export default function TicketsPage() {
                 {selectedSeats.length > 0 && (
                   <div className="bg-white/80 p-3 rounded-2xl border border-[#e3dbcc] text-xs space-y-1">
                     <p className="text-[#6b5c54] font-bold">
-                      নির্বাচিত আসনসমূহ: <span className="text-[#2a1f1a] font-extrabold">{selectedSeats.join(', ')}</span>
+                      নির্বাচিত আসনসমূহ ({selectedBlockId} ব্লক): <span className="text-[#2a1f1a] font-extrabold">{selectedSeats.join(', ')}</span>
                     </p>
                     <p className="text-[10px] text-[#6b5c54]">
                       * অনুগ্রহ করে সিটের নম্বরগুলো টিকিট বুকিংয়ের পর হল গেটে টিকিট দেখাতে সংরক্ষণ করে রাখবেন।
