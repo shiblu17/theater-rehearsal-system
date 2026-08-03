@@ -234,6 +234,55 @@ export default function TicketsPage() {
   const { cleanName, seatLabels, cleanPhone, paymentDetails, parsedBlockId } = getTicketDisplayData(successTicket);
   const successBlock = blocks.find(b => b.id === parsedBlockId) || currentBlock;
 
+  const renderBlockCard = (block: BlockConfig) => {
+    const bookedCount = bookedSeats.filter(s => s.startsWith(block.id)).length;
+    const availableCount = block.totalSeats - bookedCount;
+    const isSelected = selectedBlockId === block.id;
+
+    return (
+      <button
+        key={block.id}
+        type="button"
+        onClick={() => {
+          setSelectedBlockId(block.id);
+          setSelectedSeats([]);
+        }}
+        className={`relative p-3 rounded-2xl border text-center transition-all cursor-pointer flex flex-col justify-between items-center shadow-md overflow-hidden h-auto py-3.5 outline-none w-full group ${
+          isSelected 
+            ? 'bg-[#851b2e] text-white border-[#d4af37] ring-4 ring-[#d4af37]/25 scale-[1.02] z-10' 
+            : 'bg-white border-[#e3dbcc] text-[#2a1f1a] hover:border-[#851b2e]/60'
+        }`}
+      >
+        {/* Selected top highlight */}
+        {isSelected && (
+          <div className="absolute top-0 left-0 right-0 h-1 bg-[#d4af37]"></div>
+        )}
+
+        {/* Stacked header to prevent horizontal clipping on mobile */}
+        <div className="w-full text-center space-y-0.5 pb-1.5 border-b border-current/10">
+          <span className={`text-[9px] font-black uppercase tracking-wider block ${isSelected ? 'text-[#d4af37]' : 'text-[#851b2e]'}`}>
+            ব্লক {block.id}
+          </span>
+          <span className={`inline-block px-1.5 py-0.5 rounded text-[7px] font-extrabold ${isSelected ? 'bg-white/15 text-white' : 'bg-[#851b2e]/10 text-[#851b2e]'}`}>
+            {block.type}
+          </span>
+        </div>
+
+        <span className={`text-3xl font-black my-2 group-hover:scale-105 transition-transform font-display tracking-tight ${isSelected ? 'text-white' : 'text-[#2a1f1a]'}`}>
+          {block.id}
+        </span>
+
+        {/* Simple layout for footer */}
+        <div className="w-full flex justify-between items-center text-[9px] font-extrabold border-t border-current/10 pt-1.5 mt-0.5 gap-1">
+          <span className={isSelected ? 'text-[#d4af37]' : 'text-[#851b2e]'}>৳{block.price}</span>
+          <span className={availableCount > 0 ? (isSelected ? 'text-emerald-300' : 'text-emerald-700') : 'text-red-500'}>
+            {availableCount} ফাঁকা
+          </span>
+        </div>
+      </button>
+    );
+  };
+
   return (
     <div className="flex-1 app-container flex items-center justify-center min-h-[85vh] py-6 sm:py-10">
       {/* Background glow decorations */}
@@ -468,48 +517,23 @@ export default function TicketsPage() {
                       <label className="text-[11px] font-black text-[#851b2e] uppercase tracking-wider block text-center">
                         🎭 হলের গ্যালারি ম্যাপ (জোন নির্বাচন করুন)
                       </label>
-                      <div className="border border-[#e3dbcc]/80 p-3 sm:p-4 bg-[#fbf9f4] rounded-3xl space-y-4">
+                      <div className="border border-[#e3dbcc]/80 p-3 sm:p-5 bg-[#fbf9f4] rounded-3xl space-y-4">
                         {/* Stage indicator */}
                         <div className="w-full flex flex-col items-center mb-1">
                           <div className="w-3/4 h-1.5 bg-gradient-to-r from-transparent via-[#d4af37]/50 to-transparent rounded-full blur-[0.5px]"></div>
                           <span className="text-[8px] text-[#851b2e] font-black tracking-widest mt-1">মঞ্চ / STAGE</span>
                         </div>
 
-                        {/* Interactive Blocks List - Horizontal Swiper for Premium Minimalist Experience */}
-                        <div className="flex gap-2.5 overflow-x-auto pb-2.5 px-1 scrollbar-none justify-start">
-                          {blocks.map(block => {
-                            const bookedCount = bookedSeats.filter(s => s.startsWith(block.id)).length;
-                            const availableCount = block.totalSeats - bookedCount;
-                            const isSelected = selectedBlockId === block.id;
-
-                            return (
-                              <button
-                                key={block.id}
-                                type="button"
-                                onClick={() => {
-                                  setSelectedBlockId(block.id);
-                                  setSelectedSeats([]);
-                                }}
-                                className={`shrink-0 px-4 py-3 rounded-full border text-xs font-bold transition-all cursor-pointer outline-none flex items-center gap-2.5 shadow-sm ${
-                                  isSelected 
-                                    ? 'bg-[#851b2e] text-white border-[#d4af37] ring-2 ring-[#d4af37]/35 scale-105' 
-                                    : 'bg-white border-[#e3dbcc] text-[#2a1f1a] hover:border-[#851b2e]/60'
-                                }`}
-                              >
-                                <span className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-black ${
-                                  isSelected ? 'bg-[#d4af37] text-[#851b2e]' : 'bg-[#851b2e]/10 text-[#851b2e]'
-                                }`}>
-                                  {block.id}
-                                </span>
-                                <span className="whitespace-nowrap">{block.type} (৳{block.price})</span>
-                                <span className={`text-[9px] px-2 py-0.5 rounded-full font-black ${
-                                  isSelected ? 'bg-white/20 text-white' : 'bg-emerald-50 text-emerald-700'
-                                }`}>
-                                  {availableCount} ফাঁকা
-                                </span>
-                              </button>
-                            );
-                          })}
+                        {/* Interactive Blocks Layout - 2 column grid with gap-3.5 to prevent overlapping */}
+                        <div className="grid grid-cols-2 gap-3 sm:gap-4">
+                          {/* Front Row (N & G) */}
+                          {blocks.slice(0, 2).map(block => renderBlockCard(block))}
+                          
+                          {/* Mid Row (A & B) */}
+                          {blocks.slice(2, 4).map(block => renderBlockCard(block))}
+                          
+                          {/* Back Row (C & D) */}
+                          {blocks.slice(4, 6).map(block => renderBlockCard(block))}
                         </div>
                       </div>
                     </div>
