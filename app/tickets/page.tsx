@@ -6,6 +6,8 @@ import { Ticket, Users, Phone, Mail, Award, CheckCircle, ArrowRight, ArrowLeft, 
 interface BlockConfig {
   id: string;
   name: string;
+  type: string;
+  price: number;
   totalSeats: number;
   rows: {
     rowName: string;
@@ -14,9 +16,66 @@ interface BlockConfig {
 }
 
 const blocks: BlockConfig[] = [
+  // Front Section (N & G) - Floor Seating - 30 seats each - 100 BDT
+  {
+    id: 'N',
+    name: 'N ব্লক (সামনে-বাম)',
+    type: 'সামনে ফ্লোর',
+    price: 100,
+    totalSeats: 30,
+    rows: [
+      { rowName: 'N1', seats: ['N1', 'N2', 'N3', 'N4', 'N5', 'N6', 'N7', 'N8', 'N9', 'N10'] },
+      { rowName: 'N2', seats: ['N11', 'N12', 'N13', 'N14', 'N15', 'N16', 'N17', 'N18', 'N19', 'N20'] },
+      { rowName: 'N3', seats: ['N21', 'N22', 'N23', 'N24', 'N25', 'N26', 'N27', 'N28', 'N29', 'N30'] }
+    ]
+  },
+  {
+    id: 'G',
+    name: 'G ব্লক (সামনে-ডান)',
+    type: 'সামনে ফ্লোর',
+    price: 100,
+    totalSeats: 30,
+    rows: [
+      { rowName: 'G1', seats: ['G1', 'G2', 'G3', 'G4', 'G5', 'G6', 'G7', 'G8', 'G9', 'G10'] },
+      { rowName: 'G2', seats: ['G11', 'G12', 'G13', 'G14', 'G15', 'G16', 'G17', 'G18', 'G19', 'G20'] },
+      { rowName: 'G3', seats: ['G21', 'G22', 'G23', 'G24', 'G25', 'G26', 'G27', 'G28', 'G29', 'G30'] }
+    ]
+  },
+  // Middle Section (A & B) - Chair Seating - 35 seats each - 200 BDT
+  {
+    id: 'A',
+    name: 'A ব্লক (মাঝখানে-বাম)',
+    type: 'মাঝখানে চেয়ার',
+    price: 200,
+    totalSeats: 35,
+    rows: [
+      { rowName: 'A1', seats: ['A1', 'A2', 'A3', 'A4', 'A5', 'A6', 'A7'] },
+      { rowName: 'A2', seats: ['A8', 'A9', 'A10', 'A11', 'A12', 'A13', 'A14'] },
+      { rowName: 'A3', seats: ['A15', 'A16', 'A17', 'A18', 'A19', 'A20', 'A21'] },
+      { rowName: 'A4', seats: ['A22', 'A23', 'A24', 'A25', 'A26', 'A27', 'A28'] },
+      { rowName: 'A5', seats: ['A29', 'A30', 'A31', 'A32', 'A33', 'A34', 'A35'] }
+    ]
+  },
+  {
+    id: 'B',
+    name: 'B ব্লক (মাঝখানে-ডান)',
+    type: 'মাঝখানে চেয়ার',
+    price: 200,
+    totalSeats: 35,
+    rows: [
+      { rowName: 'B1', seats: ['B1', 'B2', 'B3', 'B4', 'B5', 'B6', 'B7'] },
+      { rowName: 'B2', seats: ['B8', 'B9', 'B10', 'B11', 'B12', 'B13', 'B14'] },
+      { rowName: 'B3', seats: ['B15', 'B16', 'B17', 'B18', 'B19', 'B20', 'B21'] },
+      { rowName: 'B4', seats: ['B22', 'B23', 'B24', 'B25', 'B26', 'B27', 'B28'] },
+      { rowName: 'B5', seats: ['B29', 'B30', 'B31', 'B32', 'B33', 'B34', 'B35'] }
+    ]
+  },
+  // Rear Section (C & D) - 2nd Tier - 15 seats each - 200 BDT
   {
     id: 'C',
-    name: 'C ব্লক (সামনে-বাম)',
+    name: 'C ব্লক (পেছনে ২য় তলা)',
+    type: 'পেছনে ২য় তলা',
+    price: 200,
     totalSeats: 15,
     rows: [
       { rowName: 'C1', seats: ['C1', 'C2', 'C3', 'C4', 'C5'] },
@@ -26,64 +85,14 @@ const blocks: BlockConfig[] = [
   },
   {
     id: 'D',
-    name: 'D ব্লক (সামনে-ডান)',
-    totalSeats: 16,
+    name: 'D ব্লক (পেছনে ২য় তলা)',
+    type: 'পেছনে ২য় তলা',
+    price: 200,
+    totalSeats: 15,
     rows: [
       { rowName: 'D1', seats: ['D1', 'D2', 'D3', 'D4', 'D5'] },
       { rowName: 'D2', seats: ['D6', 'D7', 'D8', 'D9', 'D10'] },
-      { rowName: 'D3', seats: ['D11', 'D12', 'D13', 'D14', 'D15', 'D16'] }
-    ]
-  },
-  {
-    id: 'A',
-    name: 'A ব্লক (মাঝখানে-বাম)',
-    totalSeats: 51,
-    rows: [
-      { rowName: 'A1', seats: ['A1', 'A2', 'A3', 'A4', 'A5', 'A6', 'A7', 'A8', 'A9'] },
-      { rowName: 'A2', seats: ['A10', 'A11', 'A12', 'A13', 'A14', 'A15', 'A16', 'A17', 'A18'] },
-      { rowName: 'A3', seats: ['A19', 'A20', 'A21', 'A22', 'A23', 'A24', 'A25', 'A26', 'A27'] },
-      { rowName: 'A4', seats: ['A28', 'A29', 'A30', 'A31', 'A32', 'A33', 'A34', 'A35', 'A36'] },
-      { rowName: 'A5', seats: ['A37', 'A38', 'A39', 'A40', 'A41', 'A42', 'A43', 'A44', 'A45'] },
-      { rowName: 'A6', seats: ['A46', 'A47', 'A48', 'A49', 'A50', 'A51'] }
-    ]
-  },
-  {
-    id: 'B',
-    name: 'B ব্লক (মাঝখানে-ডান)',
-    totalSeats: 51,
-    rows: [
-      { rowName: 'B1', seats: ['B1', 'B2', 'B3', 'B4', 'B5', 'B6', 'B7', 'B8', 'B9'] },
-      { rowName: 'B2', seats: ['B10', 'B11', 'B12', 'B13', 'B14', 'B15', 'B16', 'B17', 'B18'] },
-      { rowName: 'B3', seats: ['B19', 'B20', 'B21', 'B22', 'B23', 'B24', 'B25', 'B26', 'B27'] },
-      { rowName: 'B4', seats: ['B28', 'B29', 'B30', 'B31', 'B32', 'B33', 'B34', 'B35', 'B36'] },
-      { rowName: 'B5', seats: ['B37', 'B38', 'B39', 'B40', 'B41', 'B42', 'B43', 'B44', 'B45'] },
-      { rowName: 'B6', seats: ['B46', 'B47', 'B48', 'B49', 'B50', 'B51'] }
-    ]
-  },
-  {
-    id: 'N',
-    name: 'N ব্লক (পেছনে-বাম)',
-    totalSeats: 60,
-    rows: [
-      { rowName: 'N1', seats: ['N1', 'N2', 'N3', 'N4', 'N5', 'N6', 'N7', 'N8', 'N9', 'N10'] },
-      { rowName: 'N2', seats: ['N11', 'N12', 'N13', 'N14', 'N15', 'N16', 'N17', 'N18', 'N19', 'N20'] },
-      { rowName: 'N3', seats: ['N21', 'N22', 'N23', 'N24', 'N25', 'N26', 'N27', 'N28', 'N29', 'N30'] },
-      { rowName: 'N4', seats: ['N31', 'N32', 'N33', 'N34', 'N35', 'N36', 'N37', 'N38', 'N39', 'N40'] },
-      { rowName: 'N5', seats: ['N41', 'N42', 'N43', 'N44', 'N45', 'N46', 'N47', 'N48', 'N49', 'N50'] },
-      { rowName: 'N6', seats: ['N51', 'N52', 'N53', 'N54', 'N55', 'N56', 'N57', 'N58', 'N59', 'N60'] }
-    ]
-  },
-  {
-    id: 'G',
-    name: 'G ব্লক (পেছনে-ডান)',
-    totalSeats: 60,
-    rows: [
-      { rowName: 'G1', seats: ['G1', 'G2', 'G3', 'G4', 'G5', 'G6', 'G7', 'G8', 'G9', 'G10'] },
-      { rowName: 'G2', seats: ['G11', 'G12', 'G13', 'G14', 'G15', 'G16', 'G17', 'G18', 'G19', 'G20'] },
-      { rowName: 'G3', seats: ['G21', 'G22', 'G23', 'G24', 'G25', 'G26', 'G27', 'G28', 'G29', 'G30'] },
-      { rowName: 'G4', seats: ['G31', 'G32', 'G33', 'G34', 'G35', 'G36', 'G37', 'G38', 'G39', 'G40'] },
-      { rowName: 'G5', seats: ['G41', 'G42', 'G43', 'G44', 'G45', 'G46', 'G47', 'G48', 'G49', 'G50'] },
-      { rowName: 'G6', seats: ['G51', 'G52', 'G53', 'G54', 'G55', 'G56', 'G57', 'G58', 'G59', 'G60'] }
+      { rowName: 'D3', seats: ['D11', 'D12', 'D13', 'D14', 'D15'] }
     ]
   }
 ];
@@ -95,7 +104,7 @@ export default function TicketsPage() {
   const [phone, setPhone] = useState('');
   
   // Seat Picker States
-  const [selectedBlockId, setSelectedBlockId] = useState<string>('C');
+  const [selectedBlockId, setSelectedBlockId] = useState<string>('N');
   const [selectedSeats, setSelectedSeats] = useState<string[]>([]);
   const [bookedSeats, setBookedSeats] = useState<string[]>([]);
   
@@ -107,8 +116,6 @@ export default function TicketsPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [successTicket, setSuccessTicket] = useState<any>(null);
-
-  const TICKET_PRICE = 50; // 50 TK per seat
 
   // Find currently selected block configuration
   const currentBlock = blocks.find(b => b.id === selectedBlockId) || blocks[0];
@@ -165,7 +172,7 @@ export default function TicketsPage() {
     setLoading(true);
     setError('');
 
-    // Format seat selection with block ID: "Clean Name (Seat: C12, C13)"
+    // Append block layout & price to name
     const formattedName = `${name} (Seat: ${selectedSeats.join(', ')})`;
     const formattedPhone = `${phone} (${paymentMethod.toUpperCase()} Sender: ${senderNumber}, TrxID: ${trxId})`;
 
@@ -206,7 +213,7 @@ export default function TicketsPage() {
   };
 
   const getTicketDisplayData = (ticket: any) => {
-    if (!ticket) return { cleanName: '', seatLabels: '', cleanPhone: '', paymentDetails: '' };
+    if (!ticket) return { cleanName: '', seatLabels: '', cleanPhone: '', paymentDetails: '', parsedBlockId: 'N' };
     
     const seatMatch = ticket.name.match(/\((?:Seat|আসন):\s*([^)]+)\)/);
     const cleanName = ticket.name.replace(/\s*\((?:Seat|আসন):\s*([^)]+)\)/, '');
@@ -216,10 +223,18 @@ export default function TicketsPage() {
     const cleanPhone = ticket.phone.replace(/\s*\(([^)]+)\)/, '');
     const paymentDetails = payMatch ? payMatch[1] : 'ফ্রি এন্ট্রি পাস';
 
-    return { cleanName, seatLabels, cleanPhone, paymentDetails };
+    // Parse block letter (first character of the first seat)
+    let parsedBlockId = 'N';
+    if (seatLabels) {
+      const firstSeat = seatLabels.split(',')[0].trim();
+      parsedBlockId = firstSeat.charAt(0).toUpperCase();
+    }
+
+    return { cleanName, seatLabels, cleanPhone, paymentDetails, parsedBlockId };
   };
 
-  const { cleanName, seatLabels, cleanPhone, paymentDetails } = getTicketDisplayData(successTicket);
+  const { cleanName, seatLabels, cleanPhone, paymentDetails, parsedBlockId } = getTicketDisplayData(successTicket);
+  const successBlock = blocks.find(b => b.id === parsedBlockId) || currentBlock;
 
   return (
     <div className="flex-1 app-container flex items-center justify-center min-h-[85vh] py-8">
@@ -250,7 +265,7 @@ export default function TicketsPage() {
                     <h3 className="font-extrabold text-[#2a1f1a] text-base">রক্তকরবী (রবীন্দ্র নাট্যোৎসব)</h3>
                     <p className="text-[10px] text-[#6b5c54] mt-0.5">৫২তম আবর্তন • নাটক ও নাট্যতত্ত্ব বিভাগ</p>
                   </div>
-                  <span className="bg-amber-500/10 text-amber-800 border border-amber-500/20 px-2 py-0.5 rounded-full text-[8px] font-black uppercase tracking-wider">১ম শ্রেণীর টিকিট</span>
+                  <span className="bg-amber-500/10 text-amber-800 border border-amber-500/20 px-2 py-0.5 rounded-full text-[8px] font-black uppercase tracking-wider">{successBlock.type} টিকিট</span>
                 </div>
 
                 <div className="grid grid-cols-2 gap-y-4 gap-x-6 text-xs">
@@ -267,11 +282,11 @@ export default function TicketsPage() {
                     <span className="font-bold text-amber-600 text-sm">৩০ জুন ২০২৬, সকাল ১১:৩০</span>
                   </div>
                   <div>
-                    <span className="text-[9px] text-[#6b5c54] block font-bold uppercase tracking-wider">নির্ধারিত আসন (Seats)</span>
-                    <span className="font-bold text-emerald-600 text-sm">{seatLabels || successTicket.seats} ({successTicket.seats} টি আসন)</span>
+                    <span className="text-[9px] text-[#6b5c54] block font-bold uppercase tracking-wider">নির্ধারিত আসন ({parsedBlockId} ব্লক)</span>
+                    <span className="font-bold text-emerald-600 text-sm">{seatLabels || successTicket.seats} ({successTicket.seats}টি আসন)</span>
                   </div>
                   <div className="col-span-2 border-t border-[#e3dbcc]/60 pt-3">
-                    <span className="text-[9px] text-[#6b5c54] block font-bold uppercase tracking-wider">পেমেন্ট ও রেফারেন্স</span>
+                    <span className="text-[9px] text-[#6b5c54] block font-bold uppercase tracking-wider">পেমেন্ট ও রেফারেন্স (৳{successBlock.price * successTicket.seats})</span>
                     <span className="font-bold text-[#2a1f1a] text-xs">{paymentDetails}</span>
                   </div>
                 </div>
@@ -373,14 +388,17 @@ export default function TicketsPage() {
                                 setSelectedBlockId(block.id);
                                 setSelectedSeats([]); // Clear selections to enforce block-bound bookings
                               }}
-                              className={`p-3 rounded-2xl border text-left transition-all hover:scale-[1.02] cursor-pointer flex flex-col justify-between min-h-[85px] outline-none ${selectedBlockId === block.id ? 'bg-amber-500/5 border-amber-500 shadow-sm' : 'bg-white border-[#e3dbcc] hover:border-amber-500'}`}
+                              className={`p-3 rounded-2xl border text-left transition-all hover:scale-[1.02] cursor-pointer flex flex-col justify-between min-h-[95px] outline-none ${selectedBlockId === block.id ? 'bg-amber-500/5 border-amber-500 shadow-sm' : 'bg-white border-[#e3dbcc] hover:border-amber-500'}`}
                             >
                               <div>
-                                <span className="text-[8px] font-black text-amber-600 block uppercase tracking-wider">ব্লক</span>
-                                <span className="font-extrabold text-[#2a1f1a] text-xs">{block.name}</span>
+                                <div className="flex justify-between items-center">
+                                  <span className="text-[8px] font-black text-amber-600 uppercase tracking-wider">ব্লক {block.id}</span>
+                                  <span className="text-[8px] font-bold text-gray-400 bg-gray-100 px-1 rounded">{block.type}</span>
+                                </div>
+                                <span className="font-extrabold text-[#2a1f1a] text-xs block mt-1">{block.name}</span>
                               </div>
                               <div className="mt-2 flex justify-between items-center text-[9px] font-bold text-gray-500">
-                                <span>মোট: {block.totalSeats}</span>
+                                <span className="text-[#c0392b] font-black">৳{block.price}</span>
                                 <span className={`px-1.5 py-0.5 rounded font-black ${availableCount > 0 ? 'bg-emerald-50 text-emerald-800' : 'bg-red-50 text-red-800'}`}>
                                   {availableCount} ফাঁকা
                                 </span>
@@ -397,8 +415,8 @@ export default function TicketsPage() {
                     </div>
 
                     <div className="bg-white p-3.5 rounded-xl border border-[#e3dbcc] flex justify-between items-center text-xs shadow-sm">
-                      <span className="text-[#6b5c54] font-bold">টিকিট মূল্য (৳{TICKET_PRICE} × {selectedSeats.length}):</span>
-                      <span className="font-black text-amber-600 text-sm">৳{selectedSeats.length * TICKET_PRICE}</span>
+                      <span className="text-[#6b5c54] font-bold">টিকিট মূল্য (৳{currentBlock.price} × {selectedSeats.length}):</span>
+                      <span className="font-black text-amber-600 text-sm">৳{selectedSeats.length * currentBlock.price}</span>
                     </div>
 
                     <button
@@ -437,7 +455,7 @@ export default function TicketsPage() {
                     {/* bKash/Nagad Send Money numbers */}
                     <div className="bg-amber-500/5 p-4 rounded-xl border border-amber-500/10 space-y-2">
                       <p className="text-[11px] text-[#2a1f1a] font-extrabold text-center">
-                        বিকাশ বা নগদে মোট <span className="text-[#c0392b] text-xs font-black">৳{selectedSeats.length * TICKET_PRICE}</span> টাকা 'Send Money' করুন:
+                        বিকাশ বা নগদে মোট <span className="text-[#c0392b] text-xs font-black">৳{selectedSeats.length * currentBlock.price}</span> টাকা 'Send Money' করুন:
                       </p>
                       <div className="grid grid-cols-2 gap-3 text-center text-xs pt-1">
                         <div className="bg-white p-2.5 rounded-lg border border-[#e3dbcc] shadow-sm">
@@ -554,7 +572,7 @@ export default function TicketsPage() {
                           <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
                         ) : (
                           <>
-                            <span>টিকิต বুকিং সম্পন্ন করুন</span>
+                            <span>টিকিট বুকিং সম্পন্ন করুন</span>
                             <ArrowRight size={16} />
                           </>
                         )}
@@ -608,7 +626,6 @@ export default function TicketsPage() {
                             const isBooked = bookedSeats.includes(seatId);
                             const isSelected = selectedSeats.includes(seatId);
                             
-                            // Extract just the number suffix for aesthetic display (e.g. C15 -> 15, A51 -> 51)
                             const displayLabel = seatId.replace(/^[a-zA-Z]/, '');
 
                             let seatClass = 'bg-white border-[#e3dbcc] hover:border-amber-500 hover:text-amber-600 text-[#6b5c54] cursor-pointer shadow-sm';
