@@ -38,7 +38,7 @@ export default function BottomNavigation() {
               <div 
                 className={`p-2 rounded-xl transition-all duration-300 flex items-center justify-center ${
                   isActive 
-                    ? 'text-white bg-gradient-to-tr from-[#ff7979]/20 to-[#e056fd]/20 scale-110' 
+                    ? 'text-[#851b2e] bg-gradient-to-tr from-[#ff7979]/20 to-[#e056fd]/20 scale-110' 
                     : 'text-slate-500 group-hover:text-slate-800'
                 }`}
               >
